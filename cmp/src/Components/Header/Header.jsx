@@ -23,10 +23,27 @@ const Header = () => {
       {/* Right */}
       <div className="   flex items-center gap-4">
         
-       <button className=" flex justify-evenly items-center gap-2  h-10 w-25 px-4 rounded-md bg-black text-white text-sm font-medium hover:bg-gray-900 transition">
-  <span className="text-lg leading-none">+</span>
-  List Item
-</button>
+       <button
+        className=" 
+         flex justify-evenly items-center gap-2 
+         h-10 w-25
+           py-2 
+              rounded-lg 
+              font-semibold 
+              transition-all 
+              duration-300 
+              ease-in-out
+            text-white 
+             bg-black 
+             
+              active:scale-95"
+         
+         >
+
+
+        <span className="text-lg leading-none">+</span>
+        List Item
+      </button>
 
 
         <Logout />
