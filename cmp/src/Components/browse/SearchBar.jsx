@@ -7,7 +7,7 @@ const SearchBar = () => {
 
     
         
-         <div className='w-[86%] flex flex-wrap justify-center items-center gap-10'>
+         <div className='w-[90%] flex flex-wrap justify-center items-center gap-10'>
 
 
             <div className='flex justify-between items-center w-[70%] bg-gray-100 rounded-sm p-2 gap-4'>
