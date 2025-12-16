@@ -3,7 +3,7 @@ import Container from "./Components/container/Container"
 import Footer from "./Components/Footer/Footer"
 import Browse from "./Components/browse/Browse"
 import Profile from "./Components/profile/Profile"
-
+import Chat from "./Components/chat/Chat"
 
 function App() {
  
@@ -16,11 +16,13 @@ function App() {
 
      
         
-         <Container  />
+         {/* <Container  /> */}
       
-        <Browse />
+        {/* <Browse /> */}
 
-        <Profile />
+        {/* <Profile /> */}
+
+        <Chat />
         
 
      <Footer />
