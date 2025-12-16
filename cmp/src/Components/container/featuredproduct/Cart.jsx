@@ -2,14 +2,14 @@ import React from 'react'
 
 const Cart = ({ imgUrl, name, category, price }) => {
   return (
-    <div className="w-full max-w-80 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg transition duration-300">
+    <div className="w-full m-3 max-w-75 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg transition duration-300">
 
       {/* Image */}
       <div className="w-full h-56 overflow-hidden rounded-t-2xl">
         <img
           src={imgUrl}
           alt={`photo of ${name}`}
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-fit hover:scale-105 transition-transform duration-300  "
         />
       </div>
 

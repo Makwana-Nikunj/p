@@ -4,7 +4,7 @@ import FeaturedProducts from './featuredproduct/FeaturedProducts'
 
 const Container = () => {
   return (
-    <div className='mt-10 w-full flex flex-col gap-4  items-center'>
+    <div className='mt-25 w-full flex flex-col gap-4  items-center'>
 
     <Hero />
 

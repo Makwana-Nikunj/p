@@ -5,7 +5,7 @@ import Logout from './Logout'
 
 const Header = () => {
   return (
-    <header className="w-full h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-around">
+    <header className="w-full h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-around fixed">
       
       {/* Left */}
     

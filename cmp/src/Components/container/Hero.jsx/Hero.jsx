@@ -8,7 +8,7 @@ const Hero = () => {
      <div className='w-full flex justify-around items-center '>
 
 
-        <div className="h-30 w-[90%] bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-8 text-white">
+        <div className="h-35 w-[90%] bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-8 text-white">
        
             
             <div className='flex items-start gap-4'>
