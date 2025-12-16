@@ -2,6 +2,7 @@ import Header from "./Components/Header/Header"
 import Container from "./Components/container/Container"
 import Footer from "./Components/Footer/Footer"
 import Browse from "./Components/browse/Browse"
+import Profile from "./Components/profile/Profile"
 
 
 function App() {
@@ -15,9 +16,11 @@ function App() {
 
      
         
-         {/* <Container  /> */}
+         <Container  />
       
         <Browse />
+
+        <Profile />
         
 
      <Footer />
