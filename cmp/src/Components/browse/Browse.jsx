@@ -1,6 +1,6 @@
 import React from 'react'
 import SearchBar from './SearchBar'
-import Cart from '../container/featuredproduct/Cart'
+import Cart from '../container/featuredproduct/ItemCard'
 
 const Browse = () => {
 

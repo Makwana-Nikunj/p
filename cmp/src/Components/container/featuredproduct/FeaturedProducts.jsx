@@ -1,5 +1,5 @@
 import React from 'react'
-import Cart from './Cart'
+import Cart from './ItemCard'
 const FeaturedProducts = () => {
 
   const items = [
@@ -66,7 +66,7 @@ const FeaturedProducts = () => {
 
         {/* bottom */}
 
-        <div className='mt-6 p-4 flex justify-center items-center gap-4 flex-wrap'>
+        <div className='mt-6 p-2 flex justify-center items-center gap-4 flex-wrap'>
 
             {/* cards */}
 
