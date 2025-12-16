@@ -35,7 +35,7 @@ const Header = () => {
               ease-in-out
             text-white 
              bg-black 
-             
+             cursor-pointer
               active:scale-95"
          
          >

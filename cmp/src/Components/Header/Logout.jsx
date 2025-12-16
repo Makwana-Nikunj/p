@@ -12,6 +12,7 @@ const Logout = () => {
               ease-in-out
               hover:bg-black 
               hover:text-white 
+              cursor-pointer
           
               active:scale-95">
       <FiLogOut size={16} />
