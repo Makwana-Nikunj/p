@@ -1,0 +1,66 @@
+import React, { useState } from "react";
+import ProfileCard from "./ProfileCard";
+import OwnerProduct from "./OwnerProduct";
+import { useSelector } from "react-redux";
+
+const Profile = () => {
+  const [activeTab, setActiveTab] = useState("active");
+
+  const products = useSelector((state) => state.products.products);
+  const user = useSelector((state) => state.auth.userData);
+
+  // 🔥 Prevent crash if user not loaded yet
+  if (!user) {
+    return (
+      <div className="w-full flex justify-center items-center py-12">
+        <p className="text-lg font-semibold">Loading profile...</p>
+      </div>
+    );
+  }
+
+  const userId = user.$id;
+
+  // Filter user products
+  const ownerProducts = products.filter((p) => p.userId === userId);
+
+  const activeProducts = ownerProducts.filter((p) => p.status === "active");
+  const soldProducts = ownerProducts.filter((p) => p.status === "sold");
+
+  return (
+    <div className="w-full flex justify-center items-center py-12">
+      <div className="w-[95%] max-w-7xl">
+
+        <h1 className="text-3xl font-semibold mb-8">Profile</h1>
+
+        <ProfileCard />
+
+        <div className="w-full h-10 bg-black p-1 my-8 rounded-2xl flex justify-around">
+          <button
+            onClick={() => setActiveTab("active")}
+            className={`w-[50%] rounded-2xl cursor-pointer ${
+              activeTab === "active" ? "bg-white text-black" : "text-white"
+            }`}
+          >
+            Active Listings
+          </button>
+
+          <button
+            onClick={() => setActiveTab("sold")}
+            className={`w-[50%] rounded-2xl cursor-pointer ${
+              activeTab === "sold" ? "bg-white text-black" : "text-white"
+            }`}
+          >
+            Sold Items
+          </button>
+        </div>
+
+        <OwnerProduct
+          products={activeTab === "active" ? activeProducts : soldProducts}
+        />
+
+      </div>
+    </div>
+  );
+};
+
+export default Profile;
