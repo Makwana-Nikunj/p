@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
+import { initChatSocket } from "./socket/chat.sockets.js";
 
 
 const app = express();
@@ -44,14 +45,16 @@ app.use(cookieParser());
 
 import userRouter from "./routes/user.routes.js";
 import productRouter from "./routes/product.routes.js";
-// import chatRouter from "./routes/chats.routes.js";
-// import messageRouter from "./routes/messages.routes.js";
+import favoriteRouter from "./routes/favorite.routes.js";
+import chatRouter from "./routes/chats.routes.js";
+import messageRouter from "./routes/messages.routes.js";
 
 
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
-// app.use("/api/chats", chatRouter);
-// app.use("/api/messages", messageRouter);
+app.use("/api/favorites", favoriteRouter);
+app.use("/api/chats", chatRouter);
+app.use("/api/messages", messageRouter);
 
 // Health check endpoint for keep-alive pings
 app.get("/api/health", (req, res) => {
@@ -67,7 +70,7 @@ const io = new Server(server, {
     },
 });
 
-// initChatSocket(io);
+initChatSocket(io);
 
 // Global error handler — converts ApiError to JSON response
 app.use((err, req, res, next) => {

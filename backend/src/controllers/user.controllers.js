@@ -296,6 +296,10 @@ const deleteAccount = asyncHandler(async (req, res) => {
             await deleteFromCloudinary(product.image_public_id);
         }
     }
+    // Delete all favorites of the user   
+    await sql`
+        DELETE FROM favorites WHERE user_id = ${userId}
+    `;
 
     // delate all products of the user
     await sql`DELETE FROM products WHERE seller_id = ${userId}`;
