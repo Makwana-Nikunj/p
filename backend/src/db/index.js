@@ -15,6 +15,7 @@ const connectToDatabase = async () => {
                 username VARCHAR(255) NOT NULL,
                 email VARCHAR(255) NOT NULL unique,
                 password text NOT NULL,
+                role VARCHAR(255) NOT NULL DEFAULT 'user',
                 avatar text,
                 avatar_public_id text,
                 refresh_token text,

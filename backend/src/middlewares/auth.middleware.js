@@ -18,7 +18,7 @@ const verifyJwt = asyncHandler(async (req, _, next) => {
             throw new ApiError(401, "Access token expired or invalid");
         }
 
-        const users = await sql`SELECT id, username, email, avatar FROM users WHERE id = ${decodedToken.id}`;
+        const users = await sql`SELECT id, username, email, avatar, role FROM users WHERE id = ${decodedToken.id}`;
 
         if (!users || users.length === 0) {
             throw new ApiError(401, "Invalid Access Token");
@@ -31,4 +31,16 @@ const verifyJwt = asyncHandler(async (req, _, next) => {
     }
 });
 
-export { verifyJwt };
+const isAdmin = asyncHandler(async (req, res, next) => {
+    if (!req.user) {
+        throw new ApiError(401, "Unauthorized request");
+    }
+
+    if (req.user.role !== "admin") {
+        throw new ApiError(403, "Access denied. Admin privileges required.");
+    }
+
+    next();
+});
+
+export { verifyJwt, isAdmin };

@@ -190,29 +190,27 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, users[0], "User fetched successfully"));
 });
 
-const changeUsername = asyncHandler(async (req, res) => {
-    const { username } = req.body || {};
+const updateProfile = asyncHandler(async (req, res) => {
+    const { username, email } = req.body || {};
+    const userId = req.user.id;
 
-    if (!username?.trim()) {
-        throw new ApiError(400, "Username is required");
+    if (!username?.trim() && !email?.trim()) {
+        throw new ApiError(400, "At least one field (username or email) is required to update");
+    }
+    const updatedInfo = {};
+    if (username?.trim()) {
+        updatedInfo.username = username.toLowerCase();
+    }
+    if (email?.trim()) {
+        updatedInfo.email = email;
     }
 
-    // Check if username is already taken
-    const existing = await sql`
-        SELECT id FROM users WHERE LOWER(username) = ${username.toLowerCase()} AND id != ${req.user.id}
+    await sql`
+        UPDATE users SET ${sql(updatedInfo)}, updated_at = NOW() WHERE id = ${userId}
     `;
 
-    if (existing.length > 0) {
-        throw new ApiError(409, "Username is already taken");
-    }
+    return res.status(200).json(new ApiResponse(200, updatedInfo, "Profile updated successfully"));
 
-    const updated = await sql`
-        UPDATE users SET username = ${username.toLowerCase()}
-        WHERE id = ${req.user.id}
-        RETURNING id, username, email, avatar, created_at, updated_at
-    `;
-
-    return res.status(200).json(new ApiResponse(200, updated[0], "Username updated successfully"));
 });
 
 const changeAvatar = asyncHandler(async (req, res) => {
@@ -276,14 +274,47 @@ const changePassword = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, {}, "Password changed successfully"));
 });
 
+const deleteAccount = asyncHandler(async (req, res) => {
+
+    const userId = req.user.id;
+
+    const users = await sql`
+        SELECT id, avatar_public_id FROM users WHERE id = ${userId}
+    `;
+
+    // Delete avatar from cloudinary if it exists
+    if (users[0]?.avatar_public_id) {
+        await deleteFromCloudinary(users[0].avatar_public_id);
+
+    }
+    // get all product public_ids of the user to delete from cloudinary
+    const products = await sql`
+        SELECT id, image_public_id FROM products WHERE seller_id = ${userId}
+    `;
+    for (const product of products) {
+        if (product.image_public_id) {
+            await deleteFromCloudinary(product.image_public_id);
+        }
+    }
+
+    // delate all products of the user
+    await sql`DELETE FROM products WHERE seller_id = ${userId}`;
+
+    // Delete user from database
+    await sql`DELETE FROM users WHERE id = ${userId}`;
+
+
+    return res.status(200).json(new ApiResponse(200, {}, "Account deleted successfully"));
+});
 
 export {
     registerUser,
     loginUser,
     logoutUser,
+    deleteAccount,
     refreshAccessToken,
     getCurrentUser,
-    changeUsername,
+    updateProfile,
     changeAvatar,
     changePassword
 };

@@ -43,11 +43,13 @@ app.use(cookieParser());
 
 
 import userRouter from "./routes/user.routes.js";
+import productRouter from "./routes/product.routes.js";
 // import chatRouter from "./routes/chats.routes.js";
 // import messageRouter from "./routes/messages.routes.js";
 
 
 app.use("/api/users", userRouter);
+app.use("/api/products", productRouter);
 // app.use("/api/chats", chatRouter);
 // app.use("/api/messages", messageRouter);
 
