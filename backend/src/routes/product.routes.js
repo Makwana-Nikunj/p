@@ -19,6 +19,17 @@ import { verifyJwt, isAdmin } from "../middlewares/auth.middleware.js";
 const router = Router();
 
 // ============================================
+// ADMIN ROUTES (must be before /:id to avoid conflicts)
+// ============================================
+
+router.route("/pending").get(verifyJwt, isAdmin, getPendingProducts);
+router.route("/approved").get(verifyJwt, isAdmin, getApprovedProducts);
+router.route("/rejected").get(verifyJwt, isAdmin, getRejectedProducts);
+router.route("/all-products").get(verifyJwt, isAdmin, getAllProducts);
+router.route("/:id/approve").patch(verifyJwt, isAdmin, approveProduct);
+router.route("/:id/reject").patch(verifyJwt, isAdmin, rejectProduct);
+
+// ============================================
 // USER ROUTES
 // ============================================
 
@@ -27,26 +38,15 @@ router.route("/sell-product").post(
     upload.fields([{ name: "productImage", maxCount: 1 }]),
     createProduct
 );
-router.route("/products").get(getProducts);
-router.route("/products/:id").patch(
+router.route("/").get(getProducts);
+router.route("/:id").patch(
     verifyJwt,
     upload.fields([{ name: "productImage", maxCount: 1 }]),
     updateProduct
 );
-router.route("/products/:id")
+router.route("/:id")
     .delete(verifyJwt, deleteProduct)
     .get(getProductById);
-
-// ============================================
-// ADMIN ROUTES
-// ============================================
-
-router.route("/products/:id/approve").patch(verifyJwt, isAdmin, approveProduct);
-router.route("/products/:id/reject").patch(verifyJwt, isAdmin, rejectProduct);
-router.route("/products/pending").get(verifyJwt, isAdmin, getPendingProducts);
-router.route("/products/approved").get(verifyJwt, isAdmin, getApprovedProducts);
-router.route("/products/rejected").get(verifyJwt, isAdmin, getRejectedProducts);
-router.route("/all-products").get(verifyJwt, isAdmin, getAllProducts);
 
 
 

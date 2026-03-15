@@ -107,7 +107,7 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 
     const users = await sql`
-        SELECT id, username, email, password, avatar, created_at
+        SELECT id, username, email, password, avatar, role, created_at
         FROM users WHERE email = ${email}
     `;
 
@@ -179,7 +179,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
 const getCurrentUser = asyncHandler(async (req, res) => {
     const users = await sql`
-        SELECT id, username, email, avatar, created_at, updated_at
+        SELECT id, username, email, avatar, role, created_at, updated_at
         FROM users WHERE id = ${req.user.id}
     `;
 

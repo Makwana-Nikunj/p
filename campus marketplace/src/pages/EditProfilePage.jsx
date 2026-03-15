@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
-import { updateProfilePhoto, login as authLogin } from "../../store/authSlice";
+import { updateProfilePhoto, login as authLogin } from '../store/authSlice';
 import { useNavigate } from "react-router-dom";
-import profileService from "../../appwrite/profileService";
+import profileService from '../services/profileService';
 
 const EditProfile = () => {
   const user = useSelector((state) => state.auth.userData);
@@ -49,7 +49,7 @@ const EditProfile = () => {
 
 
         if (uploaded) {
-          finalPhoto = profileService.getProfilePhoto(user.$id);
+          finalPhoto = profileService.getProfilePhoto(uploaded.avatar || uploaded);
         }
       }
 

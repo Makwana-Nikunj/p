@@ -156,7 +156,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 const approveProduct = asyncHandler(async (req, res) => {
 
-    const { productId } = req.params;
+    const { id: productId } = req.params;
 
     if (!productId) {
         throw new ApiError(400, "Product ID is required");
@@ -182,7 +182,7 @@ const approveProduct = asyncHandler(async (req, res) => {
 
 const rejectProduct = asyncHandler(async (req, res) => {
 
-    const { productId } = req.params;
+    const { id: productId } = req.params;
 
     if (!productId) {
         throw new ApiError(400, "Product ID is required");

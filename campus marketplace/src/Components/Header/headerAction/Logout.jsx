@@ -3,7 +3,7 @@ import { FiLogOut } from "react-icons/fi";
 
 import { useNavigate } from "react-router-dom";
 import {useDispatch} from 'react-redux'
-import authService from '../../../appwrite/auth'
+import authService from '../../../services/authService'
 import {logout} from '../../../store/authSlice'
 
 

@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { FiSearch, FiArrowLeft } from "react-icons/fi";
 import { useSelector } from "react-redux";
-import ChatCard from "./ChatCard";
-import MessageBubble from "./MessageBubble";
-import chatService from "../../appwrite/chatService";
-import profileService from "../../appwrite/profileService";
+import ChatCard from '../Components/chat/ChatCard';
+import MessageBubble from '../Components/chat/MessageBubble';
+import chatService from '../services/chatService';
+import profileService from '../services/profileService';
 
 const Chat = () => {
   const user = useSelector((state) => state.auth.userData);
@@ -54,7 +54,7 @@ const Chat = () => {
     try {
       const res = await chatService.getMessages(conv.$id);
       setMessages(res.documents);
-      
+
       // Mark conversation as read
       if (conv.unreadCount > 0) {
         await chatService.markAsRead(conv.$id, user.$id);
@@ -79,12 +79,16 @@ const Chat = () => {
 
     try {
       setSendingMessage(true);
-      
+
       const newMsg = await chatService.sendMessage(
         activeConversation.$id,
         user.$id,
         input
       );
+
+      if (!newMsg) {
+        throw new Error("Failed to send message (socket disconnected).");
+      }
 
       await chatService.updateLastMessage(activeConversation.$id, input);
 
@@ -132,7 +136,7 @@ const Chat = () => {
     if (!activeConversation || !user) return;
 
     try {
-      const unsub = chatService.subscribeMessages((event) => {
+      const unsub = chatService.subscribeMessages(activeConversation.$id, (event) => {
         const msg = event.payload;
 
         if (msg.conversationId !== activeConversation.$id) return;
@@ -224,7 +228,7 @@ const Chat = () => {
             </div>
 
             {/* Scrollable conversation list */}
-            <div 
+            <div
               style={{
                 flex: 1,
                 overflowY: 'auto',
@@ -312,7 +316,7 @@ const Chat = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Product Name Bar */}
                   <div className="bg-gradient-to-r from-indigo-50 via-blue-50 to-indigo-50 px-4 md:px-5 py-3 border-t border-gray-200">
                     <div className="flex items-center gap-2">
@@ -327,7 +331,7 @@ const Chat = () => {
                 </div>
 
                 {/* Messages */}
-                <div 
+                <div
                   className="p-4 md:p-5 space-y-3 bg-gradient-to-b from-gray-50 to-gray-100"
                   style={{
                     flex: 1,
@@ -343,15 +347,16 @@ const Chat = () => {
                   ) : messages.length > 0 ? (
                     <>
                       {messages.map((msg, index) => {
+                        if (!msg) return null; // Protect against null messages
                         const prevMsg = index > 0 ? messages[index - 1] : null;
-                        const showTimestamp = !prevMsg || 
+                        const showTimestamp = !prevMsg ||
                           (new Date(msg.$createdAt) - new Date(prevMsg.$createdAt)) > 300000; // 5 min
-                        
+
                         return (
-                          <div key={msg.$id}>
+                          <div key={msg.$id || index}>
                             <MessageBubble
-                              text={msg.text}
-                              isOwn={msg.senderId === user.$id}
+                              text={msg.text || ""}
+                              isOwn={msg.senderId === user?.$id}
                               timestamp={showTimestamp ? msg.$createdAt : null}
                               imageId={msg.imageId}
                             />
@@ -383,7 +388,7 @@ const Chat = () => {
                     }}
                     disabled={sendingMessage}
                   />
-                  
+
                   <button
                     className="bg-black text-white px-4 md:px-6 py-2 rounded-lg text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-800 transition-colors font-medium shrink-0"
                     onClick={sendMessage}

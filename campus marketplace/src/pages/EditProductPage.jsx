@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import productService from "../../appwrite/productService";
-import { fetchProducts } from "../../store/productSlice";
+import productService from '../services/productService';
+import { fetchProducts } from '../store/productSlice';
 import { useEffect, useState } from "react";
 
 const EditProduct = () => {

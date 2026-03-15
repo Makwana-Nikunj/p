@@ -8,9 +8,9 @@ import { verifyJwt } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.route("/favorites").get(verifyJwt, getFavorites);
+router.route("/").get(verifyJwt, getFavorites);
 
-router.route("/favorites/:productId")
+router.route("/:productId")
     .post(verifyJwt, addToFavorites)
     .delete(verifyJwt, removeFromFavorites);
 

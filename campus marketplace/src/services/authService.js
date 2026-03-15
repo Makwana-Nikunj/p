@@ -1,0 +1,99 @@
+import apiClient from '../lib/apiClient.js';
+
+export class AuthService {
+    constructor() {
+        this.pendingRequests = new Map();
+    }
+
+    /**
+     * Prevent duplicate simultaneous requests - FIXES RACE CONDITION
+     */
+    async createAccount({ email, password, name }) {
+        const key = `register_${email}`;
+
+        // Return existing request if already in progress
+        if (this.pendingRequests.has(key)) {
+            return this.pendingRequests.get(key);
+        }
+
+        const promise = (async () => {
+            try {
+                const response = await apiClient.post('/users/register', {
+                    email,
+                    password,
+                    username: name,
+                });
+                // Return response directly - don't auto-login (prevents double request)
+                return response.data;
+            } catch (error) {
+                throw error.response?.data?.message || "Registration failed";
+            } finally {
+                this.pendingRequests.delete(key);
+            }
+        })();
+
+        this.pendingRequests.set(key, promise);
+        return promise;
+    }
+
+    /**
+     * Idempotent login - FIXES RACE CONDITION
+     * Same email + password within short window = same response
+     */
+    async login({ email, password }) {
+        const key = `login_${email}`;
+
+        // Return existing request if already in progress
+        if (this.pendingRequests.has(key)) {
+            return this.pendingRequests.get(key);
+        }
+
+        const promise = (async () => {
+            try {
+                const response = await apiClient.post('/users/login', { email, password });
+                return response.data;
+            } catch (error) {
+                throw error.response?.data?.message || "Login failed";
+            } finally {
+                this.pendingRequests.delete(key);
+            }
+        })();
+
+        this.pendingRequests.set(key, promise);
+        return promise;
+    }
+
+    async getCurrentUser() {
+        try {
+            const response = await apiClient.get('/users/me');
+            if (response.data && response.data.data) {
+                const u = response.data.data;
+                return { ...u, $id: String(u.id), name: u.username };
+            }
+            return null;
+        } catch {
+            return null;
+        }
+    }
+
+    async logout() {
+        try {
+            // Clear pending requests on logout
+            this.pendingRequests.clear();
+            await apiClient.post('/users/logout');
+        } catch (error) {
+            console.log("AuthService :: logout :: error", error);
+        }
+    }
+
+    /**
+     * Clear any pending requests (e.g., on navigation or error recovery)
+     */
+    clearPendingRequests() {
+        this.pendingRequests.clear();
+    }
+}
+
+const authService = new AuthService();
+
+export default authService;

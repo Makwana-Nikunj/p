@@ -1,4 +1,4 @@
-import profileService from "../../appwrite/profileService";
+import profileService from "../../services/profileService";
 import { FiTrash2 } from "react-icons/fi";
 
 const ChatCard = ({ conversation, userId, onClick, products, onDelete }) => {

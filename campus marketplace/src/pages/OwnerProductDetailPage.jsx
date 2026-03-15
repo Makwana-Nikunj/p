@@ -6,8 +6,8 @@ import {
   Package,
   ChevronLeft,
 } from "lucide-react";
-import productService from "../../appwrite/productService";
-import { fetchProducts } from "../../store/productSlice";
+import productService from '../services/productService';
+import { fetchProducts } from '../store/productSlice';
 
 const OwnerProductDetail = () => {
   const { id } = useParams();

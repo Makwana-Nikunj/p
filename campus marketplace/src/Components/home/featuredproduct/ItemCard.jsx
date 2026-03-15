@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { FiHeart } from 'react-icons/fi';
 import { FaHeart } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
-import favoriteService from '../../../appwrite/favoriteService';
-import productService from '../../../appwrite/productService';
+import favoriteService from '../../../services/favoriteService';
+import productService from '../../../services/productService';
 
 const Cart = ({ imgUrl, name, category, price, id }) => {
   const user = useSelector((state) => state.auth.userData);

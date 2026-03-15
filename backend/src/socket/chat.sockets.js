@@ -11,10 +11,23 @@ const initChatSocket = (io) => {
 
     ioInstance = io;
 
-    // JWT AUTH MIDDLEWARE — expects accessToken from frontend
+    // JWT AUTH MIDDLEWARE — expects accessToken from frontend or cookies
     io.use((socket, next) => {
         try {
-            const token = socket.handshake.auth?.accessToken;
+            let token = socket.handshake.auth?.accessToken;
+
+            if (!token && socket.handshake.headers.cookie) {
+                // Try extracting from cookies
+                const cookieParts = socket.handshake.headers.cookie.split(';');
+                for (const part of cookieParts) {
+                    const [name, value] = part.trim().split('=');
+                    if (name === 'accessToken') {
+                        token = value;
+                        break;
+                    }
+                }
+            }
+
             if (!token) return next(new Error("Authentication required"));
 
             const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);

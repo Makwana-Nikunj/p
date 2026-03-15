@@ -2,27 +2,23 @@ import React from "react";
 import { FiEdit2 } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import profileService from "../../appwrite/profileService";
 
 const ProfileCard = () => {
   const user = useSelector((state) => state.auth.userData);
   const products = useSelector((state) => state.products.products);
   const navigate = useNavigate();
+  // Profile Photo from Redux store because editing updates it there
+  const profilePhoto = useSelector((state) => state.auth.profilePhoto);
  
 
   if (!user) return null;
-
-  // Profile Photo
-  const profilePhoto =
-    profileService.getProfilePhoto(user.$id) ||
-    "https://img.freepik.com/free-icon/user_318-159711.jpg";
 
  
     
 
   // Stats
-  const ownerProducts = products.filter((p) => p.userId === user.$id);
-  const activeCount = ownerProducts.filter((p) => p.status === "active").length;
+  const ownerProducts = products.filter((p) => String(p.userId) === String(user.$id));
+  const activeCount = ownerProducts.filter((p) => p.status === "approved" || p.status === "pending").length;
   const soldCount = ownerProducts.filter((p) => p.status === "sold").length;
 
   return (
@@ -33,7 +29,7 @@ const ProfileCard = () => {
 
         {/* Avatar */}
         <img
-          src={profilePhoto}
+          src={profilePhoto || user?.avatar || "https://img.freepik.com/free-icon/user_318-159711.jpg"}
           alt="Profile"
           className="w-40 h-40 rounded-full object-cover border"
         />

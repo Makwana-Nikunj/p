@@ -3,6 +3,10 @@ import Toast from './Toast';
 
 const ToastContext = createContext();
 
+/**
+ * Hook to use toast notifications throughout the app
+ * @returns {object} - { showToast }
+ */
 export const useToast = () => {
   const context = useContext(ToastContext);
   if (!context) {
@@ -11,12 +15,25 @@ export const useToast = () => {
   return context;
 };
 
+/**
+ * Toast Provider component - wrap your app with this to enable toast notifications
+ * Usage:
+ *   const { showToast } = useToast();
+ *   showToast('Success!', 'success', 3000);
+ *   showToast('Error occurred', 'error', 4000);
+ *   showToast('Warning', 'warning');
+ *   showToast('Info', 'info', 5000);
+ */
 export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 
   const showToast = useCallback((message, type = 'info', duration = 3000) => {
-    const id = Date.now();
-    setToasts((prev) => [...prev, { id, message, type, duration }]);
+    const id = Date.now() + Math.random();
+
+    const validTypes = ['success', 'error', 'info', 'warning'];
+    const normalizedType = validTypes.includes(type) ? type : 'info';
+
+    setToasts((prev) => [...prev, { id, message, type: normalizedType, duration }]);
   }, []);
 
   const removeToast = useCallback((id) => {
@@ -26,17 +43,21 @@ export const ToastProvider = ({ children }) => {
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-      <div className="fixed top-20 right-4 z-50 flex flex-col gap-2">
+      {/* Toast container - positioned at top right */}
+      <div className="fixed top-20 right-4 z-50 flex flex-col gap-3 pointer-events-none">
         {toasts.map((toast) => (
-          <Toast
-            key={toast.id}
-            message={toast.message}
-            type={toast.type}
-            duration={toast.duration}
-            onClose={() => removeToast(toast.id)}
-          />
+          <div key={toast.id} className="pointer-events-auto">
+            <Toast
+              message={toast.message}
+              type={toast.type}
+              duration={toast.duration}
+              onClose={() => removeToast(toast.id)}
+            />
+          </div>
         ))}
       </div>
     </ToastContext.Provider>
   );
 };
+
+export default ToastProvider;

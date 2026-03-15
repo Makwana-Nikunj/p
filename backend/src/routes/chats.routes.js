@@ -4,13 +4,16 @@ import {
     createChat,
     deleteChat
 } from "../controllers/chats.controllers.js";
+import { verifyJwt } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.route("/chats")
+router.use(verifyJwt);
+
+router.route("/")
     .get(getUserChats)
     .post(createChat);
 
-router.route("/chats/:chatId").delete(deleteChat);
+router.route("/:chatId").delete(deleteChat);
 
 export default router;

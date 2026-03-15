@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import favoriteService from '../../appwrite/favoriteService';
-import productService from '../../appwrite/productService';
-import LoadingSpinner from '../LoadingSpinner';
-import Cart from '../home/featuredproduct/ItemCard';
+import favoriteService from '../services/favoriteService';
+import productService from '../services/productService';
+import LoadingSpinner from '../Components/LoadingSpinner';
+import Cart from '../Components/home/featuredproduct/ItemCard';
 
 const Favorites = () => {
   const user = useSelector((state) => state.auth.userData);
   const products = useSelector((state) => state.products.products);
-  
+
   const [favoriteIds, setFavoriteIds] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchFavorites = async () => {
       if (!user) return;
-      
+
       try {
         setLoading(true);
         const favs = await favoriteService.getUserFavorites(user.$id);
@@ -31,8 +31,8 @@ const Favorites = () => {
     fetchFavorites();
   }, [user]);
 
-  const favoriteProducts = products.filter(p => 
-    favoriteIds.includes(p.$id) && p.status === 'active'
+  const favoriteProducts = products.filter(p =>
+    favoriteIds.includes(p.$id) && p.status === 'approved' // FIX: Change 'active' to 'approved'
   );
 
   if (!user) {

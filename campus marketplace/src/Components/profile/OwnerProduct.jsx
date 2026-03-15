@@ -1,5 +1,5 @@
 import React from "react";
-import productService from "../../appwrite/productService";
+import productService from "../../services/productService";
 import OwnerItemCard from "./OwnerItemCard";
 
 const OwnerProduct = ({ products }) => {

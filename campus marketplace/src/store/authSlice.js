@@ -3,7 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     status: false,
     userData: null,
-    profilePhoto: null,   // NEW
+    profilePhoto: null,
+    isAdmin: false,
+    accessToken: null,
 };
 
 const authSlice = createSlice({
@@ -13,14 +15,18 @@ const authSlice = createSlice({
         login: (state, action) => {
             state.status = true;
             state.userData = action.payload.userData;
-            state.profilePhoto = action.payload.profilePhoto || null; // NEW
+            state.profilePhoto = action.payload.profilePhoto || null;
+            state.isAdmin = action.payload.userData?.role === 'admin';
+            state.accessToken = action.payload.accessToken || null;
         },
         logout: (state) => {
             state.status = false;
             state.userData = null;
-            state.profilePhoto = null;  // NEW
+            state.profilePhoto = null;
+            state.isAdmin = false;
+            state.accessToken = null;
         },
-        updateProfilePhoto: (state, action) => {   // NEW
+        updateProfilePhoto: (state, action) => {
             state.profilePhoto = action.payload;
         }
     }

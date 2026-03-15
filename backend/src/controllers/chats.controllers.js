@@ -49,7 +49,7 @@ const createChat = asyncHandler(async (req, res) => {
     `;
     //if chat already exists return it instead of creating a new one
     if (existingChat && existingChat.length > 0) {
-        return res.status(200).json(new ApiResponse(true, "Chat already exists", existingChat[0]));
+        return res.status(200).json(new ApiResponse(200, existingChat[0], "Chat already exists"));
     }
     //create chat
     const newChat = await sql`
@@ -58,7 +58,7 @@ const createChat = asyncHandler(async (req, res) => {
         returning *
     `;
 
-    res.status(201).json(new ApiResponse(true, "Chat created successfully", newChat[0]));
+    res.status(201).json(new ApiResponse(201, newChat[0], "Chat created successfully"));
 });
 
 const deleteChat = asyncHandler(async (req, res) => {

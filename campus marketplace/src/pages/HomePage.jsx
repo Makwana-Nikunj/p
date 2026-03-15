@@ -1,6 +1,6 @@
 import React from 'react'
-import Hero from './Hero.jsx/Hero'
-import FeaturedProducts from './featuredproduct/FeaturedProducts'
+import Hero from '../Components/home/Hero.jsx/Hero'
+import FeaturedProducts from '../Components/home/featuredproduct/FeaturedProducts'
 
 const Container = () => {
   return (

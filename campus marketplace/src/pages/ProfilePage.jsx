@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import ProfileCard from "./ProfileCard";
-import OwnerProduct from "./OwnerProduct";
+import ProfileCard from '../Components/profile/ProfileCard';
+import OwnerProduct from '../Components/profile/OwnerProduct';
 import { useSelector } from "react-redux";
 
 const Profile = () => {
@@ -23,7 +23,7 @@ const Profile = () => {
   // Filter user products
   const ownerProducts = products.filter((p) => p.userId === userId);
 
-  const activeProducts = ownerProducts.filter((p) => p.status === "active");
+  const activeProducts = ownerProducts.filter((p) => p.status === "approved" || p.status === "pending");
   const soldProducts = ownerProducts.filter((p) => p.status === "sold");
 
   return (

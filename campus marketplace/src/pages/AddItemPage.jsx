@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import productService from "../../appwrite/productService";
+import productService from '../services/productService';
 import { useSelector } from "react-redux";
 
 const AddItem = () => {

@@ -2,15 +2,15 @@ import React from "react";
 import Cart from "./ItemCard";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import productService from "../../../appwrite/productService";
+import productService from "../../../services/productService";
 
 const FeaturedProducts = () => {
   const products = useSelector((state) => state.products.products);
-  
-  const activeProducts = products.filter(p => p.status === "active")
+
+  const activeProducts = products.filter(p => p.status === "approved" || p.status === "active")
 
 
-  
+
 
   // Format products for Cart component
   const items = activeProducts.map((doc) => ({

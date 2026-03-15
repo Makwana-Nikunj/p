@@ -2,9 +2,26 @@ import React from "react"
 import { FiHome, FiShoppingBag, FiHeart } from "react-icons/fi"
 import { CgProfile } from "react-icons/cg"
 import { TiMessages } from "react-icons/ti"
+import { MdAdminPanelSettings } from "react-icons/md" // NEW
 import { NavLink } from "react-router-dom"
+import { useSelector } from "react-redux" // NEW
 
 const NavItems = ({ mobile = false }) => {
+  const { isAdmin } = useSelector(state => state.auth) // NEW
+
+  const navItems = [
+    { to: "/", label: "Home", icon: <FiHome size={15} /> },
+    { to: "/browse", label: "Browse", icon: <FiShoppingBag size={15} /> },
+    { to: "/favorites", label: "Favorites", icon: <FiHeart size={15} /> },
+    { to: "/profile", label: "Profile", icon: <CgProfile size={15} /> },
+    { to: "/chat", label: "Messages", icon: <TiMessages size={15} /> },
+  ]
+
+  // NEW: Add admin link if user is admin
+  if (isAdmin) {
+    navItems.push({ to: "/admin", label: "Admin", icon: <MdAdminPanelSettings size={15} /> })
+  }
+
   return (
     <nav>
       <ul
@@ -13,13 +30,7 @@ const NavItems = ({ mobile = false }) => {
           text-sm font-medium
         `}
       >
-        {[
-          { to: "/", label: "Home", icon: <FiHome size={15} /> },
-          { to: "/browse", label: "Browse", icon: <FiShoppingBag size={15} /> },
-          { to: "/favorites", label: "Favorites", icon: <FiHeart size={15} /> },
-          { to: "/profile", label: "Profile", icon: <CgProfile size={15} /> },
-          { to: "/chat", label: "Messages", icon: <TiMessages size={15} /> },
-        ].map(({ to, label, icon }) => (
+        {navItems.map(({ to, label, icon }) => (
           <li key={to}>
             <NavLink
               to={to}
