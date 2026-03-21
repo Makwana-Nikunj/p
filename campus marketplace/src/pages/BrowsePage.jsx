@@ -11,16 +11,14 @@ const Browse = () => {
   const products = useSelector((state) => state.products.products);
   const { showToast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    // Simulate initial load or set to false if products are pre-loaded
-    if (products && products.length > 0) {
+    // Wrap in a timeout to avoid synchronous setState inside an effect (React Compiler warning)
+    const timer = setTimeout(() => {
       setIsLoading(false);
-    } else {
-      // Only show loading briefly if products are being fetched
-      setTimeout(() => setIsLoading(false), 500);
-    }
+    }, products && products.length > 0 ? 0 : 500);
+
+    return () => clearTimeout(timer);
   }, [products]);
 
   const activeProducts = products.filter(p => p.status === "approved" || p.status === "active")

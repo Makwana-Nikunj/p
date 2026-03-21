@@ -11,12 +11,13 @@ const EditProduct = () => {
   const dispatch = useDispatch();
 
   const products = useSelector((state) => state.products.products);
-  const user = useSelector((state) => state.auth.userData);
-
   const product = products.find((p) => p.$id === id);
 
-  const [previewImage, setPreviewImage] = useState(null);
   const [newImageFile, setNewImageFile] = useState(null);
+
+  const previewImage = newImageFile
+    ? URL.createObjectURL(newImageFile)
+    : (product ? productService.getFileView(product.imageId) : null);
 
   const {
     register,
@@ -34,8 +35,6 @@ const EditProduct = () => {
       setValue("condition", product.condition);
       setValue("location", product.location);
       setValue("description", product.description);
-
-      setPreviewImage(productService.getFileView(product.imageId));
     }
   }, [product, setValue]);
 
@@ -89,7 +88,6 @@ const EditProduct = () => {
     if (!file) return;
 
     setNewImageFile(file);
-    setPreviewImage(URL.createObjectURL(file));
   };
 
   return (
