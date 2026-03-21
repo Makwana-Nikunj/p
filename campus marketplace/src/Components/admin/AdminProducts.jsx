@@ -73,7 +73,7 @@ const AdminProducts = () => {
                         onClick={() => setFilter(status)}
                         className={`px-4 py-2 rounded-lg font-medium capitalize transition ${filter === status
                                 ? 'bg-blue-600 text-white'
-                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
                             }`}
                     >
                         {status === 'all' ? 'All Products' : `${status} (${status === 'pending' ? '📋' : '✓'})`}
@@ -85,16 +85,16 @@ const AdminProducts = () => {
             {loading ? (
                 <div className="text-center py-12">
                     <FiLoader className="inline animate-spin text-blue-600 text-3xl" />
-                    <p className="text-gray-600 mt-4">Loading products...</p>
+                    <p className="text-gray-600 dark:text-gray-400 mt-4">Loading products...</p>
                 </div>
             ) : products.length === 0 ? (
-                <div className="bg-white rounded-lg shadow p-8 text-center">
-                    <p className="text-gray-600">No products found in this category</p>
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
+                    <p className="text-gray-600 dark:text-gray-400">No products found in this category</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {products.map(product => (
-                        <div key={product.id} className="bg-white rounded-lg shadow overflow-hidden hover:shadow-lg transition">
+                        <div key={product.id} className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden hover:shadow-lg transition">
                             {/* Image */}
                             {product.image_url && (
                                 <img
@@ -106,8 +106,8 @@ const AdminProducts = () => {
 
                             {/* Content */}
                             <div className="p-4">
-                                <h3 className="font-semibold text-lg truncate">{product.title}</h3>
-                                <p className="text-gray-600 text-sm line-clamp-2">{product.description}</p>
+                                <h3 className="font-semibold text-lg truncate dark:text-white">{product.title}</h3>
+                                <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2">{product.description}</p>
 
                                 <div className="mt-4 flex items-center justify-between">
                                     <span className="text-lg font-bold text-blue-600">₹{product.price}</span>
@@ -119,7 +119,7 @@ const AdminProducts = () => {
                                     </span>
                                 </div>
 
-                                <p className="text-sm text-gray-500 mt-2">Category: {product.category}</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Category: {product.category}</p>
 
                                 {/* Actions - Only show for pending */}
                                 {product.status === 'pending' && (

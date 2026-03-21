@@ -8,6 +8,8 @@ function mapProduct(p) {
         $id: String(p.id),
         imageId: p.image_url,
         userId: String(p.user_id),
+        sellerName: p.sellerName || p.sellername || "Unknown Seller",
+        sellerAvatar: p.sellerAvatar || p.selleravatar || null,
         $createdAt: p.created_at,
     };
 }

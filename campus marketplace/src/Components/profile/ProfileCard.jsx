@@ -22,7 +22,7 @@ const ProfileCard = () => {
   const soldCount = ownerProducts.filter((p) => p.status === "sold").length;
 
   return (
-    <div className="border border-gray-200 rounded-2xl p-8 space-y-8 min-h-[350px] bg-white">
+    <div className="border border-gray-200 dark:border-gray-700 rounded-2xl p-8 space-y-8 min-h-[350px] bg-white dark:bg-gray-800 shadow-sm">
 
       {/* Top Section */}
       <div className="flex flex-col sm:flex-row gap-8">
@@ -39,13 +39,13 @@ const ProfileCard = () => {
 
           <div className="flex items-start justify-between">
             <div className="space-y-1 flex flex-col gap-5 justify-between items-start">
-              <h2 className="text-2xl font-semibold">{user.name || "User"}</h2>
-              <p className="text-sm text-gray-500">{user.email}</p>
+              <h2 className="text-2xl font-semibold dark:text-white">{user.name || "User"}</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
             </div>
 
             {/* Edit Button */}
             <button
-              className="flex items-center gap-2 text-sm font-medium px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-200 transition cursor-pointer"
+              className="flex items-center gap-2 text-sm font-medium px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition cursor-pointer"
               onClick={() => navigate("/profile/edit")}
             >
               <FiEdit2 />
@@ -56,17 +56,17 @@ const ProfileCard = () => {
         </div>
       </div>
 
-      <hr />
+      <hr className="border-gray-200 dark:border-gray-700" />
 
       {/* Stats */}
       <div className="flex justify-around text-center">
         <div>
-          <p className="text-2xl font-semibold">{activeCount}</p>
-          <p className="text-sm text-gray-500">Listings</p>
+          <p className="text-2xl font-semibold dark:text-white">{activeCount}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Listings</p>
         </div>
         <div>
-          <p className="text-2xl font-semibold">{soldCount}</p>
-          <p className="text-sm text-gray-500">Sold</p>
+          <p className="text-2xl font-semibold dark:text-white">{soldCount}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Sold</p>
         </div>
       </div>
 

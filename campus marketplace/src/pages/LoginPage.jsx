@@ -67,12 +67,12 @@ const LoginForm = () => {
     <div className="w-full flex justify-center items-center mt-20 pb-8">
       <form
         onSubmit={handleSubmit(handleLogin)}
-        className="w-full max-w-md space-y-6 border border-gray-200 rounded-xl p-8 bg-white shadow-lg"
+        className="w-full max-w-md space-y-6 border border-gray-200 dark:border-gray-700 rounded-xl p-8 bg-white dark:bg-gray-800 shadow-lg"
       >
         {/* Header */}
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900">Welcome Back</h2>
-          <p className="text-gray-600 text-sm mt-1">Sign in to your account</p>
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Welcome Back</h2>
+          <p className="text-gray-600 dark:text-gray-300 text-sm mt-1">Sign in to your account</p>
         </div>
 
         {/* Error Alert */}
@@ -85,7 +85,7 @@ const LoginForm = () => {
 
         {/* Email Field */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
@@ -98,10 +98,10 @@ const LoginForm = () => {
                   message: "Please enter a valid email address",
                 },
               })}
-              className={`w-full pl-10 pr-4 py-3 rounded-lg border transition-all outline-none
-                          ${errors.email
-                  ? 'border-red-300 focus:ring-2 focus:ring-red-200 bg-red-50'
-                  : 'border-gray-300 focus:ring-2 focus:ring-black/20 focus:border-black'
+              className={`w-full pl-10 pr-4 py-3 rounded-lg border transition-all outline-none dark:bg-gray-700 dark:text-white
+                          ${errors.email || errors.password
+                  ? 'border-red-300 focus:ring-2 focus:ring-red-200 bg-red-50 dark:bg-red-900/30 dark:border-red-500'
+                  : 'border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20 focus:border-black dark:focus:border-gray-400'
                 }`}
             />
             {emailValue && !errors.email && (
@@ -118,7 +118,7 @@ const LoginForm = () => {
 
         {/* Password Field */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Password</label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
@@ -154,8 +154,8 @@ const LoginForm = () => {
           type="submit"
           disabled={isSubmitting}
           className={`w-full py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${isSubmitting
-            ? 'bg-gray-300 text-gray-700 cursor-not-allowed'
-            : 'bg-black text-white hover:bg-gray-800 active:scale-95'
+            ? 'bg-gray-300 text-gray-700 cursor-not-allowed dark:bg-gray-600 dark:text-gray-400'
+            : 'bg-black text-white hover:bg-gray-800 active:scale-95 dark:bg-white dark:text-black dark:hover:bg-gray-200'
             }`}
         >
           {isSubmitting ? (
@@ -169,12 +169,12 @@ const LoginForm = () => {
         </button>
 
         {/* Helper Text */}
-        <p className="text-center text-sm text-gray-600">
+        <p className="text-center text-sm text-gray-600 dark:text-gray-400">
           Don't have an account?{' '}
           <button
             type="button"
             onClick={() => navigate("/register")}
-            className="text-black font-semibold hover:underline"
+            className="text-black dark:text-white font-semibold hover:underline"
           >
             Create one
           </button>

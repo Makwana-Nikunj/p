@@ -139,20 +139,14 @@ const ProductDetailPage = () => {
       </div>
 
       {/* Main Container */}
-      <div className="w-[90%] lg:w-[82%] bg-white rounded-lg p-4 md:p-8 flex flex-col md:flex-row gap-8 shadow-md">
+      <div className="w-[90%] lg:w-[82%] bg-white dark:bg-gray-800 rounded-lg p-4 md:p-8 flex flex-col md:flex-row gap-8 shadow-md">
 
         {/* LEFT: PRODUCT IMAGE */}
-        <div className="w-full md:w-1/2 flex justify-center items-center bg-gray-50 rounded-lg overflow-hidden">
+        <div className="w-full md:w-1/2 flex justify-center items-center bg-gray-50 dark:bg-gray-800/50 rounded-lg overflow-hidden min-h-[300px] md:min-h-0 aspect-square md:max-h-[600px]">
           <img
             src={productService.getFileView(product.imageId)}
             alt={product.title}
-            className="
-              w-full 
-              h-auto
-              max-h-96
-              md:max-h-screen
-              object-contain
-            "
+            className="w-full h-full object-contain p-2 md:p-6"
             loading="lazy"
           />
         </div>
@@ -216,7 +210,7 @@ const ProductDetailPage = () => {
             <div className="flex items-center gap-4">
               <img
                 src={
-                  profileService.getProfilePhoto(product.userId) ||
+                  profileService.getProfilePhoto(product.sellerAvatar) ||
                   "https://img.freepik.com/free-icon/user_318-159711.jpg"
                 }
                 className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"

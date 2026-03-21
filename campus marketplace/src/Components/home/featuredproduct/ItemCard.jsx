@@ -52,12 +52,12 @@ const Cart = ({ imgUrl, name, category, price, id }) => {
 
   return (
     <Link to={`/product/${id}`}>
-      <div className="m-3 w-75 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg transition duration-300 relative group">
+      <div className="m-3 w-75 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-lg transition duration-300 relative group">
 
         {/* Favorite Button */}
         <button
           onClick={handleFavoriteClick}
-          className="absolute top-3 right-3 z-10 p-2 bg-white rounded-full shadow-md hover:scale-110 transition-transform"
+          className="absolute top-3 right-3 z-10 p-2 bg-white dark:bg-gray-700 rounded-full shadow-md hover:scale-110 transition-transform"
           disabled={loading}
         >
           {isFavorited ? (
@@ -78,16 +78,16 @@ const Cart = ({ imgUrl, name, category, price, id }) => {
 
         {/* Content */}
         <div className="p-2 flex flex-col gap-2">
-          <span className="text-xs uppercase tracking-wide text-gray-500">
+          <span className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
             {category}
           </span>
 
-          <h2 className="text-lg font-semibold text-gray-800">
+          <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
             {name}
           </h2>
 
           <div className="flex items-center justify-between mt-1">
-            <span className="text-xl font-bold text-black">
+            <span className="text-xl font-bold text-black dark:text-white">
               ₹{price}
             </span>
           </div>

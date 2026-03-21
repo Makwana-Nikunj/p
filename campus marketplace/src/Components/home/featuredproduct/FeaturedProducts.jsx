@@ -25,22 +25,23 @@ const FeaturedProducts = () => {
     <div className="w-[90%] mt-4">
       {/* top */}
       <div className="  mx-25 flex items-center justify-between">
-        <span className="text-2xl font-bold">Featured Products</span>
+        <span className="text-2xl font-bold dark:text-white">Featured Products</span>
 
         <Link
           to="/browse"
-          className="
+            className="
             inline-block
-            border border-gray-300
+            border border-gray-300 dark:border-gray-600
+            dark:text-gray-300
             px-4 py-2
             rounded-lg
             font-semibold
             transition-all
             duration-300
             ease-in-out
-            hover:bg-black
-            hover:text-white
-            hover:border-black
+            hover:bg-black dark:hover:bg-white
+            hover:text-white dark:hover:text-black
+            hover:border-black dark:hover:border-white
             active:scale-95
           "
         >

@@ -13,7 +13,6 @@ const NavItems = ({ mobile = false }) => {
     { to: "/", label: "Home", icon: <FiHome size={15} /> },
     { to: "/browse", label: "Browse", icon: <FiShoppingBag size={15} /> },
     { to: "/favorites", label: "Favorites", icon: <FiHeart size={15} /> },
-    { to: "/profile", label: "Profile", icon: <CgProfile size={15} /> },
     { to: "/chat", label: "Messages", icon: <TiMessages size={15} /> },
   ]
 
@@ -36,8 +35,8 @@ const NavItems = ({ mobile = false }) => {
               to={to}
               className={({ isActive }) =>
                 `
-                flex items-center gap-2 h-10 px-4 rounded-md
-                ${isActive ? "bg-black text-white" : "text-black"}
+                flex items-center gap-2 h-10 px-4 rounded-md transition-colors
+                ${isActive ? "bg-black text-white dark:bg-white dark:text-black" : "text-black dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"}
                 `
               }
             >

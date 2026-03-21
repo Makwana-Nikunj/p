@@ -77,7 +77,7 @@ const EditProfile = () => {
     <div className="w-full flex items-center justify-center m-10">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-[80%] space-y-4 border border-gray-300 rounded-xl p-6 bg-white"
+        className="w-[80%] space-y-4 border border-gray-300 dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-800 shadow-md"
       >
         <h2 className="text-xl font-semibold">Edit Profile</h2>
 
@@ -97,8 +97,8 @@ const EditProfile = () => {
                 accept="image/*"
                 {...register("image")}
                 onChange={handleImageChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2
-                           outline-none focus:border-black focus:ring-2 focus:ring-black/20"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md px-3 py-2
+                           outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
               />
             </div>
           </div>
@@ -111,7 +111,7 @@ const EditProfile = () => {
               <input
                 placeholder="Your Name"
                 {...register("name", { required: "Name is required" })}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-black focus:ring-2 focus:ring-black/20"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
               />
               {errors.name && (
                 <p className="text-sm text-red-500 mt-1">
@@ -125,7 +125,7 @@ const EditProfile = () => {
               <input
                 value={user.email}
                 disabled
-                className="w-full border border-gray-200 bg-gray-100 rounded-md px-3 py-2 text-gray-500"
+                className="w-full border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-900 rounded-md px-3 py-2 text-gray-500 dark:text-gray-400"
               />
             </div>
 
@@ -137,7 +137,7 @@ const EditProfile = () => {
           <button
             type="button"
             onClick={() => navigate("/profile")}
-            className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-200 transition"
+            className="px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition"
           >
             Cancel
           </button>
@@ -145,7 +145,7 @@ const EditProfile = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-5 py-2 bg-black text-white rounded-md hover:opacity-80 active:scale-95 transition"
+            className="px-5 py-2 bg-black text-white dark:bg-white dark:text-black rounded-md hover:opacity-80 active:scale-95 transition"
           >
             {isSubmitting ? "Saving..." : "Save Changes"}
           </button>

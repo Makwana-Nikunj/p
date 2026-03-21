@@ -25,13 +25,13 @@ const AdminDashboard = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
             {/* Header */}
-            <header className="bg-white shadow">
+            <header className="bg-white dark:bg-gray-900 shadow dark:border-b dark:border-gray-800">
                 <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex justify-between items-center">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-                        <p className="text-gray-600 mt-1">Welcome, {userData?.name}</p>
+                        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
+                        <p className="text-gray-600 dark:text-gray-400 mt-1">Welcome, {userData?.name}</p>
                     </div>
                     <button
                         onClick={handleLogout}
@@ -43,14 +43,14 @@ const AdminDashboard = () => {
             </header>
 
             {/* Navigation Tabs */}
-            <div className="bg-white border-b border-gray-200">
+            <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <nav className="flex gap-8" aria-label="Tabs">
                         <button
                             onClick={() => setActiveTab('stats')}
                             className={`py-4 px-1 border-b-2 font-medium text-sm transition ${activeTab === 'stats'
-                                    ? 'border-blue-500 text-blue-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-600'
                                 }`}
                         >
                             <FiBarChart2 className="inline mr-2" />
@@ -59,8 +59,8 @@ const AdminDashboard = () => {
                         <button
                             onClick={() => setActiveTab('products')}
                             className={`py-4 px-1 border-b-2 font-medium text-sm transition ${activeTab === 'products'
-                                    ? 'border-blue-500 text-blue-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-600'
                                 }`}
                         >
                             <FiBox className="inline mr-2" />
@@ -69,8 +69,8 @@ const AdminDashboard = () => {
                         <button
                             onClick={() => setActiveTab('users')}
                             className={`py-4 px-1 border-b-2 font-medium text-sm transition ${activeTab === 'users'
-                                    ? 'border-blue-500 text-blue-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-600'
                                 }`}
                         >
                             <FiUsers className="inline mr-2" />
@@ -85,8 +85,8 @@ const AdminDashboard = () => {
                 {activeTab === 'stats' && <AdminStats />}
                 {activeTab === 'products' && <AdminProducts />}
                 {activeTab === 'users' && (
-                    <div className="bg-white rounded-lg shadow p-8 text-center">
-                        <p className="text-gray-600">User management coming soon...</p>
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
+                        <p className="text-gray-600 dark:text-gray-400">User management coming soon...</p>
                     </div>
                 )}
             </main>

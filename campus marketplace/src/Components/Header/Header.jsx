@@ -14,7 +14,7 @@ const Header = () => {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="w-full h-16 bg-white border-b border-gray-200 fixed top-0 z-50">
+    <header className="w-full h-16 bg-white border-b border-gray-200 dark:bg-gray-900 dark:border-gray-800 fixed top-0 z-50 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-full">
 
         {/* Left */}
@@ -30,14 +30,13 @@ const Header = () => {
         <HeaderActions />
       </div>
 
-
-
        
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-2xl"
+          className="md:hidden text-2xl text-gray-800 dark:text-white"
           onClick={() => setOpen(!open)}
+          aria-label="Toggle menu"
         >
           {open ? <FiX /> : <FiMenu />}
         </button>
@@ -46,13 +45,11 @@ const Header = () => {
       {/* Mobile Menu */}
    
       {open && (
-        <div className="md:hidden bg-white border-t border-gray-200 px-4 py-4 space-y-4">
+        <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 px-4 py-4 space-y-4 animate-in slide-in-from-top-2 duration-300">
           <NavItems mobile />
           <HeaderActionsMobile />
         </div>
       )}
-
-
 
     </header>
   )

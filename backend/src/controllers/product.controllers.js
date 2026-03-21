@@ -45,7 +45,10 @@ const createProduct = asyncHandler(async (req, res) => {
 const getProducts = asyncHandler(async (req, res) => {
     // Fetch all approved products
     const products = await sql`
-        SELECT * FROM products WHERE status = 'approved' ORDER BY created_at DESC
+        SELECT p.*, u.username as "sellerName", u.avatar as "sellerAvatar" 
+        FROM products p
+        LEFT JOIN users u ON p.user_id = u.id
+        WHERE p.status = 'approved' ORDER BY p.created_at DESC
     `;
 
     return res.status(200).json(new ApiResponse(200, products, "Products fetched successfully"));
@@ -57,7 +60,10 @@ const getProductById = asyncHandler(async (req, res) => {
 
     // Fetch product details by ID
     const product = await sql`
-        SELECT * FROM products WHERE id = ${id} AND status = 'approved'
+        SELECT p.*, u.username as "sellerName", u.avatar as "sellerAvatar"
+        FROM products p
+        LEFT JOIN users u ON p.user_id = u.id
+        WHERE p.id = ${id} AND p.status = 'approved'
     `;
 
     if (product.length === 0) {
@@ -210,7 +216,10 @@ const getAllProducts = asyncHandler(async (req, res) => {
     // Fetch all products regardless of status
 
     const products = await sql`
-        SELECT * FROM products ORDER BY created_at DESC
+        SELECT p.*, u.username as "sellerName", u.avatar as "sellerAvatar"
+        FROM products p
+        LEFT JOIN users u ON p.user_id = u.id
+        ORDER BY p.created_at DESC
     `;
     return res.status(200).json(new ApiResponse(200, products, "All products fetched successfully"));
 });
@@ -218,7 +227,10 @@ const getAllProducts = asyncHandler(async (req, res) => {
 const getPendingProducts = asyncHandler(async (req, res) => {
     // Fetch pending products
     const products = await sql`
-        SELECT * FROM products WHERE status = 'pending' ORDER BY created_at DESC
+        SELECT p.*, u.username as "sellerName", u.avatar as "sellerAvatar"
+        FROM products p
+        LEFT JOIN users u ON p.user_id = u.id
+        WHERE p.status = 'pending' ORDER BY p.created_at DESC
     `;
     return res.status(200).json(new ApiResponse(200, products, "Pending products fetched successfully"));
 });
@@ -227,7 +239,10 @@ const getApprovedProducts = asyncHandler(async (req, res) => {
     // Fetch approved products
 
     const products = await sql`
-        SELECT * FROM products WHERE status = 'approved' ORDER BY created_at DESC
+        SELECT p.*, u.username as "sellerName", u.avatar as "sellerAvatar"
+        FROM products p
+        LEFT JOIN users u ON p.user_id = u.id
+        WHERE p.status = 'approved' ORDER BY p.created_at DESC
     `;
     return res.status(200).json(new ApiResponse(200, products, "Approved products fetched successfully"));
 });
@@ -235,7 +250,10 @@ const getApprovedProducts = asyncHandler(async (req, res) => {
 const getRejectedProducts = asyncHandler(async (req, res) => {
     // Fetch rejected products
     const products = await sql`
-    SELECT * FROM products WHERE status = 'rejected' ORDER BY created_at DESC;
+        SELECT p.*, u.username as "sellerName", u.avatar as "sellerAvatar"
+        FROM products p
+        LEFT JOIN users u ON p.user_id = u.id
+        WHERE p.status = 'rejected' ORDER BY p.created_at DESC
     `;
     return res.status(200).json(new ApiResponse(200, products, "Rejected products fetched successfully"));
 });

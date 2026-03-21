@@ -36,28 +36,28 @@ const ChatCard = ({ conversation, userId, onClick, products, onDelete }) => {
   return (
     <div
       onClick={onClick}
-      className="flex justify-between items-center border-b border-gray-200 p-4 cursor-pointer hover:bg-gray-50 transition-colors group relative"
+      className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group relative"
     >
       <div className="flex gap-3 flex-1 min-w-0">
         <div className="relative shrink-0">
           <img
             src={profilePhoto}
             alt={displayName}
-            className="w-12 h-12 rounded-full border-2 border-gray-200 object-cover"
+            className="w-12 h-12 rounded-full border-2 border-gray-200 dark:border-gray-600 object-cover"
           />
         </div>
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <p className="font-semibold text-gray-900 truncate">{displayName}</p>
-            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium shrink-0">
+            <p className="font-semibold text-gray-900 dark:text-white truncate">{displayName}</p>
+            <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 px-2 py-0.5 rounded-full font-medium shrink-0">
               {roleBadge}
             </span>
           </div>
-          <p className="text-sm text-gray-600 truncate mb-0.5">
+          <p className="text-sm text-gray-600 dark:text-gray-400 truncate mb-0.5">
             {conversation.lastMessage || "No messages yet"}
           </p>
-          <p className="text-xs text-gray-500 truncate">
+          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
             Re: {conversation.productName}
           </p>
         </div>
@@ -65,11 +65,11 @@ const ChatCard = ({ conversation, userId, onClick, products, onDelete }) => {
 
       <button
         onClick={handleDelete}
-        className="opacity-0 group-hover:opacity-100 transition-all p-2 hover:bg-red-50 rounded-lg hover:scale-110 shrink-0"
+        className="opacity-0 group-hover:opacity-100 transition-all p-2 hover:bg-red-50 dark:hover:bg-red-900/40 rounded-lg hover:scale-110 shrink-0"
         title="Delete conversation"
         aria-label="Delete conversation"
       >
-        <FiTrash2 className="w-4 h-4 text-red-600" />
+        <FiTrash2 className="w-4 h-4 text-red-600 dark:text-red-400" />
       </button>
     </div>
   );

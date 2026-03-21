@@ -209,17 +209,17 @@ const Chat = () => {
   };
 
   return (
-    <div className="min-h-[80vh] bg-gray-50 py-2 md:py-6 px-2 md:px-8">
-      <div className="max-w-6xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+    <div className="min-h-[80vh] bg-gray-50 dark:bg-gray-900 py-2 md:py-6 px-2 md:px-8">
+      <div className="max-w-6xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
         <div className="grid grid-cols-1 md:grid-cols-[32%_68%]" style={{ height: '75vh' }}>
           {/* Conversations list */}
-          <div className={`border-r border-gray-200 flex flex-col ${activeConversation ? 'hidden md:flex' : 'flex'}`} style={{ height: '100%', overflow: 'hidden' }}>
+          <div className={`border-r border-gray-200 dark:border-gray-700 flex flex-col ${activeConversation ? 'hidden md:flex' : 'flex'}`} style={{ height: '100%', overflow: 'hidden' }}>
             {/* Sticky search header */}
-            <div className="bg-white z-10 p-3 md:p-4 border-b border-gray-200 shrink-0">
-              <div className="flex items-center gap-2 bg-gray-100 rounded-md px-3 py-2">
-                <FiSearch className="text-gray-500" />
+            <div className="bg-white dark:bg-gray-800 z-10 p-3 md:p-4 border-b border-gray-200 dark:border-gray-700 shrink-0">
+              <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 rounded-md px-3 py-2">
+                <FiSearch className="text-gray-500 dark:text-gray-400" />
                 <input
-                  className="w-full bg-transparent text-sm outline-none"
+                  className="w-full bg-transparent text-sm outline-none dark:text-white"
                   placeholder="Search conversations"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -254,7 +254,7 @@ const Chat = () => {
               ) : conversations.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full p-6 text-center">
                   <svg
-                    className="w-16 h-16 text-gray-300 mb-4"
+                    className="w-16 h-16 text-gray-300 dark:text-gray-600 mb-4"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -266,8 +266,8 @@ const Chat = () => {
                       d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                     />
                   </svg>
-                  <p className="text-gray-600 font-medium mb-2">No conversations yet</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-gray-600 dark:text-gray-400 font-medium mb-2">No conversations yet</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-500">
                     Start chatting by clicking "Message Seller" on any product
                   </p>
                 </div>
@@ -282,11 +282,11 @@ const Chat = () => {
             {activeConversation ? (
               <>
                 {/* Prominent Header with User Info */}
-                <div className="bg-white border-b-2 border-gray-300 shadow-md shrink-0">
+                <div className="bg-white dark:bg-gray-800 border-b-2 border-gray-300 dark:border-gray-700 shadow-md shrink-0">
                   {/* User Info Row */}
-                  <div className="flex items-center gap-4 p-4 md:p-5 bg-gradient-to-r from-gray-50 to-white">
+                  <div className="flex items-center gap-4 p-4 md:p-5 bg-gradient-to-r from-gray-50 to-white dark:from-gray-800 dark:to-gray-800">
                     <button
-                      className="md:hidden text-gray-700 shrink-0 hover:bg-gray-200 p-2 rounded-lg transition-colors"
+                      className="md:hidden text-gray-700 dark:text-gray-300 shrink-0 hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded-lg transition-colors"
                       onClick={() => setActiveConversation(null)}
                     >
                       <FiArrowLeft size={22} />
@@ -305,25 +305,25 @@ const Chat = () => {
                     />
 
                     <div className="min-w-0 flex-1">
-                      <p className="font-bold text-gray-900 text-lg mb-1 truncate">
+                      <p className="font-bold text-gray-900 dark:text-white text-lg mb-1 truncate">
                         {getOtherParticipantName(activeConversation)}
                       </p>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">
+                        <span className="text-sm bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 px-3 py-1 rounded-full font-medium">
                           {activeConversation.buyerId === user.$id ? "Seller" : "Buyer"}
                         </span>
-                        <span className="text-xs text-gray-500">• Chatting about:</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">• Chatting about:</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Product Name Bar */}
-                  <div className="bg-gradient-to-r from-indigo-50 via-blue-50 to-indigo-50 px-4 md:px-5 py-3 border-t border-gray-200">
+                  <div className="bg-gradient-to-r from-indigo-50 via-blue-50 to-indigo-50 dark:from-indigo-900 dark:via-blue-900 dark:to-indigo-900 px-4 md:px-5 py-3 border-t border-gray-200 dark:border-gray-700">
                     <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 text-indigo-600 dark:text-indigo-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                       </svg>
-                      <span className="text-sm font-bold text-indigo-900 truncate">
+                      <span className="text-sm font-bold text-indigo-900 dark:text-indigo-100 truncate">
                         {getProductName(activeConversation)}
                       </span>
                     </div>
@@ -332,7 +332,7 @@ const Chat = () => {
 
                 {/* Messages */}
                 <div
-                  className="p-4 md:p-5 space-y-3 bg-gradient-to-b from-gray-50 to-gray-100"
+                  className="p-4 md:p-5 space-y-3 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800"
                   style={{
                     flex: 1,
                     overflowY: 'auto',
@@ -373,10 +373,10 @@ const Chat = () => {
                 </div>
 
                 {/* Composer */}
-                <div className="p-3 md:p-4 border-t border-gray-200 flex gap-2 md:gap-3 shrink-0">
+                <div className="p-3 md:p-4 border-t border-gray-200 dark:border-gray-700 flex gap-2 md:gap-3 shrink-0">
                   <input
                     ref={inputRef}
-                    className="flex-1 border border-gray-300 rounded-lg px-3 md:px-4 py-2 text-sm md:text-base outline-none focus:border-black transition-colors"
+                    className="flex-1 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 md:px-4 py-2 text-sm md:text-base outline-none focus:border-black dark:focus:border-gray-400 transition-colors"
                     placeholder="Type a message…"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
@@ -390,7 +390,7 @@ const Chat = () => {
                   />
 
                   <button
-                    className="bg-black text-white px-4 md:px-6 py-2 rounded-lg text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-800 transition-colors font-medium shrink-0"
+                    className="bg-black text-white dark:bg-white dark:text-black px-4 md:px-6 py-2 rounded-lg text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium shrink-0"
                     onClick={sendMessage}
                     disabled={sendingMessage || !input.trim()}
                   >
@@ -404,9 +404,9 @@ const Chat = () => {
                 </div>
               </>
             ) : (
-              <div className="flex flex-col items-center justify-center h-full text-center p-8 text-gray-600">
+              <div className="flex flex-col items-center justify-center h-full text-center p-8 text-gray-600 dark:text-gray-400">
                 <svg
-                  className="w-20 h-20 text-gray-300 mb-4"
+                  className="w-20 h-20 text-gray-300 dark:text-gray-600 mb-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -418,8 +418,8 @@ const Chat = () => {
                     d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
                   />
                 </svg>
-                <p className="text-lg font-medium mb-2">Select a conversation</p>
-                <p className="text-sm text-gray-500">
+                <p className="text-lg font-medium mb-2 dark:text-white">Select a conversation</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Choose a conversation from the list to start messaging
                 </p>
               </div>

@@ -59,12 +59,12 @@ const RegisterForm = () => {
     <div className="w-full flex flex-col justify-center items-center mt-20 pb-8">
       <form
         onSubmit={handleSubmit(create)}
-        className="w-full max-w-md space-y-6 border border-gray-200 rounded-xl p-8 bg-white shadow-lg"
+        className="w-full max-w-md space-y-6 border border-gray-200 dark:border-gray-700 rounded-xl p-8 bg-white dark:bg-gray-800 shadow-lg"
       >
         {/* Header */}
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900">Create Account</h2>
-          <p className="text-gray-600 text-sm mt-1">Join our campus marketplace</p>
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Create Account</h2>
+          <p className="text-gray-600 dark:text-gray-300 text-sm mt-1">Join our campus marketplace</p>
         </div>
 
         {/* Error Alert */}
@@ -77,7 +77,7 @@ const RegisterForm = () => {
 
         {/* Name Field */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
           <div className="relative">
             <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
@@ -89,10 +89,10 @@ const RegisterForm = () => {
                   message: "Name must be at least 2 characters"
                 }
               })}
-              className={`w-full pl-10 pr-4 py-3 rounded-lg border transition-all outline-none
-                          ${errors.name
-                  ? 'border-red-300 focus:ring-2 focus:ring-red-200 bg-red-50'
-                  : 'border-gray-300 focus:ring-2 focus:ring-black/20 focus:border-black'
+              className={`w-full pl-10 pr-4 py-3 rounded-lg border transition-all outline-none dark:bg-gray-700 dark:text-white
+                          ${errors.name || errors.email || errors.password || errors.confirmPassword
+                  ? 'border-red-300 focus:ring-2 focus:ring-red-200 bg-red-50 dark:bg-red-900/30 dark:border-red-500'
+                  : 'border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20 focus:border-black dark:focus:border-gray-400'
                 }`}
             />
             {nameValue && !errors.name && (
@@ -109,7 +109,7 @@ const RegisterForm = () => {
 
         {/* Email Field */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
@@ -142,7 +142,7 @@ const RegisterForm = () => {
 
         {/* Password Field */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Password</label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
@@ -175,7 +175,7 @@ const RegisterForm = () => {
 
         {/* Confirm Password Field */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Confirm Password</label>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Confirm Password</label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
@@ -209,8 +209,8 @@ const RegisterForm = () => {
           type="submit"
           disabled={isSubmitting}
           className={`w-full py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${isSubmitting
-            ? 'bg-gray-300 text-gray-700 cursor-not-allowed'
-            : 'bg-black text-white hover:bg-gray-800 active:scale-95'
+            ? 'bg-gray-300 text-gray-700 cursor-not-allowed dark:bg-gray-600 dark:text-gray-400'
+            : 'bg-black text-white hover:bg-gray-800 active:scale-95 dark:bg-white dark:text-black dark:hover:bg-gray-200'
             }`}
         >
           {isSubmitting ? (
@@ -224,12 +224,12 @@ const RegisterForm = () => {
         </button>
 
         {/* Helper Text */}
-        <p className="text-center text-sm text-gray-600">
+        <p className="text-center text-sm text-gray-600 dark:text-gray-400">
           Already have an account?{' '}
           <button
             type="button"
             onClick={() => navigate("/login")}
-            className="text-black font-semibold hover:underline"
+            className="text-black dark:text-white font-semibold hover:underline"
           >
             Sign in
           </button>

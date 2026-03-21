@@ -64,7 +64,7 @@ const AddItem = () => {
     <div className="w-full flex items-center justify-center m-10">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-[80%] space-y-4 border border-gray-300 rounded-xl p-6 bg-white"
+        className="w-[80%] space-y-4 border border-gray-300 dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-800"
       >
         <h2 className="text-xl font-semibold">Add Product</h2>
 
@@ -78,7 +78,7 @@ const AddItem = () => {
               <input
                 placeholder="Product name"
                 {...register("title", { required: "Product name is required" })}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-black focus:ring-2 focus:ring-black/20"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
               />
               {errors.title && (
                 <p className="text-sm text-red-500 mt-1">
@@ -96,7 +96,7 @@ const AddItem = () => {
                   required: "Price is required",
                   min: { value: 1, message: "Price must be greater than 0" },
                 })}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-black focus:ring-2 focus:ring-black/20"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
               />
               {errors.price && (
                 <p className="text-sm text-red-500 mt-1">
@@ -113,7 +113,7 @@ const AddItem = () => {
                 {...register("image", {
                   required: "Product image is required",
                 })}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-black focus:ring-2 focus:ring-black/20"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
               />
               {errors.image && (
                 <p className="text-sm text-red-500 mt-1">
@@ -130,7 +130,7 @@ const AddItem = () => {
             <div className="w-full">
               <select
                 {...register("category", { required: "Category is required" })}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-black focus:ring-2 focus:ring-black/20"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
               >
                 <option value="">Select category</option>
                 <option value="books">Books</option>
@@ -171,7 +171,7 @@ const AddItem = () => {
             rows={3}
             placeholder="Product description"
             {...register("description", { required: "Description is required" })}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none resize-none focus:border-black focus:ring-2 focus:ring-black/20"
+            className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md px-3 py-2 outline-none resize-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
           />
           {errors.description && (
             <p className="text-sm text-red-500 mt-1">
@@ -183,7 +183,7 @@ const AddItem = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full border border-black rounded-md py-2 font-medium transition hover:bg-black hover:text-white active:scale-95"
+          className="w-full border border-black dark:border-white rounded-md py-2 font-medium transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black dark:text-white active:scale-95"
         >
           List Product
         </button>

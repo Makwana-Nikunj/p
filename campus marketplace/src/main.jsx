@@ -6,12 +6,16 @@ import { Provider } from "react-redux";
 import store from "./store/store";
 import { ToastProvider } from "./Components/Toast/ToastContainer";
 
+import { ThemeProvider } from "./Components/Theme/ThemeProvider";
+
 createRoot(document.getElementById('root')).render(
     <ErrorBoundary>
         <Provider store={store}>
-            <ToastProvider>
-                <App />
-            </ToastProvider>
+            <ThemeProvider>
+                <ToastProvider>
+                    <App />
+                </ToastProvider>
+            </ThemeProvider>
         </Provider>
     </ErrorBoundary>
 );

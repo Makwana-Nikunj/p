@@ -47,7 +47,7 @@ const OwnerProductDetail = () => {
       <div className="w-[90%] lg:w-[82%]">
         <button
           onClick={() => navigate("/profile")}
-          className="mb-4 p-2 flex items-center bg-black text-white rounded-xl"
+          className="mb-4 p-2 flex items-center bg-black text-white dark:bg-white dark:text-black rounded-xl"
         >
           <ChevronLeft className="w-4 h-4 mr-2" />
           Back to Profile
@@ -55,7 +55,7 @@ const OwnerProductDetail = () => {
       </div>
 
       {/* Main Container */}
-      <div className="w-[90%] lg:w-[82%] bg-white rounded-lg p-4 md:p-6 flex flex-col md:flex-row gap-8 shadow">
+      <div className="w-[90%] lg:w-[82%] bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 flex flex-col md:flex-row gap-8 shadow">
 
         {/* LEFT: PRODUCT IMAGE */}
         <div className="w-full md:w-1/2 flex justify-center items-center">
@@ -85,7 +85,7 @@ const OwnerProductDetail = () => {
                 {product.title}
               </h1>
 
-              <span className="bg-black text-white rounded-lg px-4 py-2 text-sm">
+              <span className="bg-black text-white dark:bg-white dark:text-black rounded-lg px-4 py-2 text-sm">
                 {product.category}
               </span>
             </div>
@@ -95,7 +95,7 @@ const OwnerProductDetail = () => {
             </p>
 
             {/* Specs */}
-            <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+            <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
               <div className="flex items-center gap-2">
                 <Package className="w-4 h-4" />
                 <span>Condition: {product.condition || "Not provided"}</span>
@@ -115,7 +115,7 @@ const OwnerProductDetail = () => {
             {/* Description */}
             <div>
               <h3 className="font-semibold text-lg mb-2">Description</h3>
-              <p className="text-gray-600 text-sm sm:text-base">
+              <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">
                 {product.description}
               </p>
             </div>
@@ -135,7 +135,7 @@ const OwnerProductDetail = () => {
             {/* MOVE STATUS BUTTON */}
             <button
               onClick={handleMoveStatus}
-              className="w-full bg-black text-white py-2 rounded-lg font-medium hover:bg-gray-900"
+              className="w-full bg-black text-white dark:bg-white dark:text-black py-2 rounded-lg font-medium hover:bg-gray-900 dark:hover:bg-gray-200"
             >
               {product.status === "active"
                 ? "Move to Sold"

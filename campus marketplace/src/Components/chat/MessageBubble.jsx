@@ -30,14 +30,14 @@ const MessageBubble = ({ isOwn, text, timestamp }) => {
       <div
         className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-sm wrap-break-word shadow-sm ${
           isOwn
-            ? "bg-black text-white rounded-br-md"
-            : "bg-white text-gray-900 border border-gray-200 rounded-bl-md"
+            ? "bg-black text-white dark:bg-gray-700 rounded-br-md"
+            : "bg-white text-gray-900 border border-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700 rounded-bl-md"
         }`}
       >
         {text}
       </div>
       {timestamp && (
-        <span className="text-xs text-gray-500 px-2 mt-1">
+        <span className="text-xs text-gray-500 dark:text-gray-400 px-2 mt-1">
           {formatTime(timestamp)}
         </span>
       )}

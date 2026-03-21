@@ -4,7 +4,7 @@ import { Github, Linkedin, Twitter } from "lucide-react"
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-white text-black border-t border-gray-200">
+    <footer className="w-full bg-white text-black dark:bg-gray-900 dark:text-white border-t border-gray-200 dark:border-gray-800">
       
       {/* Top Section */}
       <div
@@ -25,7 +25,7 @@ const Footer = () => {
           <Link to="/" className="text-2xl font-bold tracking-wide">
             Campus Marketplace
           </Link>
-          <p className="mt-3 text-sm text-gray-600 max-w-xs">
+          <p className="mt-3 text-sm text-gray-600 dark:text-gray-400 max-w-xs">
             Buy & sell within your campus community.
           </p>
         </div>
@@ -33,19 +33,19 @@ const Footer = () => {
         {/* Navigation */}
         <div className="flex flex-col items-center sm:items-start">
           <h3 className="text-lg font-semibold mb-3">Marketplace</h3>
-          <ul className="space-y-2 text-sm text-gray-600">
+          <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
             <li>
-              <Link to="/browse" className="hover:text-black transition">
+              <Link to="/browse" className="hover:text-black dark:hover:text-gray-200 transition">
                 Listed Products
               </Link>
             </li>
             <li>
-              <Link to="/profile" className="hover:text-black transition">
+              <Link to="/profile" className="hover:text-black dark:hover:text-gray-200 transition">
                 Profile
               </Link>
             </li>
             <li>
-              <Link to="/messages" className="hover:text-black transition">
+              <Link to="/messages" className="hover:text-black dark:hover:text-gray-200 transition">
                 Messages
               </Link>
             </li>
@@ -60,7 +60,7 @@ const Footer = () => {
               href="https://github.com/yourusername"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-full text-gray-600 hover:text-black hover:bg-gray-100 transition"
+              className="p-2 rounded-full text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition"
             >
               <Github size={20} />
             </a>
@@ -68,7 +68,7 @@ const Footer = () => {
               href="https://linkedin.com/in/yourusername"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-full text-gray-600 hover:text-black hover:bg-gray-100 transition"
+              className="p-2 rounded-full text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition"
             >
               <Linkedin size={20} />
             </a>
@@ -76,7 +76,7 @@ const Footer = () => {
               href="https://twitter.com/yourusername"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-full text-gray-600 hover:text-black hover:bg-gray-100 transition"
+              className="p-2 rounded-full text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition"
             >
               <Twitter size={20} />
             </a>
@@ -86,7 +86,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom */}
-      <div className="py-4 px-4 text-center text-sm text-gray-500">
+      <div className="py-4 px-4 text-center text-sm text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-800">
         © {new Date().getFullYear()} Campus Marketplace. All rights reserved.
       </div>
 

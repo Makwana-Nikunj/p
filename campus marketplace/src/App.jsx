@@ -31,7 +31,7 @@ import AdminDashboard from "./pages/AdminDashboardPage.jsx";
 // Base layout wrapping routes
 function Layout({ children }) {
   return (
-    <div className="h-screen w-full flex flex-col justify-between">
+    <div className="min-h-screen w-full flex flex-col justify-between bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100 transition-colors duration-200">
       <Header />
       <main className="grow pt-16 md:pt-16">
         {children}

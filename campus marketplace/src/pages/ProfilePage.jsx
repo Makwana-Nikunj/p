@@ -34,11 +34,11 @@ const Profile = () => {
 
         <ProfileCard />
 
-        <div className="w-full h-10 bg-black p-1 my-8 rounded-2xl flex justify-around">
+        <div className="w-full h-10 bg-black dark:bg-gray-800 p-1 my-8 rounded-2xl flex justify-around">
           <button
             onClick={() => setActiveTab("active")}
             className={`w-[50%] rounded-2xl cursor-pointer ${
-              activeTab === "active" ? "bg-white text-black" : "text-white"
+              activeTab === "active" ? "bg-white text-black" : "text-white dark:text-gray-300"
             }`}
           >
             Active Listings
@@ -47,7 +47,7 @@ const Profile = () => {
           <button
             onClick={() => setActiveTab("sold")}
             className={`w-[50%] rounded-2xl cursor-pointer ${
-              activeTab === "sold" ? "bg-white text-black" : "text-white"
+              activeTab === "sold" ? "bg-white text-black" : "text-white dark:text-gray-300"
             }`}
           >
             Sold Items
