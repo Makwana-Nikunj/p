@@ -94,7 +94,7 @@ const EditProduct = () => {
     <div className="w-full flex items-center justify-center m-10">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-[80%] space-y-4 border border-gray-300 dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-800 shadow-sm"
+        className="w-[80%] space-y-4 border border-gray-300 dark:border-gray-800 rounded-xl p-6 bg-white dark:bg-gray-900 shadow-sm"
       >
         <h2 className="text-xl font-semibold dark:text-white">Edit Product</h2>
 
@@ -108,6 +108,7 @@ const EditProduct = () => {
               src={previewImage}
               alt="Preview"
               className="w-64 h-64 object-cover rounded-lg border"
+              loading="lazy"
             />
 
             {/* Upload New Image */}
@@ -116,7 +117,7 @@ const EditProduct = () => {
               accept="image/*"
               {...register("image")}
               onChange={handleImageChange}
-              className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
+              className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
             />
 
           </div>
@@ -129,7 +130,7 @@ const EditProduct = () => {
               <input
                 placeholder="Product name"
                 {...register("title", { required: "Product name is required" })}
-                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
+                className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
               />
               {errors.title && (
                 <p className="text-sm text-red-500">{errors.title.message}</p>
@@ -145,7 +146,7 @@ const EditProduct = () => {
                   required: "Price is required",
                   min: { value: 1, message: "Price must be greater than 0" },
                 })}
-                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
+                className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
               />
               {errors.price && (
                 <p className="text-sm text-red-500">{errors.price.message}</p>
@@ -155,7 +156,7 @@ const EditProduct = () => {
             {/* Category */}
             <select
               {...register("category", { required: "Category is required" })}
-              className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
+              className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
             >
               <option value="books">Books</option>
               <option value="electronics">Electronics</option>
@@ -166,7 +167,7 @@ const EditProduct = () => {
             {/* Condition */}
             <select
               {...register("condition")}
-              className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
+              className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
             >
               <option value="">Condition (optional)</option>
               <option value="like-new">Like New</option>
@@ -178,7 +179,7 @@ const EditProduct = () => {
             <input
               placeholder="Location"
               {...register("location")}
-              className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
+              className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
             />
 
           </div>
@@ -204,7 +205,7 @@ const EditProduct = () => {
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
+            className="px-4 py-2 border border-gray-300 dark:border-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800"
           >
             Cancel
           </button>

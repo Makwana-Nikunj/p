@@ -13,6 +13,7 @@ const OwnerItemCard = ({ imgUrl, name, category, price, id }) => {
             src={imgUrl}
             alt={`photo of ${name}`}
             className="w-full h-48 object-fill p-2 rounded-t-xl hover:scale-105 transition-transform duration-300"
+            loading="lazy"
           />
         </div>
 

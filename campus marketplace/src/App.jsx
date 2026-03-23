@@ -1,8 +1,8 @@
 import Header from "./Components/Header/Header"
 import Footer from "./Components/Footer/Footer"
-import LoadingSpinner from "./Components/LoadingSpinner"
+import { ProductGridSkeleton } from "./Components/SkeletonLoader"
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, Suspense, lazy } from "react";
 import { useDispatch } from "react-redux";
 import { login, logout } from "./store/authSlice";
 import { fetchProducts } from "./store/productSlice";
@@ -13,25 +13,25 @@ import profileService from './services/profileService';
 import ProtectedRoute from "./Components/ProtectedRoute";
 import AdminProtectedRoute from "./Components/AdminProtectedRoute";
 
-// Lazy loaded pages to match PAPERCHAT style roughly
-import Home from "./pages/HomePage.jsx"
-import Browse from "./pages/BrowsePage"
-import Profile from "./pages/ProfilePage.jsx";
-import Chat from "./pages/ChatPage"
-import AddItem from './pages/AddItemPage.jsx'
-import LoginForm from './pages/LoginPage.jsx'
-import RegisterForm from './pages/RegisterPage.jsx'
-import ProductDetailPage from './pages/ProductDetailPage.jsx'
-import OwnerProductDetail from "./pages/OwnerProductDetailPage.jsx";
-import EditProfile from "./pages/EditProfilePage.jsx";
-import EditProduct from "./pages/EditProductPage.jsx";
-import Favorites from "./pages/FavoritesPage.jsx";
-import AdminDashboard from "./pages/AdminDashboardPage.jsx";
+// Lazy loaded pages for code splitting
+const Home = lazy(() => import("./pages/HomePage.jsx"));
+const Browse = lazy(() => import("./pages/BrowsePage"));
+const Profile = lazy(() => import("./pages/ProfilePage.jsx"));
+const Chat = lazy(() => import("./pages/ChatPage"));
+const AddItem = lazy(() => import("./pages/AddItemPage.jsx"));
+const LoginForm = lazy(() => import("./pages/LoginPage.jsx"));
+const RegisterForm = lazy(() => import("./pages/RegisterPage.jsx"));
+const ProductDetailPage = lazy(() => import("./pages/ProductDetailPage.jsx"));
+const OwnerProductDetail = lazy(() => import("./pages/OwnerProductDetailPage.jsx"));
+const EditProfile = lazy(() => import("./pages/EditProfilePage.jsx"));
+const EditProduct = lazy(() => import("./pages/EditProductPage.jsx"));
+const Favorites = lazy(() => import("./pages/FavoritesPage.jsx"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboardPage.jsx"));
 
 // Base layout wrapping routes
 function Layout({ children }) {
   return (
-    <div className="min-h-screen w-full flex flex-col justify-between bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100 transition-colors duration-200">
+    <div className="min-h-screen w-full flex flex-col justify-between bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-200">
       <Header />
       <main className="grow pt-16 md:pt-16">
         {children}
@@ -67,12 +67,26 @@ function App() {
   }, [dispatch]);
 
   if (loading) {
-    return <LoadingSpinner fullScreen />;
+    return (
+      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-950">
+        <div className="w-[90%] max-w-7xl animate-fadeIn">
+          <div className="h-16 bg-gray-300 dark:bg-gray-800 rounded animate-pulse mb-8 w-64 mx-auto"></div>
+          <ProductGridSkeleton count={12} />
+        </div>
+      </div>
+    );
   }
 
   return (
     <BrowserRouter>
-      <Suspense fallback={<LoadingSpinner fullScreen />}>
+      <Suspense fallback={
+        <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-950">
+          <div className="w-[90%] max-w-7xl animate-fadeIn">
+            <div className="h-16 bg-gray-300 dark:bg-gray-800 rounded animate-pulse mb-8 w-64 mx-auto"></div>
+            <ProductGridSkeleton count={12} />
+          </div>
+        </div>
+      }>
         <Routes>
           <Route path="/" element={<Layout><Home /></Layout>} />
           <Route path="/browse" element={<Layout><Browse /></Layout>} />

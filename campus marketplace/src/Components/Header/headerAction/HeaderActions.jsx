@@ -7,17 +7,15 @@ const HeaderActions = () => {
   const isLoggedIn = useSelector((state) => state.auth.status);
 
   return (
-    <div className="hidden md:flex items-center gap-4">
+    <div className="hidden md:flex items-center gap-3">
       {isLoggedIn && (
         <NavLink
           to="/add-item"
           className={({ isActive }) =>
             `
             flex items-center justify-center gap-2 h-10 px-4 rounded-lg font-semibold
-            transition-all border border-gray-300 dark:border-gray-700
-            ${isActive ? "bg-black text-white dark:bg-white dark:text-black" : "bg-white text-black dark:bg-gray-800 dark:text-white"}
-            hover:bg-black hover:text-white dark:hover:bg-gray-700
-            active:scale-95
+            transition-all
+            ${isActive ? "bg-white text-black" : "bg-white text-black hover:bg-gray-200"}
             `
           }
         >

@@ -25,7 +25,7 @@ const NavItems = ({ mobile = false }) => {
     <nav>
       <ul
         className={`
-          flex ${mobile ? "flex justify-center gap-7 mb-10 items-center flex-wrap" : "items-center gap-2"}
+          flex ${mobile ? "flex justify-center gap-7 mb-10 items-center flex-wrap" : "items-center gap-1"}
           text-sm font-medium
         `}
       >
@@ -35,8 +35,8 @@ const NavItems = ({ mobile = false }) => {
               to={to}
               className={({ isActive }) =>
                 `
-                flex items-center gap-2 h-10 px-4 rounded-md transition-colors
-                ${isActive ? "bg-black text-white dark:bg-white dark:text-black" : "text-black dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"}
+                flex items-center gap-2 h-10 px-4 rounded-lg transition-colors
+                ${isActive ? "bg-gray-800 text-white" : "text-gray-400 hover:text-white hover:bg-gray-800/50"}
                 `
               }
             >

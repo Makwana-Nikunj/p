@@ -77,7 +77,7 @@ const EditProfile = () => {
     <div className="w-full flex items-center justify-center m-10">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-[80%] space-y-4 border border-gray-300 dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-800 shadow-md"
+        className="w-[80%] space-y-4 border border-gray-300 dark:border-gray-800 rounded-xl p-6 bg-white dark:bg-gray-900 shadow-md"
       >
         <h2 className="text-xl font-semibold">Edit Profile</h2>
 
@@ -89,6 +89,7 @@ const EditProfile = () => {
               src={preview}
               alt="Profile"
               className="w-32 h-32 rounded-full object-cover border"
+              loading="lazy"
             />
 
             <div className="w-full">
@@ -97,7 +98,7 @@ const EditProfile = () => {
                 accept="image/*"
                 {...register("image")}
                 onChange={handleImageChange}
-                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md px-3 py-2
+                className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2
                            outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
               />
             </div>
@@ -125,7 +126,7 @@ const EditProfile = () => {
               <input
                 value={user.email}
                 disabled
-                className="w-full border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-900 rounded-md px-3 py-2 text-gray-500 dark:text-gray-400"
+                className="w-full border border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-900 rounded-md px-3 py-2 text-gray-500 dark:text-gray-500"
               />
             </div>
 
@@ -137,7 +138,7 @@ const EditProfile = () => {
           <button
             type="button"
             onClick={() => navigate("/profile")}
-            className="px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+            className="px-4 py-2 border border-gray-300 dark:border-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 transition"
           >
             Cancel
           </button>

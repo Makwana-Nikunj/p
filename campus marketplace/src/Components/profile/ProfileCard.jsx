@@ -22,7 +22,7 @@ const ProfileCard = () => {
   const soldCount = ownerProducts.filter((p) => p.status === "sold").length;
 
   return (
-    <div className="border border-gray-200 dark:border-gray-700 rounded-2xl p-8 space-y-8 min-h-[350px] bg-white dark:bg-gray-800 shadow-sm">
+    <div className="border border-gray-200 dark:border-gray-700 rounded-2xl p-8 space-y-8 min-h-[350px] bg-white dark:bg-gray-900 shadow-sm">
 
       {/* Top Section */}
       <div className="flex flex-col sm:flex-row gap-8">
@@ -32,6 +32,7 @@ const ProfileCard = () => {
           src={profilePhoto || user?.avatar || "https://img.freepik.com/free-icon/user_318-159711.jpg"}
           alt="Profile"
           className="w-40 h-40 rounded-full object-cover border"
+          loading="lazy"
         />
 
         {/* Info */}
@@ -45,7 +46,7 @@ const ProfileCard = () => {
 
             {/* Edit Button */}
             <button
-              className="flex items-center gap-2 text-sm font-medium px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition cursor-pointer"
+              className="flex items-center gap-2 text-sm font-medium px-4 py-2 border border-gray-300 dark:border-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 transition cursor-pointer"
               onClick={() => navigate("/profile/edit")}
             >
               <FiEdit2 />
@@ -56,7 +57,7 @@ const ProfileCard = () => {
         </div>
       </div>
 
-      <hr className="border-gray-200 dark:border-gray-700" />
+      <hr className="border-gray-200 dark:border-gray-800" />
 
       {/* Stats */}
       <div className="flex justify-around text-center">

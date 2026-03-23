@@ -43,7 +43,8 @@ const ChatCard = ({ conversation, userId, onClick, products, onDelete }) => {
           <img
             src={profilePhoto}
             alt={displayName}
-            className="w-12 h-12 rounded-full border-2 border-gray-200 dark:border-gray-600 object-cover"
+            className="w-12 h-12 rounded-full border-2 border-gray-200 dark:border-gray-700 object-cover"
+            loading="lazy"
           />
         </div>
 

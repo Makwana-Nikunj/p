@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { FiCheck, FiX, FiLoader } from 'react-icons/fi';
+import { FiCheck, FiX } from 'react-icons/fi';
 import apiClient from '../../lib/apiClient';
 import { useToast } from '../Toast/ToastContainer';
+import { ProductGridSkeleton } from '../../Components/SkeletonLoader';
 
 const AdminProducts = () => {
     const [products, setProducts] = useState([]);
@@ -74,7 +75,7 @@ const AdminProducts = () => {
                         onClick={() => setFilter(status)}
                         className={`px-4 py-2 rounded-lg font-medium capitalize transition ${filter === status
                                 ? 'bg-blue-600 text-white'
-                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
                             }`}
                     >
                         {status === 'all' ? 'All Products' : `${status} (${status === 'pending' ? '📋' : '✓'})`}
@@ -84,24 +85,36 @@ const AdminProducts = () => {
 
             {/* Products Grid */}
             {loading ? (
-                <div className="text-center py-12">
-                    <FiLoader className="inline animate-spin text-blue-600 text-3xl" />
-                    <p className="text-gray-600 dark:text-gray-400 mt-4">Loading products...</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <div key={i} className="bg-white dark:bg-gray-900 rounded-lg shadow overflow-hidden">
+                      <div className="w-full h-48 bg-gray-300 dark:bg-gray-800 animate-pulse"></div>
+                      <div className="p-4 space-y-3">
+                        <div className="h-5 bg-gray-300 dark:bg-gray-700 rounded w-3/4 animate-pulse"></div>
+                        <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/2 animate-pulse"></div>
+                        <div className="flex items-center justify-between">
+                          <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded w-24 animate-pulse"></div>
+                          <div className="h-5 bg-gray-300 dark:bg-gray-700 rounded w-16 animate-pulse"></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
             ) : products.length === 0 ? (
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
+                <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-8 text-center">
                     <p className="text-gray-600 dark:text-gray-400">No products found in this category</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {products.map(product => (
-                        <div key={product.id} className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden hover:shadow-lg transition">
+                        <div key={product.id} className="bg-white dark:bg-gray-900 rounded-lg shadow overflow-hidden hover:shadow-lg transition">
                             {/* Image */}
                             {product.image_url && (
                                 <img
                                     src={product.image_url}
                                     alt={product.title}
                                     className="w-full h-48 object-cover"
+                                    loading="lazy"
                                 />
                             )}
 

@@ -37,9 +37,9 @@ const ProductDetailPage = () => {
   // Show loading skeleton while product data loads
   if (isLoading) {
     return (
-      <div className="w-full min-h-screen flex flex-col items-center bg-gray-50 py-6">
+      <div className="w-full min-h-screen flex flex-col items-center bg-gray-50 dark:bg-black py-6">
         <div className="w-[90%] lg:w-[82%]">
-          <div className="h-10 bg-gray-300 rounded animate-pulse mb-4 w-32"></div>
+          <div className="h-10 bg-gray-300 dark:bg-gray-800 rounded animate-pulse mb-4 w-32"></div>
           <ProductDetailSkeleton />
         </div>
       </div>
@@ -48,16 +48,16 @@ const ProductDetailPage = () => {
 
   if (!product) {
     return (
-      <div className="w-full min-h-screen flex flex-col items-center justify-center bg-gray-50 py-6 px-4">
+      <div className="w-full min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-black py-6 px-4">
         <div className="flex flex-col items-center text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
-          <h2 className="text-2xl font-semibold text-gray-800 mb-2">Product Not Found</h2>
-          <p className="text-gray-600 mb-6 max-w-md">
+          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-2">Product Not Found</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md">
             This product doesn't exist or has been removed. Please browse other products or return to the listing.
           </p>
           <button
             onClick={() => navigate("/browse")}
-            className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2"
+            className="px-6 py-2 bg-black text-white dark:bg-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-300 transition-colors flex items-center gap-2"
           >
             <ChevronLeft className="w-4 h-4" />
             Back to Browse
@@ -125,13 +125,13 @@ const ProductDetailPage = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center bg-gray-50 py-6 pb-12">
+    <div className="w-full min-h-screen flex flex-col items-center bg-gray-50 dark:bg-black py-6 pb-12">
 
       {/* Back Button */}
       <div className="w-[90%] lg:w-[82%]">
         <button
           onClick={() => navigate("/browse")}
-          className="mb-4 p-2 flex items-center gap-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
+          className="mb-4 p-2 flex items-center gap-2 bg-black text-white dark:bg-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium"
         >
           <ChevronLeft className="w-5 h-5" />
           Back to Browse
@@ -139,10 +139,10 @@ const ProductDetailPage = () => {
       </div>
 
       {/* Main Container */}
-      <div className="w-[90%] lg:w-[82%] bg-white dark:bg-gray-800 rounded-lg p-4 md:p-8 flex flex-col md:flex-row gap-8 shadow-md">
+      <div className="w-[90%] lg:w-[82%] bg-white dark:bg-gray-900 rounded-lg p-4 md:p-8 flex flex-col md:flex-row gap-8 shadow-md">
 
         {/* LEFT: PRODUCT IMAGE */}
-        <div className="w-full md:w-1/2 flex justify-center items-center bg-gray-50 dark:bg-gray-800/50 rounded-lg overflow-hidden min-h-[300px] md:min-h-0 aspect-square md:max-h-[600px]">
+        <div className="w-full md:w-1/2 flex justify-center items-center bg-gray-50 dark:bg-gray-900/50 rounded-lg overflow-hidden min-h-[300px] md:min-h-0 aspect-square md:max-h-[600px]">
           <img
             src={productService.getFileView(product.imageId)}
             alt={product.title}
@@ -155,13 +155,13 @@ const ProductDetailPage = () => {
         <div className="w-full md:w-1/2 flex flex-col justify-between space-y-6">
 
           {/* Product Header */}
-          <div className="space-y-4 border-b pb-4">
+          <div className="space-y-4 border-b border-gray-200 dark:border-gray-800 pb-4">
 
             <div className="w-full flex items-start justify-between gap-4 flex-col sm:flex-row">
-              <h1 className="font-bold text-2xl sm:text-3xl md:text-4xl leading-tight">
+              <h1 className="font-bold text-2xl sm:text-3xl md:text-4xl leading-tight dark:text-white">
                 {product.title}
               </h1>
-              <span className="bg-black text-white rounded-lg px-4 py-2 text-xs font-semibold whitespace-nowrap">
+              <span className="bg-black text-white dark:bg-white dark:text-black rounded-lg px-4 py-2 text-xs font-semibold whitespace-nowrap">
                 {product.category}
               </span>
             </div>
@@ -173,39 +173,39 @@ const ProductDetailPage = () => {
 
           {/* Product Specs */}
           <div className="space-y-3">
-            <div className="flex items-center gap-3 text-gray-700">
-              <Package className="w-5 h-5 text-gray-600" />
+            <div className="flex items-center gap-3 text-gray-700 dark:text-gray-400">
+              <Package className="w-5 h-5 text-gray-600 dark:text-gray-500" />
               <span className="text-sm md:text-base">
-                <span className="font-semibold">Condition:</span> {product.condition || "Not specified"}
+                <span className="font-semibold dark:text-gray-200">Condition:</span> {product.condition || "Not specified"}
               </span>
             </div>
 
-            <div className="flex items-center gap-3 text-gray-700">
-              <MapPin className="w-5 h-5 text-gray-600" />
+            <div className="flex items-center gap-3 text-gray-700 dark:text-gray-400">
+              <MapPin className="w-5 h-5 text-gray-600 dark:text-gray-500" />
               <span className="text-sm md:text-base">
-                <span className="font-semibold">Location:</span> {product.location || "Not specified"}
+                <span className="font-semibold dark:text-gray-300">Location:</span> {product.location || "Not specified"}
               </span>
             </div>
 
-            <div className="flex items-center gap-3 text-gray-700">
-              <Calendar className="w-5 h-5 text-gray-600" />
+            <div className="flex items-center gap-3 text-gray-700 dark:text-gray-400">
+              <Calendar className="w-5 h-5 text-gray-600 dark:text-gray-500" />
               <span className="text-sm md:text-base">
-                <span className="font-semibold">Posted:</span> {formatDate(product.$createdAt)}
+                <span className="font-semibold dark:text-gray-300">Posted:</span> {formatDate(product.$createdAt)}
               </span>
             </div>
           </div>
 
           {/* Description */}
           <div className="space-y-2">
-            <h3 className="font-semibold text-lg">Description</h3>
-            <p className="text-gray-600 text-sm md:text-base leading-relaxed">
+            <h3 className="font-semibold text-lg dark:text-white">Description</h3>
+            <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base leading-relaxed">
               {product.description || "No description provided"}
             </p>
           </div>
 
           {/* Seller Info Card */}
-          <div className="border-2 border-gray-200 rounded-lg p-5 space-y-4 mt-auto">
-            <h3 className="font-semibold text-lg">Seller Information</h3>
+          <div className="border-2 border-gray-200 dark:border-gray-800 rounded-lg p-5 space-y-4 mt-auto bg-white dark:bg-gray-900">
+            <h3 className="font-semibold text-lg dark:text-white">Seller Information</h3>
 
             <div className="flex items-center gap-4">
               <img
@@ -213,14 +213,15 @@ const ProductDetailPage = () => {
                   profileService.getProfilePhoto(product.sellerAvatar) ||
                   "https://img.freepik.com/free-icon/user_318-159711.jpg"
                 }
-                className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
+                className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 dark:border-gray-800"
                 alt={product.sellerName || "Seller"}
+                loading="lazy"
               />
               <div>
-                <p className="font-semibold text-lg text-gray-800">
+                <p className="font-semibold text-lg text-gray-800 dark:text-white">
                   {product.sellerName || "Unknown Seller"}
                 </p>
-                <p className="text-sm text-gray-500">Campus Member</p>
+                <p className="text-sm text-gray-500 dark:text-gray-500">Campus Member</p>
               </div>
             </div>
 
@@ -228,8 +229,8 @@ const ProductDetailPage = () => {
               onClick={handleMessageSeller}
               disabled={isLoadingChat}
               className={`flex justify-center items-center gap-2 w-full px-4 py-3 rounded-lg font-semibold transition-colors ${isLoadingChat
-                  ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                  : 'bg-black text-white hover:bg-gray-800'
+                  ? 'bg-gray-300 text-gray-600 cursor-not-allowed dark:bg-gray-800 dark:text-gray-300'
+                  : 'bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-300'
                 }`}
             >
               {isLoadingChat ? (
@@ -251,7 +252,7 @@ const ProductDetailPage = () => {
       {/* RELATED PRODUCTS */}
       {relatedProducts.length > 0 && (
         <div className="w-[90%] lg:w-[82%] mt-12">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">Related Products</h2>
+          <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Related Products</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {relatedProducts.map((item) => (
               <Cart

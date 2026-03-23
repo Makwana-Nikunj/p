@@ -63,7 +63,7 @@ const OwnerProductDetail = () => {
             src={productService.getFileView(product.imageId)}
             alt={product.title}
             className="
-              w-full 
+              w-full
               max-h-[280px]
               sm:max-h-[340px]
               md:max-h-[480px]
@@ -71,6 +71,7 @@ const OwnerProductDetail = () => {
               object-fill
               rounded-lg
             "
+            loading="lazy"
           />
         </div>
 

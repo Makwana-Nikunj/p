@@ -5,6 +5,7 @@ import productService from '../services/productService'
 import { useState, useEffect } from "react";
 import { ProductCardSkeleton, ProductGridSkeleton } from '../Components/SkeletonLoader';
 import { useToast } from '../Components/Toast/ToastContainer';
+import { Package, SearchX } from 'lucide-react';
 
 const Browse = () => {
 
@@ -61,12 +62,15 @@ const Browse = () => {
       return new Date(b.$createdAt) - new Date(a.$createdAt);
     });
 
+  // Stagger animation classes
+  const staggerClasses = ['stagger-1', 'stagger-2', 'stagger-3', 'stagger-4', 'stagger-5', 'stagger-6'];
+
   return (
-    <div className='w-full flex flex-col items-center gap-6 mt-7 pb-12'>
+    <div className='w-full flex flex-col items-center gap-6 mt-7 pb-12 animate-fadeIn bg-gray-50 dark:bg-gray-950 min-h-screen'>
 
       {/* Heading */}
-      <div className='w-[86%]'>
-        <h1 className="font-semibold text-3xl mb-2 text-gray-900 dark:text-white">Browse Products</h1>
+      <div className='w-[90%] max-w-7xl'>
+        <h1 className="font-bold text-3xl mb-2 text-gray-900 dark:text-white">Browse Products</h1>
         <p className="text-gray-600 dark:text-gray-400">Discover items from your campus community</p>
       </div>
 
@@ -88,38 +92,44 @@ const Browse = () => {
       <div className='w-full flex justify-center'>
         {isLoading ? (
           // Loading skeleton
-          <div className='w-[86%]'>
+          <div className='w-[90%] max-w-7xl'>
             <ProductGridSkeleton count={12} />
           </div>
         ) : filtered.length > 0 ? (
-          // Products found
-          <div className='mt-5 w-full flex justify-center items-center gap-4 flex-wrap px-4'>
-            {filtered.map((doc) => (
-              <Cart
+          // Products found - Grid layout - 4 columns responsive with auto-fill
+          <div className='mt-5 w-[90%] max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-fr'>
+            {filtered.map((doc, index) => (
+              <div
                 key={doc.$id}
-                id={doc.$id}
-                imgUrl={productService.getFileView(doc.imageId)}
-                category={doc.category}
-                name={doc.title}
-                price={doc.price}
-                views={doc.views}
-                favoriteCount={doc.favoriteCount}
-              />
+                className={`opacity-0 animate-slideInFromBottom ${staggerClasses[index % 6]}`}
+                style={{ animationFillMode: 'forwards' }}
+              >
+                <Cart
+                  id={doc.$id}
+                  imgUrl={productService.getFileView(doc.imageId)}
+                  category={doc.category}
+                  name={doc.title}
+                  price={doc.price}
+                  views={doc.views}
+                  favoriteCount={doc.favoriteCount}
+                  condition={doc.condition}
+                  sellerName={doc.sellerName}
+                  sellerAvatar={doc.sellerAvatar}
+                  rating={doc.rating}
+                />
+              </div>
             ))}
           </div>
         ) : (
           // Empty state
-          <div className="flex flex-col items-center justify-center py-20 px-4">
-            <svg
-              className="w-24 h-24 text-gray-300 dark:text-gray-700 mb-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              role="img"
-              aria-label="No products found"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
+          <div className="flex flex-col items-center justify-center py-20 px-4 animate-fadeIn">
+            <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-full mb-6">
+              {search || category !== "all" || minPrice || maxPrice ? (
+                <SearchX className="w-12 h-12 text-gray-400" />
+              ) : (
+                <Package className="w-12 h-12 text-gray-400" />
+              )}
+            </div>
             <h3 className="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-2">No products found</h3>
             <p className="text-gray-500 dark:text-gray-400 text-center max-w-md mb-6">
               {search || category !== "all" || minPrice || maxPrice
@@ -136,7 +146,7 @@ const Browse = () => {
                   setMaxPrice("");
                   showToast('Filters cleared', 'info', 2000);
                 }}
-                className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 transition"
+                className="px-6 py-2 bg-black text-white dark:bg-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200 btn-press"
               >
                 Clear Filters
               </button>
@@ -147,8 +157,8 @@ const Browse = () => {
 
       {/* Results summary */}
       {!isLoading && filtered.length > 0 && (
-        <div className="text-center text-gray-600 dark:text-gray-400 text-sm">
-          Showing <span className="font-semibold text-gray-800 dark:text-gray-200">{filtered.length}</span> products
+        <div className="text-center text-gray-600 dark:text-gray-400 text-sm animate-fadeIn">
+          Showing <span className="font-semibold text-gray-800 dark:text-gray-200">{filtered.length}</span> {filtered.length === 1 ? 'product' : 'products'}
         </div>
       )}
 
