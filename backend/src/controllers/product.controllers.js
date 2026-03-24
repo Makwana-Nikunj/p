@@ -12,11 +12,47 @@ const createProduct = asyncHandler(async (req, res) => {
     const userId = req.user.id;
     const { title, price, category, condition, location, description } = req.body;
 
-    // Validate input data (title, price, category, condition, location, description)
-    if ([title, price, category, condition, location, description].some((field) => !field?.trim())) {
-        throw new ApiError(400, "All fields are required");
+    // ===== INPUT VALIDATION =====
+    // Validate title
+    if (!title || typeof title !== 'string' || title.trim().length === 0) {
+        throw new ApiError(400, "Title is required");
+    }
+    if (title.length > 255) {
+        throw new ApiError(400, "Title must be less than 255 characters");
     }
 
+    // Validate price (must be positive number)
+    const priceNum = parseFloat(price);
+    if (isNaN(priceNum) || priceNum <= 0) {
+        throw new ApiError(400, "Price must be a positive number");
+    }
+    if (priceNum > 1000000) {
+        throw new ApiError(400, "Price is too high");
+    }
+
+    // Validate category
+    const allowedCategories = ['electronics', 'books', 'clothing', 'furniture', 'other', 'vehicles', 'services'];
+    if (!allowedCategories.includes(category)) {
+        throw new ApiError(400, "Invalid category");
+    }
+
+    // Validate condition
+    const allowedConditions = ['new', 'like-new', 'good', 'fair', 'poor'];
+    if (!allowedConditions.includes(condition)) {
+        throw new ApiError(400, "Invalid condition");
+    }
+
+    // Validate description length
+    if (description && description.length > 5000) {
+        throw new ApiError(400, "Description too long (max 5000 characters)");
+    }
+
+    // Validate location length
+    if (location && location.length > 255) {
+        throw new ApiError(400, "Location too long");
+    }
+
+    // Validate image exists
     const productImageLocalPath = req.files?.productImage?.[0]?.path;
     if (!productImageLocalPath) {
         throw new ApiError(400, "Product image is required");

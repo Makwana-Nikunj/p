@@ -4,7 +4,7 @@ let sql;
 
 const connectToDatabase = async () => {
     try {
-        sql = postgres(process.env.DATABASE_URL, { ssl: 'require', max: 5, prepare: false });
+        sql = postgres(process.env.DATABASE_URL, { ssl: 'require', max: 5, prepare: true });
 
         // ===============================
         // USERS TABLE

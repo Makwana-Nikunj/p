@@ -4,6 +4,9 @@ import cookieParser from "cookie-parser";
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 import { initChatSocket } from "./socket/chat.sockets.js";
+import { apiLimiter, authLimiter } from "./middlewares/rateLimit.middleware.js";
+import { securityHeaders } from "./middlewares/security.middleware.js";
+import { requestLogger } from "./middlewares/requestLogger.middleware.js";
 
 
 const app = express();
@@ -38,10 +41,17 @@ app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(cookieParser());
 
+// Apply rate limiting to API routes
+app.use('/api/', apiLimiter);
+// Apply stricter limits to auth endpoints
+app.use('/api/users/login', authLimiter);
+app.use('/api/users/register', authLimiter);
 
+// Apply security headers
+app.use(securityHeaders);
 
-
-
+// Request logging
+app.use(requestLogger);
 
 import userRouter from "./routes/user.routes.js";
 import productRouter from "./routes/product.routes.js";

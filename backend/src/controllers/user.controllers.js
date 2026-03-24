@@ -57,6 +57,38 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(400, "All fields are required");
     }
 
+    // ===== ENHANCED VALIDATION =====
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        throw new ApiError(400, "Invalid email format");
+    }
+
+    // Validate username (alphanumeric, dashes, underscores, 3-50 chars)
+    const usernameRegex = /^[a-zA-Z0-9_-]{3,50}$/;
+    if (!usernameRegex.test(username)) {
+        throw new ApiError(400, "Username must be 3-50 characters, letters/numbers/_- only");
+    }
+
+    // Validate password strength
+    if (password.length < 8) {
+        throw new ApiError(400, "Password must be at least 8 characters");
+    }
+    if (!/[A-Z]/.test(password)) {
+        throw new ApiError(400, "Password must contain at least one uppercase letter");
+    }
+    if (!/[a-z]/.test(password)) {
+        throw new ApiError(400, "Password must contain at least one lowercase letter");
+    }
+    if (!/[0-9]/.test(password)) {
+        throw new ApiError(400, "Password must contain at least one number");
+    }
+    // Password max length
+    if (password.length > 100) {
+        throw new ApiError(400, "Password too long");
+    }
+    // ===== END VALIDATION =====
+
     const existingUsers = await sql`
         SELECT id FROM users 
         WHERE LOWER(username) = ${username.toLowerCase()} 

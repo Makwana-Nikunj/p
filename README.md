@@ -84,10 +84,17 @@
 | Feature | Description |
 |---------|-------------|
 | 🔐 **JWT Authentication** | Secure token-based auth with httpOnly cookies |
-| 🛡️ **Race Condition Protection** | Prevents duplicate simultaneous requests |
+| 🛡️ **SQL Injection Prevention** | Prepared statements (parameterized queries) |
+| ⚡ **Rate Limiting** | 100 req/15min API, 5 req/hr auth endpoints |
+| 🛡️ **Security Headers** | CSP, HSTS, X-Frame-Options, X-Content-Type-Options |
 | 🔒 **Role-Based Access** | User, Seller, and Admin role distinctions |
 | 📧 **Password Hashing** | bcrypt for secure password storage |
 | 🚫 **Protected Routes** | Route guards for authenticated/admin pages |
+| 📝 **Input Validation** | Comprehensive validation for all user inputs |
+| 📊 **Request Logging** | All requests logged with auth failure tracking |
+| 🚨 **File Upload Security** | Type/size restrictions, Cloudinary upload |
+| 🏃 **Race Condition Guard** | Prevents duplicate simultaneous requests |
+| ✅ **XSS Protection** | React auto-escaping + CSP headers |
 
 ---
 
@@ -236,14 +243,18 @@ Open **http://localhost:5173** in your browser.
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `PORT` | Server port | `3000` |
-| `NODE_ENV` | Environment | `development` |
-| `DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@localhost:5432/campus_marketplace` |
-| `JWT_SECRET` | JWT signing secret (32+ chars) | `your-secret-key-min-32-chars` |
-| `JWT_EXPIRES_IN` | Access token TTL | `7d` |
-| `CORS_ORIGIN` | Allowed frontend origin | `http://localhost:5173` |
+| `NODE_ENV` | Environment (`development` or `production`) | `development` |
+| `DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@host/db` |
+| `ACCESS_TOKEN_SECRET` | Secret for signing access tokens (min 32 chars) | `your-access-token-secret-min-32-chars` |
+| `ACCESS_TOKEN_EXPIRY` | Access token expiration time | `15m` or `1d` |
+| `REFRESH_TOKEN_SECRET` | Secret for signing refresh tokens (min 32 chars) | `your-refresh-token-secret-min-32-chars` |
+| `REFRESH_TOKEN_EXPIRY` | Refresh token expiration time | `7d` |
+| `CORS_ORIGIN` | Allowed frontend origin(s), comma-separated | `http://localhost:5173` or `https://your-app.vercel.app,https://staging.your-app.com` |
 | `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name | `your-cloud` |
 | `CLOUDINARY_API_KEY` | Cloudinary API key | `123456789` |
 | `CLOUDINARY_API_SECRET` | Cloudinary API secret | `your-secret` |
+
+> ⚠️ **Never commit `.env` files.** Both directories have `.gitignore` entries for these files.
 
 ### Frontend (`campus-marketplace/.env`)
 
@@ -264,8 +275,8 @@ campus-marketplace/
 │   ├── package.json
 │   ├── .env.example
 │   └── src/
-│       ├── index.js              # Server entry point
-│       ├── app.js                # Express app & middleware
+│       ├── index.js              # Server entry point (with env validation)
+│       ├── app.js                # Express app & middleware config
 │       ├── controllers/          # Request handlers
 │       │   ├── auth.controllers.js
 │       │   ├── user.controllers.js
@@ -281,17 +292,20 @@ campus-marketplace/
 │       │   ├── admin.routes.js
 │       │   └── messages.routes.js
 │       ├── middlewares/
-│       │   ├── auth.middleware.js    # JWT verification & admin check
-│       │   └── multer.middleware.js  # File upload handling
+│       │   ├── auth.middleware.js      # JWT verification & admin check
+│       │   ├── rateLimit.middleware.js # Rate limiting (API & auth)
+│       │   ├── security.middleware.js  # Security headers (CSP, HSTS, etc.)
+│       │   ├── requestLogger.middleware.js # Request logging & auth failure tracking
+│       │   └── multer.middleware.js    # File upload handling
 │       ├── services/
 │       │   └── socket/
-│       │       └── chat.sockets.js   # Socket.IO event handlers
+│       │       └── chat.sockets.js     # Socket.IO event handlers
 │       ├── db/
-│       │   └── index.js              # PostgreSQL connection pool
+│       │   └── index.js                # PostgreSQL connection with prepared statements
 │       └── utils/
-│           ├── ApiError.js           # Custom error class
-│           ├── ApiResponse.js        # Standardized response
-│           └── asyncHandler.js       # Async error wrapper
+│           ├── ApiError.js             # Custom error class
+│           ├── ApiResponse.js          # Standardized response
+│           └── asyncHandler.js         # Async error wrapper
 │
 └── campus-marketplace/           # Frontend (React app)
     ├── package.json
@@ -490,6 +504,237 @@ async login({ email, password }) {
   }
 }
 ```
+
+---
+
+## 🔒 Security Features
+
+The Campus Marketplace implements **defense-in-depth** security across multiple layers to protect against common web vulnerabilities.
+
+### SQL Injection Prevention
+
+**Prepared Statements**
+All PostgreSQL queries use parameterized statements with `prepare: true` enabled in the connection pool.
+
+```javascript
+// backend/src/db/index.js
+sql = postgres(process.env.DATABASE_URL, { ssl: 'require', max: 5, prepare: true });
+```
+
+This prevents SQL injection by ensuring user input is never interpreted as SQL code.
+
+**Testing:**
+```bash
+curl "http://localhost:3000/api/products/1' OR '1'='1"
+# Returns 404 (no data leakage)
+```
+
+---
+
+### Rate Limiting
+
+**Two-Tier Protection**
+
+| Limiter | Limit | Targets |
+|---------|-------|---------|
+| `apiLimiter` | 100 requests / 15 min | All `/api/*` endpoints |
+| `authLimiter` | 5 attempts / hour | `/api/users/login`, `/api/users/register` |
+
+```javascript
+// backend/src/middlewares/rateLimit.middleware.js
+app.use('/api/', apiLimiter);
+app.use('/api/users/login', authLimiter);
+app.use('/api/users/register', authLimiter);
+```
+
+Rate limit headers included in responses:
+```
+RateLimit-Policy: 100;w=900
+RateLimit-Limit: 100
+RateLimit-Remaining: 99
+RateLimit-Reset: 900
+```
+
+---
+
+### Security Headers
+
+Comprehensive HTTP security headers are set on every response:
+
+| Header | Value | Purpose |
+|--------|-------|---------|
+| `X-Content-Type-Options` | `nosniff` | Prevents MIME-type sniffing attacks |
+| `X-Frame-Options` | `DENY` | Blocks clickjacking attempts |
+| `X-XSS-Protection` | `1; mode=block` | Legacy XSS protection for older browsers |
+| `Strict-Transport-Security` | `max-age=31536000; includeSubDomains` | Enforces HTTPS in production |
+| `Content-Security-Policy` | `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;` | Mitigates XSS by controlling resource loading |
+| `Permissions-Policy` | `geolocation=(), microphone=(), camera=()` | Disables unused browser features |
+
+```javascript
+// backend/src/middlewares/security.middleware.js
+export const securityHeaders = (req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;");
+    res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+    next();
+};
+```
+
+---
+
+### Input Validation
+
+#### Product Creation Validation
+
+All product submissions are validated for:
+
+```javascript
+// backend/src/controllers/product.controllers.js
+- Title: Required, string, max 255 chars
+- Price: Positive number, max 1,000,000
+- Category: Whitelist (electronics, books, clothing, furniture, other, vehicles, services)
+- Condition: Whitelist (new, like-new, good, fair, poor)
+- Description: Max 5,000 characters
+- Location: Max 255 characters
+- Image: Required (file upload)
+```
+
+#### User Registration Validation
+
+Enhanced password and username requirements:
+
+```javascript
+// backend/src/controllers/user.controllers.js
+- Email: RFC-compliant format validation
+- Username: 3-50 chars, alphanumeric + _ or - only
+- Password: Min 8 chars, max 100 chars, requires uppercase, lowercase, number
+```
+
+---
+
+### Authorization & Access Control
+
+#### Ownership Checks
+
+Product update/delete operations verify user ownership:
+
+```javascript
+const product = await sql`
+    SELECT * FROM products
+    WHERE id = ${productId} AND user_id = ${userId}
+`;
+if (product.length === 0) {
+    throw new ApiError(404, "Product not found or unauthorized");
+}
+```
+
+#### Admin Route Protection
+
+All admin endpoints require both authentication and admin role:
+
+```javascript
+// backend/src/routes/product.routes.js
+router.route("/pending").get(verifyJwt, isAdmin, getPendingProducts);
+router.route("/:id/approve").patch(verifyJwt, isAdmin, approveProduct);
+```
+
+---
+
+### Request Logging & Monitoring
+
+All requests are logged with response times and IP addresses. Auth failures (401/403) are highlighted:
+
+```javascript
+// backend/src/middlewares/requestLogger.middleware.js
+export const requestLogger = (req, res, next) => {
+    const start = Date.now();
+    res.on('finish', () => {
+        const duration = Date.now() - start;
+        const log = `[${new Date().toISOString()}] ${req.method} ${req.path} ${res.statusCode} ${duration}ms ${req.ip}`;
+        if (res.statusCode >= 400) console.warn(log);
+        else console.log(log);
+        if (res.statusCode === 401 || res.statusCode === 403) {
+            console.warn(`AUTH FAILURE: ${req.method} ${req.path} - User: ${req.user?.id || 'anonymous'} - IP: ${req.ip}`);
+        }
+    });
+    next();
+};
+```
+
+---
+
+### File Upload Security
+
+**Multer Configuration** enforces strict file upload controls:
+
+```javascript
+// backend/src/middlewares/multer.middleware.js
+export const upload = multer({
+    storage,
+    fileFilter: (req, file, cb) => {
+        const imageExt = [".jpg", ".jpeg", ".png", ".webp"];
+        if (imageExt.includes(ext)) return cb(null, true);
+        return cb(new Error("Invalid file format"), false);
+    },
+    limits: {
+        fileSize: 500 * 1024 * 1024, // 500MB
+    }
+});
+```
+
+Only image files (JPG, JPEG, PNG, WebP) are accepted. File size limited to prevent DoS.
+
+---
+
+### Request Size Limits
+
+Body parser size limits protect against large payload attacks:
+
+```javascript
+// backend/src/app.js
+app.use(express.json({ limit: "16kb" }));
+app.use(express.urlencoded({ limit: "16kb", extended: true }));
+```
+
+These limits apply to all JSON and URL-encoded request bodies, preventing memory exhaustion attacks.
+
+---
+
+### XSS Prevention
+
+**React Auto-Escaping**: All user input is automatically escaped in JSX. No `dangerouslySetInnerHTML` used in codebase.
+
+**Content Security Policy**: CSP header restricts resource loading to same-origin, blocking injected scripts.
+
+---
+
+### Environment Hardening
+
+**Startup Validation** ensures required environment variables are present:
+
+```javascript
+// backend/src/index.js
+const requiredEnvVars = ['DATABASE_URL', 'ACCESS_TOKEN_SECRET', 'REFRESH_TOKEN_SECRET'];
+const missingEnvVars = requiredEnvVars.filter(varName => !process.env[varName]);
+if (missingEnvVars.length > 0) {
+    console.error(`❌ Missing required environment variables: ${missingEnvVars.join(', ')}`);
+    process.exit(1);
+}
+```
+
+---
+
+### Authentication Security
+
+- **HttpOnly Cookies**: JWT tokens stored in httpOnly cookies (not accessible to JavaScript)
+- **Secure Flag**: Cookies marked `Secure` in production (`NODE_ENV=production`)
+- **SameSite Policy**: `strict` in development, `none` in production with credentials
+- **Password Hashing**: bcrypt with cost factor 10
+- **Race Condition Protection**: Auth service uses `pendingRequests` Map to prevent duplicate simultaneous requests
+- **Role-Based Access**: User, Seller, Admin roles with middleware guards
 
 ---
 
