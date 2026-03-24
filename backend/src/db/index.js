@@ -36,7 +36,8 @@ const connectToDatabase = async () => {
                 condition VARCHAR(255) NOT NULL,
                 location VARCHAR(255),
                 description TEXT,
-                status VARCHAR(255) NOT NULL,
+                status VARCHAR(255) NOT NULL, -- Admin: pending, approved, rejected
+                listing_status VARCHAR(255) NOT NULL DEFAULT 'active', -- Seller: active, sold, archived
                 user_id INTEGER REFERENCES users(id),
                 image_url TEXT,
                 image_public_id TEXT,
@@ -45,6 +46,13 @@ const connectToDatabase = async () => {
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         `;
+
+        // Add listing_status column if it doesn't exist (migration for existing DB)
+        try {
+            await sql`ALTER TABLE products ADD COLUMN IF NOT EXISTS listing_status VARCHAR(255) NOT NULL DEFAULT 'active'`;
+        } catch (error) {
+            // Column might already exist, ignore
+        }
         // ===============================
         // CHATS TABLE (1-1 CHAT)
         // ===============================

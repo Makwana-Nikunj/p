@@ -67,9 +67,9 @@ const ProductDetailPage = () => {
     );
   }
 
-  // Related products
+  // Related products - show only approved AND active products
   const relatedProducts = products.filter(
-    (p) => p.category === product.category && p.$id !== product.$id && (p.status === "approved" || p.status === "active")
+    (p) => p.category === product.category && p.$id !== product.$id && p.status === 'approved' && p.listing_status === 'active'
   ).slice(0, 4);
 
   const handleMessageSeller = async () => {
@@ -143,12 +143,14 @@ const ProductDetailPage = () => {
 
         {/* LEFT: PRODUCT IMAGE */}
         <div className="w-full md:w-1/2 flex justify-center items-center bg-gray-50 dark:bg-gray-900/50 rounded-lg overflow-hidden min-h-[300px] md:min-h-0 aspect-square md:max-h-[600px]">
-          <img
-            src={productService.getFileView(product.imageId)}
-            alt={product.title}
-            className="w-full h-full object-contain p-2 md:p-6"
-            loading="lazy"
-          />
+          <div className="relative w-full h-full group overflow-hidden p-2 md:p-6">
+            <img
+              src={productService.getFileView(product.imageId)}
+              alt={product.title}
+              className="w-full h-full object-contain transition-transform duration-500 ease-out transform group-hover:scale-150 cursor-zoom-in"
+              loading="lazy"
+            />
+          </div>
         </div>
 
         {/* RIGHT SECTION */}

@@ -68,8 +68,8 @@ const createProduct = asyncHandler(async (req, res) => {
 
     // Create product in the database
     const newProduct = await sql`
-        INSERT INTO products (title, price, category, condition, location, description, status, user_id, image_url, image_public_id)
-        VALUES (${title}, ${price}, ${category}, ${condition}, ${location}, ${description}, 'pending', ${userId}, ${productImageUrl}, ${productImagePublicId})
+        INSERT INTO products (title, price, category, condition, location, description, status, listing_status, user_id, image_url, image_public_id)
+        VALUES (${title}, ${price}, ${category}, ${condition}, ${location}, ${description}, 'pending', 'active', ${userId}, ${productImageUrl}, ${productImagePublicId})
         RETURNING *
     `;
 
@@ -79,31 +79,55 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 
 const getProducts = asyncHandler(async (req, res) => {
-    // Fetch all approved products
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const offset = (page - 1) * limit;
+
+    // Fetch approved and active products with pagination
     const products = await sql`
-        SELECT p.*, u.username as "sellerName", u.avatar as "sellerAvatar" 
+        SELECT p.*, u.username as "sellerName", u.avatar as "sellerAvatar"
         FROM products p
         LEFT JOIN users u ON p.user_id = u.id
-        WHERE p.status = 'approved' ORDER BY p.created_at DESC
+        WHERE p.status = 'approved' AND p.listing_status = 'active'
+        ORDER BY p.created_at DESC
+        LIMIT ${limit} OFFSET ${offset}
     `;
 
-    return res.status(200).json(new ApiResponse(200, products, "Products fetched successfully"));
+    // Get total count for pagination metadata
+    const countResult = await sql`SELECT COUNT(*) as total FROM products WHERE status = 'approved' AND listing_status = 'active'`;
+    const total = parseInt(countResult[0].total);
+
+    return res.status(200).json(new ApiResponse(200, {
+        documents: products,
+        total,
+        page,
+        totalPages: Math.ceil(total / limit),
+        hasNext: page < Math.ceil(total / limit)
+    }, "Products fetched successfully"));
 });
 
 const getProductById = asyncHandler(async (req, res) => {
 
     const { id } = req.params;
+    const userId = req.user?.id; // may be undefined for unauthenticated
 
     // Fetch product details by ID
     const product = await sql`
         SELECT p.*, u.username as "sellerName", u.avatar as "sellerAvatar"
         FROM products p
         LEFT JOIN users u ON p.user_id = u.id
-        WHERE p.id = ${id} AND p.status = 'approved'
+        WHERE p.id = ${id}
     `;
 
     if (product.length === 0) {
         throw new ApiError(404, "Product not found");
+    }
+
+    // If user is not the owner, only allow if product is approved AND active
+    if (userId && product[0].user_id !== userId) {
+        if (product[0].status !== 'approved' || product[0].listing_status !== 'active') {
+            throw new ApiError(404, "Product not found");
+        }
     }
 
     return res.status(200).json(new ApiResponse(200, product[0], "Product fetched successfully"));
@@ -112,47 +136,77 @@ const getProductById = asyncHandler(async (req, res) => {
 const updateProduct = asyncHandler(async (req, res) => {
     const userId = req.user.id;
     const productId = req.params.id;
-    const { title, price, category, condition, location, description } = req.body;
+    const { title, price, category, condition, location, description, listing_status } = req.body;
     const productImageLocalPath = req.files?.productImage?.[0]?.path;
-
-    // Validate input data
-    if ([title, price, category, condition, location, description].some((field) => !field?.trim())) {
-        throw new ApiError(400, "All fields are required");
-    }
 
     if (!productId) {
         throw new ApiError(400, "Product ID is required");
     }
 
     const product = await sql`
-        select * from products where id = ${productId} and user_id = ${userId}
+        SELECT * FROM products WHERE id = ${productId} AND user_id = ${userId}
     `;
 
     if (product.length === 0) {
         throw new ApiError(404, "Product not found");
     }
 
-    let productImageUrl = product[0].image_url;
-    let productImagePublicId = product[0].image_public_id;
+    const current = product[0];
 
+    // Determine new values (partial update - only use provided values)
+    const newTitle = title !== undefined ? title : current.title;
+    const newPrice = price !== undefined ? price : current.price;
+    const newCategory = category !== undefined ? category : current.category;
+    const newCondition = condition !== undefined ? condition : current.condition;
+    const newLocation = location !== undefined ? location : current.location;
+    const newDescription = description !== undefined ? description : current.description;
+    let newImageUrl = current.image_url;
+    let newImagePublicId = current.image_public_id;
+    const newListingStatus = (listing_status && ['active', 'sold', 'archived'].includes(listing_status))
+        ? listing_status
+        : current.listing_status;
 
-    // If a new image is uploaded, handle the image update
+    // Handle image upload if provided
     if (productImageLocalPath) {
-        // Delete old image from Cloudinary if it exists
-        if (product[0].image_public_id) {
-            await deleteFromCloudinary(product[0].image_public_id);
+        if (current.image_public_id) {
+            await deleteFromCloudinary(current.image_public_id);
         }
-        // Upload new image to Cloudinary
-        const uploadedProductImage = await uploadOnCloudinary(productImageLocalPath);
-        productImageUrl = uploadedProductImage.secure_url;
-        productImagePublicId = uploadedProductImage.public_id;
-
+        const uploaded = await uploadOnCloudinary(productImageLocalPath);
+        newImageUrl = uploaded.secure_url;
+        newImagePublicId = uploaded.public_id;
     }
 
-    // Update product in the database
+    // Validate only if these fields are being changed
+    if (title !== undefined && (!newTitle?.trim() || newTitle.length > 255)) {
+        throw new ApiError(400, "Invalid title");
+    }
+    if (price !== undefined) {
+        const priceNum = parseFloat(newPrice);
+        if (isNaN(priceNum) || priceNum <= 0) {
+            throw new ApiError(400, "Price must be a positive number");
+        }
+    }
+    if (category !== undefined && !newCategory?.trim()) {
+        throw new ApiError(400, "Category cannot be empty");
+    }
+    if (condition !== undefined && !newCondition?.trim()) {
+        throw new ApiError(400, "Condition cannot be empty");
+    }
+
+    // Update database
     const updatedProduct = await sql`
         UPDATE products
-        SET title = ${title}, price = ${price}, category = ${category}, condition = ${condition}, location = ${location}, description = ${description}, image_url = ${productImageUrl}, image_public_id = ${productImagePublicId}, updated_at = CURRENT_TIMESTAMP
+        SET
+            title = ${newTitle},
+            price = ${newPrice},
+            category = ${newCategory},
+            condition = ${newCondition},
+            location = ${newLocation},
+            description = ${newDescription},
+            image_url = ${newImageUrl},
+            image_public_id = ${newImagePublicId},
+            listing_status = ${newListingStatus},
+            updated_at = CURRENT_TIMESTAMP
         WHERE id = ${productId} AND user_id = ${userId}
         RETURNING *
     `;
@@ -294,6 +348,19 @@ const getRejectedProducts = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, products, "Rejected products fetched successfully"));
 });
 
+const getMyProducts = asyncHandler(async (req, res) => {
+    // Fetch all products for the current user (any status, any listing_status)
+    const userId = req.user.id;
+    const products = await sql`
+        SELECT p.*, u.username as "sellerName", u.avatar as "sellerAvatar"
+        FROM products p
+        LEFT JOIN users u ON p.user_id = u.id
+        WHERE p.user_id = ${userId}
+        ORDER BY p.created_at DESC
+    `;
+    return res.status(200).json(new ApiResponse(200, products, "My products fetched successfully"));
+});
+
 
 export {
     createProduct,
@@ -306,5 +373,6 @@ export {
     getAllProducts,
     getPendingProducts,
     getApprovedProducts,
-    getRejectedProducts
+    getRejectedProducts,
+    getMyProducts
 };

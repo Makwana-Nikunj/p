@@ -7,17 +7,44 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import productService from '../services/productService';
-import { fetchProducts } from '../store/productSlice';
+import { fetchProducts, fetchProductById } from '../store/productSlice';
+import { useEffect, useState } from "react";
 
 const OwnerProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const products = useSelector((state) => state.products.products);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Find product owned by user
-  const product = products.find((p) => p.$id === id);
+  useEffect(() => {
+    const loadProduct = async () => {
+      try {
+        // Try to fetch product directly (works for any status if user is owner)
+        const result = await dispatch(fetchProductById(id));
+        if (result.payload) {
+          setProduct(result.payload);
+        } else {
+          // Try to find in products store as fallback
+          const products = useSelector((state) => state.products.products);
+          const found = products.find(p => p.$id === id);
+          if (found) setProduct(found);
+        }
+      } catch (error) {
+        console.error("Failed to load product:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadProduct();
+  }, [id, dispatch]);
+
+  if (loading) {
+    return (
+      <p className="text-center mt-20 text-lg font-semibold">Loading product...</p>
+    );
+  }
 
   if (!product) {
     return (
@@ -27,11 +54,11 @@ const OwnerProductDetail = () => {
     );
   }
 
-  // Move status handler
+  // Move status handler - toggles listing_status between 'active' and 'sold'
   const handleMoveStatus = async () => {
-    const newStatus = product.status === "active" ? "sold" : "active";
+    const newListingStatus = product.listing_status === "active" ? "sold" : "active";
 
-    await productService.updateProduct(product.$id, { status: newStatus });
+    await productService.updateProduct(product.$id, { listing_status: newListingStatus });
 
     // Refresh redux store
     dispatch(fetchProducts());
@@ -41,7 +68,7 @@ const OwnerProductDetail = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center bg-gray-50 py-6">
+    <div className="w-full min-h-screen flex flex-col items-center bg-gray-50 dark:bg-black py-6">
 
       {/* Back Button */}
       <div className="w-[90%] lg:w-[82%]">
@@ -82,13 +109,24 @@ const OwnerProductDetail = () => {
           <div className="space-y-4">
 
             <div className="w-full flex items-start justify-between ">
-              <h1 className="font-semibold text-xl sm:text-2xl md:text-3xl">
+              <h1 className="font-semibold text-xl sm:text-2xl md:text-3xl text-gray-800 dark:text-white">
                 {product.title}
               </h1>
 
-              <span className="bg-black text-white dark:bg-white dark:text-black rounded-lg px-4 py-2 text-sm">
-                {product.category}
-              </span>
+              <div className="flex flex-col gap-2 items-end">
+                <span className="bg-black text-white dark:bg-white dark:text-black rounded-lg px-4 py-2 text-sm">
+                  {product.category}
+                </span>
+                <span className={`rounded-lg px-4 py-1 text-xs font-semibold ${
+                  product.listing_status === 'active'
+                    ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                    : product.listing_status === 'sold'
+                    ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                    : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
+                }`}>
+                  {product.listing_status.toUpperCase()}
+                </span>
+              </div>
             </div>
 
             <p className="text-primary font-semibold text-lg sm:text-xl md:text-2xl">
@@ -136,11 +174,15 @@ const OwnerProductDetail = () => {
             {/* MOVE STATUS BUTTON */}
             <button
               onClick={handleMoveStatus}
-              className="w-full bg-black text-white dark:bg-white dark:text-black py-2 rounded-lg font-medium hover:bg-gray-900 dark:hover:bg-gray-200"
+              className={`w-full py-3 rounded-lg font-semibold transition-all ${
+                product.listing_status === 'active'
+                  ? 'bg-red-600 text-white hover:bg-red-700'
+                  : 'bg-green-600 text-white hover:bg-green-700'
+              }`}
             >
-              {product.status === "active"
-                ? "Move to Sold"
-                : "Move to Active"}
+              {product.listing_status === "active"
+                ? "✓ Mark as Sold"
+                : "✓ Mark as Active"}
             </button>
 
           </div>

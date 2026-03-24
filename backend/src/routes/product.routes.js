@@ -10,7 +10,8 @@ import {
     rejectProduct,
     getPendingProducts,
     getApprovedProducts,
-    getRejectedProducts
+    getRejectedProducts,
+    getMyProducts
 } from "../controllers/product.controllers.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJwt, isAdmin } from "../middlewares/auth.middleware.js";
@@ -39,6 +40,8 @@ router.route("/sell-product").post(
     createProduct
 );
 router.route("/").get(getProducts);
+// Get current user's products (all statuses)
+router.route("/my").get(verifyJwt, getMyProducts);
 router.route("/:id").patch(
     verifyJwt,
     upload.fields([{ name: "productImage", maxCount: 1 }]),

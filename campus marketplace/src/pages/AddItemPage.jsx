@@ -42,9 +42,7 @@ const AddItem = () => {
           imageId: imageID,
           userId: user?.$id,
           sellerName: user.name || user.email.split("@")[0],
-
-          // ✅ FIX: add status
-          status: "active"
+          // No need to set status/listing_status - backend sets: status='pending', listing_status='active'
       });
 
       if (product) {

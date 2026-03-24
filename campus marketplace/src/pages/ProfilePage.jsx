@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProfileCard from '../Components/profile/ProfileCard';
 import OwnerProduct from '../Components/profile/OwnerProduct';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchMyProducts } from '../store/productSlice';
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("active");
 
-  const products = useSelector((state) => state.products.products);
+  const dispatch = useDispatch();
+  const myProducts = useSelector((state) => state.products.myProducts);
   const user = useSelector((state) => state.auth.userData);
 
   // 🔥 Prevent crash if user not loaded yet
@@ -18,13 +20,14 @@ const Profile = () => {
     );
   }
 
-  const userId = user.$id;
+  // Fetch user's products on mount
+  useEffect(() => {
+    dispatch(fetchMyProducts());
+  }, [dispatch]);
 
-  // Filter user products
-  const ownerProducts = products.filter((p) => p.userId === userId);
-
-  const activeProducts = ownerProducts.filter((p) => p.status === "approved" || p.status === "pending");
-  const soldProducts = ownerProducts.filter((p) => p.status === "sold");
+  // myProducts already scoped to current user from backend
+  const activeProducts = myProducts.filter((p) => p.listing_status === "active");
+  const soldProducts = myProducts.filter((p) => p.listing_status === "sold");
 
   return (
     <div className="w-full flex justify-center items-center py-12">

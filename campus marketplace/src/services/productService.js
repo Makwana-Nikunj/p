@@ -95,16 +95,23 @@ export class ProductService {
     }
 
     // ---------------------------
-    // GET ALL PRODUCTS
+    // GET ALL PRODUCTS (with pagination only - filtering happens client-side)
     // ---------------------------
-    async getProducts() {
+    async getProducts(page = 1, limit = 20) {
         try {
-            const response = await apiClient.get('/products');
-            const data = response.data?.data || [];
-            return { documents: Array.isArray(data) ? data.map(mapProduct) : [] };
+            const response = await apiClient.get(`/products?page=${page}&limit=${limit}`);
+            const data = response.data?.data || {};
+            const products = Array.isArray(data.documents) ? data.documents.map(mapProduct) : [];
+            return {
+                documents: products,
+                total: data.total || 0,
+                page: data.page || page,
+                totalPages: data.totalPages || 1,
+                hasNext: data.hasNext || false
+            };
         } catch (error) {
             console.log("ProductService :: getProducts :: error", error);
-            return { documents: [] };
+            return { documents: [], total: 0, page: 1, totalPages: 1, hasNext: false };
         }
     }
 
@@ -144,6 +151,22 @@ export class ProductService {
     // ---------------------------
     async updateFavoriteCount() {
         return true;
+    }
+
+    // ---------------------------
+    // GET MY PRODUCTS (for profile)
+    // ---------------------------
+    async getMyProducts() {
+        try {
+            const response = await apiClient.get('/products/my');
+            const data = response.data?.data || [];
+            return {
+                documents: Array.isArray(data) ? data.map(mapProduct) : []
+            };
+        } catch (error) {
+            console.log("ProductService :: getMyProducts :: error", error);
+            return { documents: [] };
+        }
     }
 }
 
