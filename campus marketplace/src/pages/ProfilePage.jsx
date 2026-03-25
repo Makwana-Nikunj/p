@@ -35,7 +35,7 @@ const Profile = () => {
 
         <h1 className="text-3xl font-semibold mb-8">Profile</h1>
 
-        <ProfileCard />
+        <ProfileCard myProducts={myProducts} />
 
         <div className="w-full h-10 bg-black dark:bg-gray-800 p-1 my-8 rounded-2xl flex justify-around">
           <button

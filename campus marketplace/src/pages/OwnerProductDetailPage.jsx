@@ -7,7 +7,7 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import productService from '../services/productService';
-import { fetchProducts, fetchProductById } from '../store/productSlice';
+import { fetchProducts, fetchProductById, fetchMyProducts } from '../store/productSlice';
 import { useEffect, useState } from "react";
 
 const OwnerProductDetail = () => {
@@ -60,8 +60,9 @@ const OwnerProductDetail = () => {
 
     await productService.updateProduct(product.$id, { listing_status: newListingStatus });
 
-    // Refresh redux store
+    // Refresh redux store for both general products and user's own products
     dispatch(fetchProducts());
+    dispatch(fetchMyProducts());
 
     // Redirect back to profile
     navigate("/profile");

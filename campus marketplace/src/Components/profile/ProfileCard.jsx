@@ -3,9 +3,8 @@ import { FiEdit2 } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const ProfileCard = () => {
+const ProfileCard = ({ myProducts }) => {
   const user = useSelector((state) => state.auth.userData);
-  const products = useSelector((state) => state.products.products);
   const navigate = useNavigate();
   // Profile Photo from Redux store because editing updates it there
   const profilePhoto = useSelector((state) => state.auth.profilePhoto);
@@ -16,10 +15,9 @@ const ProfileCard = () => {
  
     
 
-  // Stats
-  const ownerProducts = products.filter((p) => String(p.userId) === String(user.$id));
-  const activeCount = ownerProducts.filter((p) => p.status === "approved" || p.status === "pending").length;
-  const soldCount = ownerProducts.filter((p) => p.status === "sold").length;
+  // Stats - myProducts already filtered for current user
+  const activeCount = myProducts.filter((p) => p.listing_status === "active").length;
+  const soldCount = myProducts.filter((p) => p.listing_status === "sold").length;
 
   return (
     <div className="border border-gray-200 dark:border-gray-700 rounded-2xl p-8 space-y-8 min-h-[350px] bg-white dark:bg-gray-900 shadow-sm">

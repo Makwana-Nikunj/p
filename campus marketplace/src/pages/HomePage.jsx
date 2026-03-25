@@ -6,12 +6,13 @@ import BottomCTA from '../Components/home/BottomCTA'
 
 const Container = () => {
   return (
-    <div className='w-full flex flex-col gap-4 items-center'>
+    <div className='w-full flex flex-col items-center perspective-1000'>
 
-    <Hero />
-    <TrendingSection />
-    <TrustBar />
-    <BottomCTA />
+      <Hero />
+      <div className="w-full border-b border-gray-200 dark:border-gray-800 my-4" />
+      <TrendingSection />
+      <TrustBar />
+      <BottomCTA />
 
     </div>
   )

@@ -21,21 +21,22 @@ const TrustBar = () => {
   ]
 
   return (
-    <div className="w-full max-w-7xl mx-auto mt-10 px-4 sm:px-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="w-full max-w-7xl mx-auto mt-12 px-4 sm:px-6 perspective-1000">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {trustItems.map((item, index) => (
           <div
             key={index}
-            className="flex items-start gap-4 p-5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl"
+            className="flex items-start gap-4 p-6 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700/50 rounded-2xl shadow-lg hover:shadow-2xl hover:shadow-blue-500/10 transform hover:-translate-y-1 animate-tilt3d transition-all duration-300 group card-hover"
+            style={{ animationDelay: `${index * 0.1}s` }}
           >
-            <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300">
+            <div className="p-3 bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-900/30 dark:to-purple-900/30 rounded-xl text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform duration-300">
               {item.icon}
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                 {item.title}
               </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                 {item.description}
               </p>
             </div>

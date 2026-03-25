@@ -90,8 +90,8 @@ const registerUser = asyncHandler(async (req, res) => {
     // ===== END VALIDATION =====
 
     const existingUsers = await sql`
-        SELECT id FROM users 
-        WHERE LOWER(username) = ${username.toLowerCase()} 
+        SELECT id FROM users
+        WHERE LOWER(username) = ${username.toLowerCase()}
         OR email = ${email}
     `;
 
@@ -99,6 +99,7 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(409, "User with this email or username already exists");
     }
 
+    // Handle optional avatar upload
     const avatarLocalPath = req.files?.avatar?.[0]?.path;
     let avatarUrl = null;
     let avatarPublicId = null;

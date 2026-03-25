@@ -122,10 +122,10 @@ const RegisterForm = () => {
                   message: "Please enter a valid email address",
                 },
               })}
-              className={`w-full pl-10 pr-4 py-3 rounded-lg border transition-all outline-none
+              className={`w-full pl-10 pr-4 py-3 rounded-lg border transition-all outline-none dark:bg-gray-800 dark:text-white
                           ${errors.email
-                  ? 'border-red-300 focus:ring-2 focus:ring-red-200 bg-red-50'
-                  : 'border-gray-300 focus:ring-2 focus:ring-black/20 focus:border-black'
+                  ? 'border-red-300 focus:ring-2 focus:ring-red-200 bg-red-50 dark:bg-red-900/30 dark:border-red-500'
+                  : 'border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20 focus:border-black dark:focus:border-gray-400'
                 }`}
             />
             {emailValue && !errors.email && (
@@ -151,14 +151,18 @@ const RegisterForm = () => {
               {...register("password", {
                 required: "Password is required",
                 minLength: {
-                  value: 6,
-                  message: "Password must be at least 6 characters",
+                  value: 8,
+                  message: "Password must be at least 8 characters",
                 },
+                pattern: {
+                  value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
+                  message: "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+                }
               })}
-              className={`w-full pl-10 pr-4 py-3 rounded-lg border transition-all outline-none
+              className={`w-full pl-10 pr-4 py-3 rounded-lg border transition-all outline-none dark:bg-gray-800 dark:text-white
                           ${errors.password
-                  ? 'border-red-300 focus:ring-2 focus:ring-red-200 bg-red-50'
-                  : 'border-gray-300 focus:ring-2 focus:ring-black/20 focus:border-black'
+                  ? 'border-red-300 focus:ring-2 focus:ring-red-200 bg-red-50 dark:bg-red-900/30 dark:border-red-500'
+                  : 'border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20 focus:border-black dark:focus:border-gray-400'
                 }`}
             />
             {passwordValue && !errors.password && (
@@ -186,10 +190,10 @@ const RegisterForm = () => {
                 validate: (value) =>
                   value === password || "Passwords do not match",
               })}
-              className={`w-full pl-10 pr-4 py-3 rounded-lg border transition-all outline-none
+              className={`w-full pl-10 pr-4 py-3 rounded-lg border transition-all outline-none dark:bg-gray-800 dark:text-white
                           ${errors.confirmPassword
-                  ? 'border-red-300 focus:ring-2 focus:ring-red-200 bg-red-50'
-                  : 'border-gray-300 focus:ring-2 focus:ring-black/20 focus:border-black'
+                  ? 'border-red-300 focus:ring-2 focus:ring-red-200 bg-red-50 dark:bg-red-900/30 dark:border-red-500'
+                  : 'border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20 focus:border-black dark:focus:border-gray-400'
                 }`}
             />
             {confirmPasswordValue && !errors.confirmPassword && (
