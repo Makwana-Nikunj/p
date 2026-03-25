@@ -27,46 +27,32 @@ const TrendingSection = () => {
   }));
 
   return (
-    <div className="w-full max-w-7xl mx-auto mt-12 px-4 sm:px-6">
+    <div className="w-full max-w-7xl mx-auto mt-12 px-4 sm:px-6 section-spacing">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8 pb-4 border-b-2 border-blue-500/30 dark:border-blue-400/30">
+      <div className="flex items-center justify-between mb-8 pb-4 border-b-2 border-indigo-500/30">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold dark:text-white tracking-tight">
+          <h2 className="font-section-headline gradient-text">
             Trending right now
           </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1.5">
+          <p className="text-sm text-gray-400 mt-1.5">
             Most popular items this week 🔥
           </p>
         </div>
 
         <Link
           to="/browse"
-          className="group inline-flex items-center gap-2 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-5 py-2.5 rounded-xl font-bold transition-all duration-300 hover:border-blue-500 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 hover:shadow-lg hover:shadow-blue-500/20 transform hover:-translate-y-0.5 btn-press bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
+          className="group inline-flex items-center gap-2 glass border border-subtle text-white px-5 py-2.5 rounded-xl font-bold transition-all duration-300 hover:bg-white/10 hover:scale-105 btn-press"
         >
           View All
           <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
         </Link>
       </div>
 
-      {/* Product Grid - 4 columns with staggered animations */}
+      {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {items.map((item, index) => (
-          <div
-            key={item.id}
-            className="stagger-1"
-            style={{ animationDelay: `${index * 0.1}s` }}
-          >
-            <Cart
-              id={item.id}
-              imgUrl={item.imgUrl}
-              category={item.category}
-              name={item.name}
-              price={item.price}
-              condition={item.condition}
-              sellerName={item.sellerName}
-              sellerAvatar={item.sellerAvatar}
-              rating={item.rating}
-            />
+          <div key={item.id} className="animate-fadeIn" style={{ animationDelay: `${index * 0.1}s` }}>
+            <Cart id={item.id} imgUrl={item.imgUrl} category={item.category} name={item.name} price={item.price} condition={item.condition} sellerName={item.sellerName} sellerAvatar={item.sellerAvatar} rating={item.rating} />
           </div>
         ))}
       </div>

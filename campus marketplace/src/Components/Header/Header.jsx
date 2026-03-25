@@ -14,7 +14,7 @@ const Header = () => {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="w-full h-16 bg-[#0c0c0c] dark:bg-[#0c0c0c] border-b border-gray-800 fixed top-0 z-50 transition-colors duration-200">
+    <header className="w-full h-16 glass fixed top-0 z-50 transition-all duration-300 border-b border-subtle">
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-full">
 
         {/* Left */}
@@ -34,7 +34,7 @@ const Header = () => {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-2xl text-white p-2 hover:bg-gray-800 rounded-lg transition-colors"
+          className="md:hidden text-2xl text-white p-2 hover:bg-white/10 rounded-lg transition-all duration-300"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
         >
@@ -44,7 +44,7 @@ const Header = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-out bg-[#0c0c0c] border-t border-gray-800 ${
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-out glass border-t border-subtle ${
           open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >

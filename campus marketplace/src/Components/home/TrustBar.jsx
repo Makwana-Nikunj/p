@@ -26,17 +26,17 @@ const TrustBar = () => {
         {trustItems.map((item, index) => (
           <div
             key={index}
-            className="flex items-start gap-4 p-6 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700/50 rounded-2xl shadow-lg hover:shadow-2xl hover:shadow-blue-500/10 transform hover:-translate-y-1 animate-tilt3d transition-all duration-300 group card-hover"
+            className="flex items-start gap-4 p-6 glass border border-subtle tilt-card transition-all duration-300"
             style={{ animationDelay: `${index * 0.1}s` }}
           >
-            <div className="p-3 bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-900/30 dark:to-purple-900/30 rounded-xl text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform duration-300">
+            <div className="p-3 bg-gradient-to-br from-indigo-500/20 to-cyan-400/20 rounded-xl text-indigo-400 group-hover:scale-110 transition-transform duration-300">
               {item.icon}
             </div>
             <div>
-              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              <h3 className="font-bold text-lg text-white mb-2">
                 {item.title}
               </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+              <p className="text-sm text-gray-400 leading-relaxed">
                 {item.description}
               </p>
             </div>

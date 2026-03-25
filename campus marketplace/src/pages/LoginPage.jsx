@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { login as authLogin } from '../store/authSlice';
 import { Mail, Lock, AlertCircle, CheckCircle2, ArrowRight } from "lucide-react";
 import { useToast } from '../Components/Toast/ToastContainer';
+import AtmosphericBlooms from '../Components/AtmosphericBlooms';
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -30,30 +31,19 @@ const LoginForm = () => {
 
   const handleLogin = async (data) => {
     setError("");
-
     try {
       const session = await authService.login(data);
-
       if (session) {
         const userData = await authService.getCurrentUser();
-
         if (userData) {
-          dispatch(
-            authLogin({
-              userData,
-              profilePhoto: userData.prefs?.profilePhoto || null,
-              accessToken: session?.data?.accessToken || null
-            })
-          );
-
-          // Reconnect socket with new auth
-          setTimeout(() => {
-            chatService.reconnect();
-          }, 100);
-
+          dispatch(authLogin({
+            userData,
+            profilePhoto: userData.prefs?.profilePhoto || null,
+            accessToken: session?.data?.accessToken || null
+          }));
+          setTimeout(() => chatService.reconnect(), 100);
           showToast(`Welcome back, ${userData.name || "User"}!`, 'success', 3000);
         }
-
         navigate(from, { replace: true });
       }
     } catch (error) {
@@ -64,33 +54,36 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="w-full flex justify-center items-center min-h-[80vh] px-4 py-8">
+    <div className="w-full flex justify-center items-center min-h-[80vh] px-4 py-8 relative">
+      {/* Vibrant Background with multiple blooms */}
+      <AtmosphericBlooms intensity="vibrant" />
+
       <form
         onSubmit={handleSubmit(handleLogin)}
-        className="w-full max-w-md space-y-6 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 bg-white dark:bg-gray-900 shadow-xl animate-fadeIn"
+        className="w-full max-w-md space-y-6 glass-intense rounded-2xl p-8 relative z-10 animate-fadeIn"
       >
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mx-auto flex items-center justify-center mb-4">
+          <div className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center mb-4 bg-gradient-to-br from-indigo-500 to-cyan-400 shadow-lg shadow-indigo-500/30">
             <Lock className="w-8 h-8 text-white" />
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Welcome Back</h2>
-          <p className="text-gray-500 dark:text-gray-500 text-sm">Sign in to continue to your account</p>
+          <h2 className="text-3xl font-bold gradient-text">Welcome Back</h2>
+          <p className="text-gray-400 text-sm">Sign in to continue to your account</p>
         </div>
 
         {/* Error Alert */}
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl flex gap-3 animate-slideInFromBottom">
-            <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
-            <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
+          <div className="p-4 bg-red-900/20 border border-red-500/50 rounded-xl flex gap-3 animate-slideInFromBottom border-subtle">
+            <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+            <p className="text-sm text-red-300">{error}</p>
           </div>
         )}
 
         {/* Email Field */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">Email Address</label>
+          <label className="block text-sm font-medium text-gray-400">Email Address</label>
           <div className="relative">
-            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
+            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="email"
               placeholder="you@example.com"
@@ -101,29 +94,29 @@ const LoginForm = () => {
                   message: "Please enter a valid email address",
                 },
               })}
-              className={`w-full pl-12 pr-12 py-3.5 rounded-xl border transition-all duration-200 outline-none dark:bg-gray-900/50 dark:text-white
+              className={`w-full pl-12 pr-12 py-3.5 rounded-xl border transition-all duration-200 outline-none bg-[rgba(255,255,255,0.03)] text-white
                           ${errors.email
-                            ? 'border-red-400 focus:ring-2 focus:ring-red-500/20 bg-red-50 dark:bg-red-900/20'
-                            : 'border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'
+                            ? 'border-red-500 focus:ring-2 focus:ring-red-500/50 bg-red-900/20'
+                            : 'border-subtle focus-glow-indigo'
                           }`}
             />
             {emailValue && !errors.email && (
-              <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-500 animate-scaleIn" />
+              <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-400 animate-scaleIn" />
             )}
           </div>
           {errors.email && (
             <div className="flex items-center gap-2 animate-slideInFromBottom">
-              <AlertCircle className="w-4 h-4 text-red-500" />
-              <p className="text-sm text-red-600 dark:text-red-400">{errors.email.message}</p>
+              <AlertCircle className="w-4 h-4 text-red-400" />
+              <p className="text-sm text-red-400">{errors.email.message}</p>
             </div>
           )}
         </div>
 
         {/* Password Field */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">Password</label>
+          <label className="block text-sm font-medium text-gray-400">Password</label>
           <div className="relative">
-            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
+            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="password"
               placeholder="••••••••"
@@ -134,20 +127,20 @@ const LoginForm = () => {
                   message: "Password must be at least 6 characters",
                 },
               })}
-              className={`w-full pl-12 pr-12 py-3.5 rounded-xl border transition-all duration-200 outline-none dark:bg-gray-800/50 dark:text-white
+              className={`w-full pl-12 pr-12 py-3.5 rounded-xl border transition-all duration-200 outline-none bg-[rgba(255,255,255,0.03)] text-white
                           ${errors.password
-                            ? 'border-red-400 focus:ring-2 focus:ring-red-500/20 bg-red-50 dark:bg-red-900/20'
-                            : 'border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'
+                            ? 'border-red-500 focus:ring-2 focus:ring-red-500/50 bg-red-900/20'
+                            : 'border-subtle focus-glow-indigo'
                           }`}
             />
             {passwordValue && !errors.password && (
-              <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-500 animate-scaleIn" />
+              <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-400 animate-scaleIn" />
             )}
           </div>
           {errors.password && (
             <div className="flex items-center gap-2 animate-slideInFromBottom">
-              <AlertCircle className="w-4 h-4 text-red-500" />
-              <p className="text-sm text-red-600 dark:text-red-400">{errors.password.message}</p>
+              <AlertCircle className="w-4 h-4 text-red-400" />
+              <p className="text-sm text-red-400">{errors.password.message}</p>
             </div>
           )}
         </div>
@@ -156,10 +149,10 @@ const LoginForm = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className={`w-full py-3.5 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center gap-2 btn-press
+          className={`w-full py-3.5 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 btn-press
                       ${isSubmitting
-                        ? 'bg-gray-300 dark:bg-gray-800 text-gray-500 dark:text-gray-300 cursor-not-allowed'
-                        : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 shadow-lg hover:shadow-xl'
+                        ? 'bg-gray-700 text-gray-300 cursor-not-allowed'
+                        : 'btn-gradient-primary text-white hover:shadow-indigo-500/60'
                       }`}
         >
           {isSubmitting ? (
@@ -176,12 +169,12 @@ const LoginForm = () => {
         </button>
 
         {/* Helper Text */}
-        <p className="text-center text-sm text-gray-500 dark:text-gray-500">
+        <p className="text-center text-sm text-gray-400">
           Don't have an account?{' '}
           <button
             type="button"
             onClick={() => navigate("/register")}
-            className="text-blue-600 dark:text-blue-400 font-semibold hover:underline transition-colors"
+            className="text-cyan-400 font-semibold hover:text-cyan-300 transition-colors hover:underline"
           >
             Create one
           </button>

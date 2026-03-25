@@ -1,6 +1,7 @@
 import Header from "./Components/Header/Header"
 import Footer from "./Components/Footer/Footer"
 import { ProductGridSkeleton } from "./Components/SkeletonLoader"
+import AtmosphericBlooms from "./Components/AtmosphericBlooms"
 
 import { useEffect, useState, Suspense, lazy } from "react";
 import { useDispatch } from "react-redux";
@@ -31,9 +32,10 @@ const AdminDashboard = lazy(() => import("./pages/AdminDashboardPage.jsx"));
 // Base layout wrapping routes
 function Layout({ children }) {
   return (
-    <div className="min-h-screen w-full flex flex-col justify-between bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <div className="min-h-screen w-full flex flex-col justify-between bg-[#060E20] text-white relative">
+      <AtmosphericBlooms intensity="medium" />
       <Header />
-      <main className="grow pt-16 md:pt-16">
+      <main className="grow pt-16 md:pt-16 relative z-10">
         {children}
       </main>
       <Footer />

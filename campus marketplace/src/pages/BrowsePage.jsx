@@ -41,14 +41,14 @@ const Browse = () => {
   }, [dispatch]);
 
   return (
-    <div className='w-full flex flex-col items-center gap-6 mt-7 pb-12 animate-fadeIn bg-gray-50 dark:bg-gray-950 min-h-screen'>
+    <div className='w-full flex flex-col items-center gap-20 animate-fadeIn min-h-screen section-spacing relative'>
       <div className='w-[90%] max-w-7xl'>
-        <h1 className="font-bold text-3xl mb-2 text-gray-900 dark:text-white">Browse Products</h1>
-        <p className="text-gray-600 dark:text-gray-400">Discover items from your campus community</p>
+        <h1 className="font-bold text-3xl mb-2 gradient-text">Browse Products</h1>
+        <p className="text-gray-400">Discover items from your campus community</p>
       </div>
 
       <div className='w-full flex justify-center'>
-        <div className='mt-5 w-[90%] max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-fr'>
+        <div className='w-[90%] max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-fr'>
           {products.map((doc, index) => {
             const isLast = index === products.length - 1;
             return (
@@ -83,12 +83,11 @@ const Browse = () => {
       )}
 
       {products.length > 0 && (
-        <div className="text-center text-gray-600 dark:text-gray-400 text-sm animate-fadeIn">
+        <div className="text-center text-gray-400 text-sm animate-fadeIn">
           Loaded {products.length} of {pagination.total} products
           {pagination.hasMore && " • Scroll for more"}
         </div>
       )}
-
     </div>
   )
 }

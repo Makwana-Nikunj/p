@@ -4,11 +4,11 @@ import { Link } from "react-router-dom"
 
 const Logo = () => {
   return (
-    <Link to="/" className="flex items-center gap-2 font-semibold text-white transition-colors duration-200">
-      <div className="w-9 h-9 flex items-center justify-center rounded-lg bg-white text-black transition-colors duration-200">
-        <FiShoppingBag size={18} />
+    <Link to="/" className="flex items-center gap-2 transition-colors duration-300">
+      <div className="w-9 h-9 flex items-center justify-center rounded-lg glass border border-subtle transition-all duration-300 hover:scale-105">
+        <FiShoppingBag size={18} className="text-indigo-400" />
       </div>
-      <span className="text-lg sm:text-2xl hidden sm:block">Campus Marketplace</span>
+      <span className="text-lg sm:text-2xl hidden sm:block gradient-text font-bold">Campus Marketplace</span>
     </Link>
   )
 }
