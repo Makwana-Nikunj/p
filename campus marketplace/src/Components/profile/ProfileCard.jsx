@@ -20,31 +20,34 @@ const ProfileCard = ({ myProducts }) => {
   const soldCount = myProducts.filter((p) => p.listing_status === "sold").length;
 
   return (
-    <div className="border border-gray-200 dark:border-gray-700 rounded-2xl p-8 space-y-8 min-h-[350px] bg-white dark:bg-gray-900 shadow-sm">
+    <div className="glass glass-intense rounded-2xl p-8 space-y-8 min-h-[350px] border border-subtle shadow-2xl">
 
       {/* Top Section */}
-      <div className="flex flex-col sm:flex-row gap-8">
+      <div className="flex flex-col sm:flex-row gap-8 items-center sm:items-start">
 
         {/* Avatar */}
-        <img
-          src={profilePhoto || user?.avatar || "https://img.freepik.com/free-icon/user_318-159711.jpg"}
-          alt="Profile"
-          className="w-40 h-40 rounded-full object-cover border"
-          loading="lazy"
-        />
+        <div className="relative group">
+          <img
+            src={profilePhoto || user?.avatar || "https://img.freepik.com/free-icon/user_318-159711.jpg"}
+            alt="Profile"
+            className="w-40 h-40 rounded-full object-cover border-2 border-indigo-500/50 shadow-lg shadow-indigo-500/20"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 rounded-full border-2 border-transparent group-hover:border-cyan-400 transition-all duration-500"></div>
+        </div>
 
         {/* Info */}
-        <div className="flex-1  space-y-4">
+        <div className="flex-1 space-y-4 w-full">
 
-          <div className="flex items-start justify-between">
-            <div className="space-y-1 flex flex-col gap-5 justify-between items-start">
-              <h2 className="text-2xl font-semibold dark:text-white">{user.name || "User"}</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="space-y-2">
+              <h2 className="font-card-title text-white">{user.name || "User"}</h2>
+              <p className="text-sm text-gray-400">{user.email}</p>
             </div>
 
             {/* Edit Button */}
             <button
-              className="flex items-center gap-2 text-sm font-medium px-4 py-2 border border-gray-300 dark:border-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 transition cursor-pointer"
+              className="flex items-center gap-2 text-sm font-medium px-5 py-2.5 btn-gradient-primary rounded-lg shadow-lg"
               onClick={() => navigate("/profile/edit")}
             >
               <FiEdit2 />
@@ -55,17 +58,17 @@ const ProfileCard = ({ myProducts }) => {
         </div>
       </div>
 
-      <hr className="border-gray-200 dark:border-gray-800" />
+      <div className="divider"></div>
 
       {/* Stats */}
       <div className="flex justify-around text-center">
-        <div>
-          <p className="text-2xl font-semibold dark:text-white">{activeCount}</p>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Listings</p>
+        <div className="group">
+          <p className="text-3xl font-bold gradient-text">{activeCount}</p>
+          <p className="text-sm text-gray-400">Listings</p>
         </div>
-        <div>
-          <p className="text-2xl font-semibold dark:text-white">{soldCount}</p>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Sold</p>
+        <div className="group">
+          <p className="text-3xl font-bold gradient-text">{soldCount}</p>
+          <p className="text-sm text-gray-400">Sold</p>
         </div>
       </div>
 

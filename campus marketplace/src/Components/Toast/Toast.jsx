@@ -34,26 +34,34 @@ const Toast = ({ message, type = 'info', duration = 3000, onClose }) => {
     warning: <FiAlertTriangle className="w-5 h-5" />,
   };
 
-  const bgColors = {
-    success: 'bg-green-50 dark:bg-green-900/30 border-green-500 border-l-4',
-    error: 'bg-red-50 dark:bg-red-900/30 border-red-500 border-l-4',
-    info: 'bg-blue-50 dark:bg-blue-900/30 border-blue-500 border-l-4',
-    warning: 'bg-amber-50 dark:bg-amber-900/30 border-amber-500 border-l-4',
+  const styles = {
+    success: {
+      container: 'glass border-l-4 border-indigo-500/60',
+      icon: 'text-indigo-400',
+      text: 'text-indigo-200',
+      glow: 'shadow-[0_0_20px_rgba(99,102,241,0.4)]'
+    },
+    error: {
+      container: 'glass border-l-4 border-red-500/60',
+      icon: 'text-red-400',
+      text: 'text-red-200',
+      glow: 'shadow-[0_0_20px_rgba(239,68,68,0.4)]'
+    },
+    info: {
+      container: 'glass border-l-4 border-cyan-400/60',
+      icon: 'text-cyan-400',
+      text: 'text-cyan-200',
+      glow: 'shadow-[0_0_20px_rgba(34,211,238,0.4)]'
+    },
+    warning: {
+      container: 'glass border-l-4 border-amber-400/60',
+      icon: 'text-amber-400',
+      text: 'text-amber-200',
+      glow: 'shadow-[0_0_20px_rgba(245,158,11,0.4)]'
+    }
   };
 
-  const textColors = {
-    success: 'text-green-800 dark:text-green-200',
-    error: 'text-red-800 dark:text-red-200',
-    info: 'text-blue-800 dark:text-blue-200',
-    warning: 'text-amber-800 dark:text-amber-200',
-  };
-
-  const iconColors = {
-    success: 'text-green-600 dark:text-green-400',
-    error: 'text-red-600 dark:text-red-400',
-    info: 'text-blue-600 dark:text-blue-400',
-    warning: 'text-amber-600 dark:text-amber-400',
-  };
+  const style = styles[type] || styles.info;
 
   return (
     <div
@@ -62,22 +70,23 @@ const Toast = ({ message, type = 'info', duration = 3000, onClose }) => {
         flex items-start gap-3 min-w-72 max-w-md p-4 rounded-lg border shadow-lg
         backdrop-blur-sm
         transition-all duration-300 ease-out
-        ${bgColors[type]}
+        ${style.container}
         ${isExiting ? 'opacity-0 translate-x-8' : 'opacity-100 translate-x-0 animate-slideIn'}
+        ${style.glow}
       `}
     >
-      <div className={`shrink-0 pt-0.5 ${iconColors[type]}`}>
+      <div className={`shrink-0 pt-0.5 ${style.icon}`}>
         {icons[type]}
       </div>
-      <p className={`flex-1 text-sm font-medium ${textColors[type]}`}>
+      <p className={`flex-1 text-sm font-medium ${style.text}`}>
         {message}
       </p>
       <button
         onClick={handleClose}
-        className="shrink-0 p-1 hover:bg-black/5 dark:hover:bg-white/10 rounded transition-colors"
+        className="shrink-0 p-1 hover:bg-white/10 rounded transition-colors"
         aria-label="Close notification"
       >
-        <FiX className={`w-4 h-4 ${textColors[type]}`} />
+        <FiX className={`w-4 h-4 ${style.text}`} />
       </button>
     </div>
   );

@@ -6,6 +6,7 @@ import productService from '../services/productService';
 import { ProductGridSkeleton } from '../Components/SkeletonLoader';
 import Cart from '../Components/home/featuredproduct/ItemCard';
 import { FaHeart } from 'react-icons/fa';
+import AtmosphericBlooms from '../Components/AtmosphericBlooms';
 
 const Favorites = () => {
   const user = useSelector((state) => state.auth.userData);
@@ -57,39 +58,42 @@ const Favorites = () => {
   }
 
   return (
-    <div className="w-full flex flex-col items-center gap-6 mt-7 min-h-[70vh] bg-gray-50 dark:bg-gray-950 pb-12">
+    <div className="min-h-screen w-full flex flex-col items-center gap-6 relative py-10">
+      <AtmosphericBlooms intensity="subtle" />
+
       {loading && (
         <div className="w-[90%] max-w-7xl animate-fadeIn">
           <div className="flex items-center justify-between mb-2">
-            <div className="h-8 bg-gray-300 dark:bg-gray-700 rounded w-48 animate-pulse"></div>
-            <div className="h-10 bg-gray-300 dark:bg-gray-700 rounded w-32 animate-pulse"></div>
+            <div className="h-8 glass rounded w-48 animate-pulse"></div>
+            <div className="h-10 glass rounded w-32 animate-pulse"></div>
           </div>
-          <div className="h-5 bg-gray-300 dark:bg-gray-700 rounded w-64 animate-pulse mb-6"></div>
+          <div className="h-5 glass rounded w-64 animate-pulse mb-6"></div>
           <ProductGridSkeleton count={8} />
         </div>
       )}
-      <div className="w-[90%] max-w-7xl">
-        <div className="flex items-center justify-between mb-2">
-          <h1 className="font-semibold text-2xl dark:text-white">My Favorites ❤️</h1>
+
+      <div className="w-[90%] max-w-7xl section-spacing">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-2">
+          <h1 className="font-section-headline gradient-text">My Favorites ❤️</h1>
           {/* Sort Dropdown */}
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg text-sm border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            className="px-4 py-2 glass rounded-lg text-sm border border-subtle focus-glow-indigo transition-all duration-300 text-white"
           >
-            <option value="recent">Recently saved</option>
-            <option value="price-low">Price: Low to High</option>
-            <option value="price-high">Price: High to Low</option>
+            <option value="recent" className="text-gray-900">Recently saved</option>
+            <option value="price-low" className="text-gray-900">Price: Low to High</option>
+            <option value="price-high" className="text-gray-900">Price: High to Low</option>
           </select>
         </div>
-        <p className="text-gray-700 dark:text-gray-300">
+        <p className="text-gray-400">
           {favoriteProducts.length} {favoriteProducts.length === 1 ? 'item' : 'items'} saved
         </p>
       </div>
 
       <div className="w-full flex justify-center">
         {sortedFavorites.length > 0 ? (
-          <div className='w-[90%] max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
+          <div className='w-[90%] max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-fr'>
             {sortedFavorites.map((product) => (
               <Cart
                 key={product.$id}
@@ -106,13 +110,15 @@ const Favorites = () => {
             ))}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-16">
-            <FaHeart className="w-24 h-24 text-gray-300 dark:text-gray-700 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">No favorites yet</h3>
-            <p className="text-gray-500 dark:text-gray-400 text-center max-w-md mb-4">
+          <div className="flex flex-col items-center justify-center py-16 section-spacing w-[90%] max-w-7xl">
+            <div className="glass rounded-full p-8 mb-6 border border-subtle">
+              <FaHeart className="w-24 h-24 text-gray-500" />
+            </div>
+            <h3 className="font-section-headline gradient-text mb-2">No favorites yet</h3>
+            <p className="text-gray-400 text-center max-w-md mb-6">
               Start adding products to your wishlist by clicking the heart icon
             </p>
-            <Link to="/browse" className="px-6 py-2 bg-black text-white dark:bg-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200">
+            <Link to="/browse" className="btn-gradient-primary px-8 py-3 rounded-lg font-semibold shadow-lg">
               Browse Products
             </Link>
           </div>

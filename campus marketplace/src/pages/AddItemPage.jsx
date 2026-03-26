@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import productService from '../services/productService';
 import { useSelector } from "react-redux";
+import AtmosphericBlooms from '../Components/AtmosphericBlooms';
 
 const AddItem = () => {
   const {
@@ -59,27 +60,31 @@ const AddItem = () => {
   };
 
   return (
-    <div className="w-full flex items-center justify-center m-10">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="w-[80%] space-y-4 border border-gray-300 dark:border-gray-800 rounded-xl p-6 bg-white dark:bg-gray-900"
-      >
-        <h2 className="text-xl font-semibold">Add Product</h2>
+    <div className="min-h-screen w-full flex items-center justify-center relative py-10">
+      <AtmosphericBlooms intensity="vibrant" />
+      <div className="w-[95%] max-w-4xl section-spacing">
+        <h1 className="font-section-headline gradient-text text-center mb-10">List New Item</h1>
 
-        <div className="w-full flex flex-col md:flex-row gap-6">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="glass glass-intense rounded-2xl p-8 space-y-6 border border-subtle shadow-2xl"
+        >
 
-          {/* LEFT */}
-          <div className="md:w-full max-h-2xl flex flex-col items-start gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          {/* LEFT COLUMN */}
+          <div className="space-y-5">
 
             {/* Title */}
             <div className="w-full">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Product Name</label>
               <input
-                placeholder="Product name"
+                placeholder="Enter product name"
                 {...register("title", { required: "Product name is required" })}
-                className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
+                className="w-full glass rounded-lg px-4 py-3 outline-none focus-glow-indigo transition-all duration-300 text-white placeholder-gray-500"
               />
               {errors.title && (
-                <p className="text-sm text-red-500 mt-1">
+                <p className="text-sm text-red-400 mt-1">
                   {errors.title.message}
                 </p>
               )}
@@ -87,92 +92,106 @@ const AddItem = () => {
 
             {/* Price */}
             <div className="w-full">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Price (₹)</label>
               <input
                 type="number"
-                placeholder="Price (₹)"
+                placeholder="0.00"
                 {...register("price", {
                   required: "Price is required",
                   min: { value: 1, message: "Price must be greater than 0" },
                 })}
-                className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
+                className="w-full glass rounded-lg px-4 py-3 outline-none focus-glow-indigo transition-all duration-300 text-white placeholder-gray-500"
               />
               {errors.price && (
-                <p className="text-sm text-red-500 mt-1">
+                <p className="text-sm text-red-400 mt-1">
                   {errors.price.message}
                 </p>
               )}
             </div>
 
-            {/* Image */}
+            {/* Image Upload Zone */}
             <div className="w-full">
-              <input
-                type="file"
-                accept="image/*"
-                {...register("image", {
-                  required: "Product image is required",
-                })}
-                className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
-              />
+              <label className="block text-sm font-medium text-gray-300 mb-2">Product Image</label>
+              <div className="upload-zone rounded-xl p-6 text-center cursor-pointer">
+                <input
+                  type="file"
+                  accept="image/*"
+                  {...register("image", {
+                    required: "Product image is required",
+                  })}
+                  className="w-full h-full absolute inset-0 opacity-0 cursor-pointer"
+                />
+                <p className="text-gray-400">Click or drag to upload image</p>
+                <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 5MB</p>
+              </div>
               {errors.image && (
-                <p className="text-sm text-red-500 mt-1">
+                <p className="text-sm text-red-400 mt-1">
                   {errors.image.message}
                 </p>
               )}
             </div>
           </div>
 
-          {/* RIGHT */}
-          <div className="md:w-full max-h-2xl flex flex-col gap-5 items-start justify-between">
+          {/* RIGHT COLUMN */}
+          <div className="space-y-5">
 
             {/* Category */}
             <div className="w-full">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Category</label>
               <select
                 {...register("category", { required: "Category is required" })}
-                className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
+                className="w-full glass rounded-lg px-4 py-3 outline-none focus-glow-indigo transition-all duration-300 text-white"
               >
-                <option value="">Select category</option>
-                <option value="books">Books</option>
-                <option value="electronics">Electronics</option>
-                <option value="stationery">Stationery</option>
-                <option value="others">Others</option>
+                <option value="" className="text-gray-900">Select category</option>
+                <option value="books" className="text-gray-900">Books</option>
+                <option value="electronics" className="text-gray-900">Electronics</option>
+                <option value="stationery" className="text-gray-900">Stationery</option>
+                <option value="others" className="text-gray-900">Others</option>
               </select>
               {errors.category && (
-                <p className="text-sm text-red-500 mt-1">
+                <p className="text-sm text-red-400 mt-1">
                   {errors.category.message}
                 </p>
               )}
             </div>
 
             {/* Condition */}
-            <select
-              {...register("condition")}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-black focus:ring-2 focus:ring-black/20"
-            >
-              <option value="">Condition (optional)</option>
-              <option value="like-new">Like New</option>
-              <option value="good">Good</option>
-              <option value="used">Used</option>
-            </select>
+            <div className="w-full">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Condition (optional)</label>
+              <select
+                {...register("condition")}
+                className="w-full glass rounded-lg px-4 py-3 outline-none focus-glow-indigo transition-all duration-300 text-white"
+              >
+                <option value="" className="text-gray-900">Select condition</option>
+                <option value="like-new" className="text-gray-900">Like New</option>
+                <option value="good" className="text-gray-900">Good</option>
+                <option value="used" className="text-gray-900">Used</option>
+              </select>
+            </div>
 
             {/* Location */}
-            <input
-              placeholder="Location (e.g. North Campus Dorms)"
-              {...register("location")}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-black focus:ring-2 focus:ring-black/20"
-            />
+            <div className="w-full">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Location</label>
+              <input
+                placeholder="e.g. North Campus Dorms"
+                {...register("location")}
+                className="w-full glass rounded-lg px-4 py-3 outline-none focus-glow-indigo transition-all duration-300 text-white placeholder-gray-500"
+              />
+            </div>
           </div>
         </div>
 
         {/* Description */}
         <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Description</label>
           <textarea
-            rows={3}
-            placeholder="Product description"
+            rows={4}
+            placeholder="Describe your item..."
             {...register("description", { required: "Description is required" })}
-            className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2 outline-none resize-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
+            className="w-full glass rounded-lg px-4 py-3 outline-none resize-none focus-glow-indigo transition-all duration-300 text-white placeholder-gray-500"
           />
           {errors.description && (
-            <p className="text-sm text-red-500 mt-1">
+            <p className="text-sm text-red-400 mt-1">
               {errors.description.message}
             </p>
           )}
@@ -181,12 +200,15 @@ const AddItem = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full border border-black dark:border-white rounded-md py-2 font-medium transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black dark:text-white active:scale-95"
+          className="w-full btn-gradient-primary py-3 rounded-lg font-semibold text-lg shadow-lg"
         >
           List Product
         </button>
       </form>
+      {/* Close section-spacing wrapper */}
     </div>
+    {/* Close outer py-10 container */}
+  </div>
   );
 };
 

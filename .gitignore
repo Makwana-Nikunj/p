@@ -179,20 +179,6 @@ package.json
 
 
 .agent
-SKILLS.md
+# Claude Code local config
+.claude/
 CLAUDE.md
-.claude/settings.local.json
-.gitignore
-.claude/rules/ui skills/browsepage.md
-.claude/rules/ui skills/edit-&-list-page.md
-.claude/rules/ui skills/homepage.md
-.claude/rules/ui skills/login-registerpage.md
-.claude/rules/ui skills/message-chat-page.md
-.claude/rules/ui skills/productdetailpage.md
-.claude/rules/ui skills/profile-dashboard-page.md
-.claude/rules/ui skills/theme_instuction.md
-.gitignore
-.claude/projects/C--Users-mniku-Desktop-p/MEMORY.md
-.claude/projects/C--Users-mniku-Desktop-p/memory/lumina_upgrade_progress.md
-.claude/rules/ui skills/lumina-ui-upgrade-plan.md
-campus marketplace/lumina-ui-upgrade-plan.md

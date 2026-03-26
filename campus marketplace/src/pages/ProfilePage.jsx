@@ -3,6 +3,7 @@ import ProfileCard from '../Components/profile/ProfileCard';
 import OwnerProduct from '../Components/profile/OwnerProduct';
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMyProducts } from '../store/productSlice';
+import AtmosphericBlooms from '../Components/AtmosphericBlooms';
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("active");
@@ -30,18 +31,22 @@ const Profile = () => {
   const soldProducts = myProducts.filter((p) => p.listing_status === "sold");
 
   return (
-    <div className="w-full flex justify-center items-center py-12">
-      <div className="w-[95%] max-w-7xl">
+    <div className="min-h-screen w-full flex justify-center items-center relative py-10">
+      <AtmosphericBlooms intensity="subtle" />
+      <div className="w-[95%] max-w-7xl section-spacing">
 
-        <h1 className="text-3xl font-semibold mb-8">Profile</h1>
+        <h1 className="font-section-headline gradient-text text-center mb-10">My Profile</h1>
 
         <ProfileCard myProducts={myProducts} />
 
-        <div className="w-full h-10 bg-black dark:bg-gray-800 p-1 my-8 rounded-2xl flex justify-around">
+        {/* Tab Switcher */}
+        <div className="w-full glass p-1.5 rounded-2xl flex justify-around my-10 border border-subtle">
           <button
             onClick={() => setActiveTab("active")}
-            className={`w-[50%] rounded-2xl cursor-pointer ${
-              activeTab === "active" ? "bg-white text-black" : "text-white dark:text-gray-300"
+            className={`w-[50%] rounded-2xl cursor-pointer transition-all duration-300 ${
+              activeTab === "active"
+                ? "btn-gradient-primary text-white shadow-lg"
+                : "text-gray-300 hover:bg-white/5"
             }`}
           >
             Active Listings
@@ -49,8 +54,10 @@ const Profile = () => {
 
           <button
             onClick={() => setActiveTab("sold")}
-            className={`w-[50%] rounded-2xl cursor-pointer ${
-              activeTab === "sold" ? "bg-white text-black" : "text-white dark:text-gray-300"
+            className={`w-[50%] rounded-2xl cursor-pointer transition-all duration-300 ${
+              activeTab === "sold"
+                ? "btn-gradient-primary text-white shadow-lg"
+                : "text-gray-300 hover:bg-white/5"
             }`}
           >
             Sold Items

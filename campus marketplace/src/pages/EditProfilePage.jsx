@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateProfilePhoto, login as authLogin } from '../store/authSlice';
 import { useNavigate } from "react-router-dom";
 import profileService from '../services/profileService';
+import AtmosphericBlooms from '../Components/AtmosphericBlooms';
 
 const EditProfile = () => {
   const user = useSelector((state) => state.auth.userData);
@@ -74,85 +75,93 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="w-full flex items-center justify-center m-10">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="w-[80%] space-y-4 border border-gray-300 dark:border-gray-800 rounded-xl p-6 bg-white dark:bg-gray-900 shadow-md"
-      >
-        <h2 className="text-xl font-semibold">Edit Profile</h2>
+    <div className="min-h-screen w-full flex items-center justify-center relative py-10">
+      <AtmosphericBlooms intensity="vibrant" />
+      <div className="w-[95%] max-w-2xl section-spacing">
+        <h1 className="font-section-headline gradient-text text-center mb-10">Edit Profile</h1>
 
-        <div className="w-full flex flex-col md:flex-row gap-6">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="glass glass-intense rounded-2xl p-8 space-y-6 border border-subtle shadow-2xl"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-          {/* LEFT SIDE — Profile Photo */}
-          <div className="md:w-full flex flex-col items-start gap-5">
-            <img
-              src={preview}
-              alt="Profile"
-              className="w-32 h-32 rounded-full object-cover border"
-              loading="lazy"
-            />
+            {/* LEFT — Profile Photo */}
+            <div className="space-y-5">
+              <label className="block text-sm font-medium text-gray-300">Profile Photo</label>
+              <div className="relative w-full aspect-square rounded-xl overflow-hidden glass border border-subtle">
+                <img
+                  src={preview}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
 
-            <div className="w-full">
-              <input
-                type="file"
-                accept="image/*"
-                {...register("image")}
-                onChange={handleImageChange}
-                className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2
-                           outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
-              />
+              <div className="w-full">
+                <label className="block text-sm font-medium text-gray-300 mb-2">Upload New Photo</label>
+                <div className="upload-zone rounded-xl p-4 text-center cursor-pointer">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    {...register("image")}
+                    onChange={handleImageChange}
+                    className="w-full h-full absolute inset-0 opacity-0 cursor-pointer"
+                  />
+                  <p className="text-gray-400 text-sm">Click to upload image</p>
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT — Name & Email */}
+            <div className="space-y-5">
+
+              {/* Name */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Display Name</label>
+                <input
+                  placeholder="Your Name"
+                  {...register("name", { required: "Name is required" })}
+                  className="w-full glass rounded-lg px-4 py-3 outline-none focus-glow-indigo transition-all duration-300 text-white placeholder-gray-500"
+                />
+                {errors.name && (
+                  <p className="text-sm text-red-400 mt-1">{errors.name.message}</p>
+                )}
+              </div>
+
+              {/* Email (read-only) */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Email (cannot be changed)</label>
+                <input
+                  value={user.email}
+                  disabled
+                  className="w-full glass rounded-lg px-4 py-3 text-gray-400 opacity-60 cursor-not-allowed"
+                />
+              </div>
             </div>
           </div>
 
-          {/* RIGHT SIDE — Name & Email */}
-          <div className="md:w-full flex flex-col gap-5">
+          {/* BUTTONS */}
+          <div className="flex gap-4 justify-end pt-4">
+            <button
+              type="button"
+              onClick={() => navigate("/profile")}
+              className="px-6 py-2.5 glass rounded-lg hover:bg-white/10 transition-all duration-300"
+            >
+              Cancel
+            </button>
 
-            {/* Name */}
-            <div className="w-full">
-              <input
-                placeholder="Your Name"
-                {...register("name", { required: "Name is required" })}
-                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
-              />
-              {errors.name && (
-                <p className="text-sm text-red-500 mt-1">
-                  {errors.name.message}
-                </p>
-              )}
-            </div>
-
-            {/* Email (read-only) */}
-            <div className="w-full">
-              <input
-                value={user.email}
-                disabled
-                className="w-full border border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-900 rounded-md px-3 py-2 text-gray-500 dark:text-gray-500"
-              />
-            </div>
-
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="px-6 py-2.5 btn-gradient-primary rounded-lg font-semibold shadow-lg disabled:opacity-50"
+            >
+              {isSubmitting ? "Saving…" : "Save Changes"}
+            </button>
           </div>
-        </div>
 
-        {/* BUTTONS */}
-        <div className="flex gap-4 justify-end pt-4">
-          <button
-            type="button"
-            onClick={() => navigate("/profile")}
-            className="px-4 py-2 border border-gray-300 dark:border-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 transition"
-          >
-            Cancel
-          </button>
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="px-5 py-2 bg-black text-white dark:bg-white dark:text-black rounded-md hover:opacity-80 active:scale-95 transition"
-          >
-            {isSubmitting ? "Saving..." : "Save Changes"}
-          </button>
-        </div>
-
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React from "react";
+import AtmosphericBlooms from './AtmosphericBlooms';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -17,11 +18,12 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-          <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 text-center">
-            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="min-h-screen w-full flex items-center justify-center relative">
+          <AtmosphericBlooms intensity="subtle" />
+          <div className="glass glass-intense rounded-2xl p-10 max-w-md w-full text-center border border-subtle shadow-2xl">
+            <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-red-500/30 to-orange-500/30 border border-red-500/30">
               <svg
-                className="w-8 h-8 text-red-600"
+                className="w-10 h-10 text-red-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -34,15 +36,15 @@ class ErrorBoundary extends React.Component {
                 />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="font-section-headline gradient-text mb-3">
               Oops! Something went wrong
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-400 mb-8 leading-relaxed">
               We encountered an unexpected error. Please try refreshing the page.
             </p>
             <button
               onClick={() => window.location.reload()}
-              className="w-full bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800 transition-colors font-medium"
+              className="btn-gradient-primary py-3 px-8 rounded-lg font-semibold shadow-lg"
             >
               Refresh Page
             </button>

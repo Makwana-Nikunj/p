@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import productService from '../services/productService';
 import { fetchProducts } from '../store/productSlice';
 import { useEffect, useState } from "react";
+import AtmosphericBlooms from '../Components/AtmosphericBlooms';
 
 const EditProduct = () => {
   const { id } = useParams();
@@ -91,121 +92,145 @@ const EditProduct = () => {
   };
 
   return (
-    <div className="w-full flex items-center justify-center m-10">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="w-[80%] space-y-4 border border-gray-300 dark:border-gray-800 rounded-xl p-6 bg-white dark:bg-gray-900 shadow-sm"
-      >
-        <h2 className="text-xl font-semibold dark:text-white">Edit Product</h2>
+    <div className="min-h-screen w-full flex items-center justify-center relative py-10">
+      <AtmosphericBlooms intensity="vibrant" />
+      <div className="w-[95%] max-w-4xl section-spacing">
+        <h1 className="font-section-headline gradient-text text-center mb-10">Edit Product</h1>
 
-        <div className="w-full flex flex-col md:flex-row gap-6">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="glass glass-intense rounded-2xl p-8 space-y-6 border border-subtle shadow-2xl"
+        >
 
-          {/* LEFT */}
-          <div className="md:w-full flex flex-col items-start gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          {/* LEFT COLUMN */}
+          <div className="space-y-5">
 
             {/* Image Preview */}
-            <img
-              src={previewImage}
-              alt="Preview"
-              className="w-64 h-64 object-cover rounded-lg border"
-              loading="lazy"
-            />
+            <div className="w-full">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Current Image</label>
+              <div className="relative w-full aspect-square rounded-xl overflow-hidden glass border border-subtle">
+                <img
+                  src={previewImage}
+                  alt="Preview"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            </div>
 
             {/* Upload New Image */}
-            <input
-              type="file"
-              accept="image/*"
-              {...register("image")}
-              onChange={handleImageChange}
-              className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
-            />
-
+            <div className="w-full">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Replace Image (optional)</label>
+              <div className="upload-zone rounded-xl p-4 text-center cursor-pointer">
+                <input
+                  type="file"
+                  accept="image/*"
+                  {...register("image")}
+                  onChange={handleImageChange}
+                  className="w-full h-full absolute inset-0 opacity-0 cursor-pointer"
+                />
+                <p className="text-gray-400 text-sm">Click to upload new image</p>
+              </div>
+            </div>
           </div>
 
-          {/* RIGHT */}
-          <div className="md:w-full flex flex-col gap-5">
+          {/* RIGHT COLUMN */}
+          <div className="space-y-5">
 
             {/* Title */}
             <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Product Name</label>
               <input
                 placeholder="Product name"
                 {...register("title", { required: "Product name is required" })}
-                className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
+                className="w-full glass rounded-lg px-4 py-3 outline-none focus-glow-indigo transition-all duration-300 text-white placeholder-gray-500"
               />
               {errors.title && (
-                <p className="text-sm text-red-500">{errors.title.message}</p>
+                <p className="text-sm text-red-400 mt-1">{errors.title.message}</p>
               )}
             </div>
 
             {/* Price */}
             <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Price (₹)</label>
               <input
                 type="number"
-                placeholder="Price (₹)"
+                placeholder="0.00"
                 {...register("price", {
                   required: "Price is required",
                   min: { value: 1, message: "Price must be greater than 0" },
                 })}
-                className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
+                className="w-full glass rounded-lg px-4 py-3 outline-none focus-glow-indigo transition-all duration-300 text-white placeholder-gray-500"
               />
               {errors.price && (
-                <p className="text-sm text-red-500">{errors.price.message}</p>
+                <p className="text-sm text-red-400 mt-1">{errors.price.message}</p>
               )}
             </div>
 
             {/* Category */}
-            <select
-              {...register("category", { required: "Category is required" })}
-              className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
-            >
-              <option value="books">Books</option>
-              <option value="electronics">Electronics</option>
-              <option value="stationery">Stationery</option>
-              <option value="others">Others</option>
-            </select>
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Category</label>
+              <select
+                {...register("category", { required: "Category is required" })}
+                className="w-full glass rounded-lg px-4 py-3 outline-none focus-glow-indigo transition-all duration-300 text-white"
+              >
+                <option value="books" className="text-gray-900">Books</option>
+                <option value="electronics" className="text-gray-900">Electronics</option>
+                <option value="stationery" className="text-gray-900">Stationery</option>
+                <option value="others" className="text-gray-900">Others</option>
+              </select>
+            </div>
 
             {/* Condition */}
-            <select
-              {...register("condition")}
-              className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
-            >
-              <option value="">Condition (optional)</option>
-              <option value="like-new">Like New</option>
-              <option value="good">Good</option>
-              <option value="used">Used</option>
-            </select>
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Condition (optional)</label>
+              <select
+                {...register("condition")}
+                className="w-full glass rounded-lg px-4 py-3 outline-none focus-glow-indigo transition-all duration-300 text-white"
+              >
+                <option value="" className="text-gray-900">Select condition</option>
+                <option value="like-new" className="text-gray-900">Like New</option>
+                <option value="good" className="text-gray-900">Good</option>
+                <option value="used" className="text-gray-900">Used</option>
+              </select>
+            </div>
 
             {/* Location */}
-            <input
-              placeholder="Location"
-              {...register("location")}
-              className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2 outline-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
-            />
-
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Location</label>
+              <input
+                placeholder="Location"
+                {...register("location")}
+                className="w-full glass rounded-lg px-4 py-3 outline-none focus-glow-indigo transition-all duration-300 text-white placeholder-gray-500"
+              />
+            </div>
           </div>
         </div>
 
         {/* Description */}
         <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Description</label>
           <textarea
-            rows={3}
+            rows={4}
             placeholder="Product description"
             {...register("description", {
               required: "Description is required",
             })}
-            className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md px-3 py-2 outline-none resize-none focus:border-black dark:focus:border-gray-400 focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
+            className="w-full glass rounded-lg px-4 py-3 outline-none resize-none focus-glow-indigo transition-all duration-300 text-white placeholder-gray-500"
           />
           {errors.description && (
-            <p className="text-sm text-red-500">{errors.description.message}</p>
+            <p className="text-sm text-red-400 mt-1">{errors.description.message}</p>
           )}
         </div>
 
         {/* BUTTONS */}
-        <div className="flex gap-4 justify-end">
+        <div className="flex gap-4 justify-end pt-4">
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="px-4 py-2 border border-gray-300 dark:border-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800"
+            className="px-6 py-2.5 glass rounded-lg hover:bg-white/10 transition-all duration-300"
           >
             Cancel
           </button>
@@ -213,14 +238,15 @@ const EditProduct = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-5 py-2 bg-black text-white dark:bg-white dark:text-black rounded-md hover:opacity-80 active:scale-95"
+            className="px-6 py-2.5 btn-gradient-primary rounded-lg font-semibold shadow-lg disabled:opacity-50"
           >
-            {isSubmitting ? "Saving..." : "Save Changes"}
+            {isSubmitting ? "Saving…" : "Save Changes"}
           </button>
         </div>
 
       </form>
     </div>
+  </div>
   );
 };
 

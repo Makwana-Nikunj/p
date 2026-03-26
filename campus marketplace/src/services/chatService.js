@@ -83,7 +83,7 @@ class ChatService {
   }
 
   // 2️⃣ Get all conversations for user
-  async getUserConversations() {
+  async getUserConversations(userId) {
     try {
       const response = await apiClient.get('/chats');
       const docs = response.data?.data || [];
@@ -94,12 +94,13 @@ class ChatService {
           buyerId: chat.buyer_id,
           sellerId: chat.seller_id,
           productId: chat.product_id,
-          // Defaulting since my backend doesn't explicitly store these right now
-          buyerName: "Buyer",
-          sellerName: "Seller",
-          productName: "Product",
-          lastMessage: "Click to chat",
-          lastMessageTime: chat.created_at
+          // Defaulting since backend doesn't explicitly store these right now
+          buyerName: chat.buyer_name || "Buyer",
+          sellerName: chat.seller_name || "Seller",
+          productName: chat.product_name || "Product",
+          lastMessage: chat.last_message || "Click to chat",
+          unreadCount: chat.unread_count || 0,
+          $updatedAt: chat.updated_at || chat.created_at
         }))
       };
     } catch (e) { console.error(e); return { documents: [] }; }
@@ -132,22 +133,34 @@ class ChatService {
       return null;
     }
 
-    return new Promise((resolve) => {
-      socket.emit("send_message", { chatId: conversationId, content: text });
-
-      resolve({
-        $id: Date.now().toString(),
-        conversationId,
-        senderId,
-        text,
-        $createdAt: new Date().toISOString()
+    return new Promise((resolve, reject) => {
+      socket.emit("send_message", { chatId: conversationId, content: text }, (response) => {
+        if (response?.success) {
+          resolve({
+            $id: response.messageId || Date.now().toString(),
+            conversationId,
+            senderId,
+            text,
+            $createdAt: new Date().toISOString()
+          });
+        } else {
+          reject(new Error(response?.message || "Failed to send message"));
+        }
       });
     });
   }
 
   // 5️⃣ Update last message + time
-  async updateLastMessage() {
-    return true;
+  async updateLastMessage(conversationId, lastMessage) {
+    try {
+      await apiClient.patch(`/chats/${conversationId}`, {
+        last_message: lastMessage
+      });
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
   }
 
   // 6️⃣ Realtime subscription
@@ -194,8 +207,14 @@ class ChatService {
   }
 
   // 8️⃣ Mark as read
-  async markAsRead() {
-    return true;
+  async markAsRead(conversationId, userId) {
+    try {
+      await apiClient.post(`/chats/${conversationId}/mark-read`, { userId });
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
   }
 }
 
