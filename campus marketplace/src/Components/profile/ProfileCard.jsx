@@ -6,72 +6,82 @@ import { useNavigate } from "react-router-dom";
 const ProfileCard = ({ myProducts }) => {
   const user = useSelector((state) => state.auth.userData);
   const navigate = useNavigate();
-  // Profile Photo from Redux store because editing updates it there
   const profilePhoto = useSelector((state) => state.auth.profilePhoto);
- 
 
   if (!user) return null;
-
- 
-    
 
   // Stats - myProducts already filtered for current user
   const activeCount = myProducts.filter((p) => p.listing_status === "active").length;
   const soldCount = myProducts.filter((p) => p.listing_status === "sold").length;
 
   return (
-    <div className="glass glass-intense rounded-2xl p-8 space-y-8 min-h-[350px] border border-subtle shadow-2xl">
+    <div className="relative mb-12">
 
-      {/* Top Section */}
-      <div className="flex flex-col sm:flex-row gap-8 items-center sm:items-start">
+      {/* Decorative radial gradient behind avatar */}
+      <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-[150%] h-64 blur-3xl opacity-30 -z-10" style={{
+        background: 'radial-gradient(circle at center, rgba(236, 72, 153, 0.1) 0%, transparent 70%)'
+      }}></div>
 
-        {/* Avatar */}
+      {/* Profile Header */}
+      <header className="flex flex-col md:flex-row gap-8 items-start md:items-end relative">
+
+        {/* Avatar with gradient border glow */}
         <div className="relative group">
+          <div className="absolute -inset-1 bg-gradient-to-tr from-primary to-secondary rounded-[2rem] blur opacity-25 group-hover:opacity-50 group-hover:blur-md transition-all duration-500"></div>
           <img
             src={profilePhoto || user?.avatar || "https://img.freepik.com/free-icon/user_318-159711.jpg"}
-            alt="Profile"
-            className="w-40 h-40 rounded-full object-cover border-2 border-indigo-500/50 shadow-lg shadow-indigo-500/20"
+            alt={user.name || "Profile"}
+            className="relative w-32 h-32 md:w-40 md:h-40 rounded-[1.8rem] object-cover border-2 border-white/10 transition-all duration-500"
             loading="lazy"
           />
-          <div className="absolute inset-0 rounded-full border-2 border-transparent group-hover:border-cyan-400 transition-all duration-500"></div>
         </div>
 
-        {/* Info */}
-        <div className="flex-1 space-y-4 w-full">
+        {/* Info Section */}
+        <div className="flex-1 space-y-3">
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="space-y-2">
-              <h2 className="font-card-title text-white">{user.name || "User"}</h2>
-              <p className="text-sm text-gray-400">{user.email}</p>
-            </div>
-
-            {/* Edit Button */}
-            <button
-              className="flex items-center gap-2 text-sm font-medium px-5 py-2.5 btn-gradient-primary rounded-lg shadow-lg"
-              onClick={() => navigate("/profile/edit")}
-            >
-              <FiEdit2 />
-              Edit Profile
-            </button>
+          <div className="flex flex-wrap items-center gap-4">
+            <h1 className="text-4xl md:text-5xl font-headline font-extrabold tracking-tight text-white">{user.name || "User"}</h1>
+            {user.isPro && (
+              <span className="px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-bold tracking-widest uppercase">PRO SELLER</span>
+            )}
           </div>
 
+          <p className="text-[#94A3B8] font-medium text-lg">
+            {user.education || user.role || "Campus Member"}
+          </p>
+
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex gap-3">
+          <button
+            className="flex items-center gap-2 px-6 py-2.5 rounded-xl glass font-semibold text-white hover:bg-white/10 transition-all duration-300 border border-subtle"
+            onClick={() => navigate("/profile/edit")}
+          >
+            <FiEdit2 className="text-lg" />
+            <span>Edit Profile</span>
+          </button>
+        </div>
+
+      </header>
+
+      {/* Stats Bento Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 mb-12">
+        <div className="glass-card p-6 rounded-3xl border border-subtle flex flex-col justify-between h-32 hover:translate-y-[-4px] transition-transform duration-300">
+          <span className="text-[#94A3B8] text-xs font-bold uppercase tracking-widest">Items Sold</span>
+          <span className="text-3xl font-headline font-black text-secondary">{soldCount}</span>
+        </div>
+
+        <div className="glass-card p-6 rounded-3xl border border-subtle flex flex-col justify-between h-32 hover:translate-y-[-4px] transition-transform duration-300">
+          <span className="text-[#94A3B8] text-xs font-bold uppercase tracking-widest">Active Listings</span>
+          <span className="text-3xl font-headline font-black text-tertiary">{activeCount}</span>
+        </div>
+
+        <div className="glass-card p-6 rounded-3xl border border-subtle flex flex-col justify-between h-32 hover:translate-y-[-4px] transition-transform duration-300">
+          <span className="text-[#94A3B8] text-xs font-bold uppercase tracking-widest">Member Since</span>
+          <span className="text-2xl font-headline font-black text-white">{user.joinedDate || "2024"}</span>
         </div>
       </div>
-
-      <div className="divider"></div>
-
-      {/* Stats */}
-      <div className="flex justify-around text-center">
-        <div className="group">
-          <p className="text-3xl font-bold gradient-text">{activeCount}</p>
-          <p className="text-sm text-gray-400">Listings</p>
-        </div>
-        <div className="group">
-          <p className="text-3xl font-bold gradient-text">{soldCount}</p>
-          <p className="text-sm text-gray-400">Sold</p>
-        </div>
-      </div>
-
     </div>
   );
 };

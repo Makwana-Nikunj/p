@@ -3,70 +3,88 @@ import ProfileCard from '../Components/profile/ProfileCard';
 import OwnerProduct from '../Components/profile/OwnerProduct';
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMyProducts } from '../store/productSlice';
-import AtmosphericBlooms from '../Components/AtmosphericBlooms';
 
 const Profile = () => {
-  const [activeTab, setActiveTab] = useState("active");
+  const [activeTab, setActiveTab] = useState("my-listings");
 
   const dispatch = useDispatch();
   const myProducts = useSelector((state) => state.products.myProducts);
   const user = useSelector((state) => state.auth.userData);
 
-  // 🔥 Prevent crash if user not loaded yet
+  // Fetch user's products on mount
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchMyProducts());
+    }
+  }, [dispatch, user]);
+
+  // Filter products by status
+  const activeProducts = myProducts.filter((p) => p.listing_status === "active");
+  const soldProducts = myProducts.filter((p) => p.listing_status === "sold");
+
+  // Prevent crash if user not loaded yet
   if (!user) {
     return (
-      <div className="w-full flex justify-center items-center py-12">
-        <p className="text-lg font-semibold">Loading profile...</p>
+      <div className="min-h-screen w-full flex justify-center items-center">
+        <div className="text-center space-y-4">
+          <div className="inline-block">
+            <div className="w-16 h-16 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
+          </div>
+          <p className="text-lg font-semibold text-white/80">Loading profile...</p>
+        </div>
       </div>
     );
   }
 
-  // Fetch user's products on mount
-  useEffect(() => {
-    dispatch(fetchMyProducts());
-  }, [dispatch]);
-
-  // myProducts already scoped to current user from backend
-  const activeProducts = myProducts.filter((p) => p.listing_status === "active");
-  const soldProducts = myProducts.filter((p) => p.listing_status === "sold");
-
   return (
-    <div className="min-h-screen w-full flex justify-center items-center relative py-10">
-      <AtmosphericBlooms intensity="subtle" />
-      <div className="w-[95%] max-w-7xl section-spacing">
+    <div className="min-h-screen w-full relative">
 
-        <h1 className="font-section-headline gradient-text text-center mb-10">My Profile</h1>
+      <div className="w-[95%] max-w-7xl mx-auto section-spacing">
 
+        {/* Profile Card with glass effect */}
         <ProfileCard myProducts={myProducts} />
 
-        {/* Tab Switcher */}
-        <div className="w-full glass p-1.5 rounded-2xl flex justify-around my-10 border border-subtle">
-          <button
-            onClick={() => setActiveTab("active")}
-            className={`w-[50%] rounded-2xl cursor-pointer transition-all duration-300 ${
-              activeTab === "active"
-                ? "btn-gradient-primary text-white shadow-lg"
-                : "text-gray-300 hover:bg-white/5"
-            }`}
-          >
-            Active Listings
-          </button>
+        {/* Tabs Interface - Underline style */}
+        <section className="mb-16">
+          <div className="border-b border-white/10 mb-8">
+            <nav className="flex items-center gap-8 overflow-x-auto scrollbar-hide">
+              <button
+                onClick={() => setActiveTab("my-listings")}
+                className={`pb-4 text-lg font-headline font-bold transition-all duration-300 px-2 tab-indicator ${
+                  activeTab === "my-listings"
+                    ? "text-indigo-300 border-b-2 border-indigo-500"
+                    : "text-[#94A3B8] hover:text-white"
+                }`}
+              >
+                My Listings
+              </button>
 
-          <button
-            onClick={() => setActiveTab("sold")}
-            className={`w-[50%] rounded-2xl cursor-pointer transition-all duration-300 ${
-              activeTab === "sold"
-                ? "btn-gradient-primary text-white shadow-lg"
-                : "text-gray-300 hover:bg-white/5"
-            }`}
-          >
-            Sold Items
-          </button>
-        </div>
+              <button
+                onClick={() => setActiveTab("sold")}
+                className={`pb-4 text-lg font-headline font-medium transition-all duration-300 px-2 tab-indicator ${
+                  activeTab === "sold"
+                    ? "text-indigo-300 border-b-2 border-indigo-500"
+                    : "text-[#94A3B8] hover:text-white"
+                }`}
+              >
+                Sold Items
+              </button>
+            </nav>
+          </div>
 
-        <OwnerProduct
-          products={activeTab === "active" ? activeProducts : soldProducts}
-        />
+          {/* Content Grid */}
+          <div className="min-h-[400px]">
+            <OwnerProduct
+              products={activeTab === "my-listings" ? activeProducts : soldProducts}
+              showNewListing={activeTab === "my-listings"}
+              emptyMessage={
+                activeTab === "my-listings"
+                  ? { title: "No active listings", message: "Start listing your items on the marketplace", icon: "📦" }
+                  : { title: "No sold items yet", message: "Your completed sales will appear here", icon: "✓" }
+              }
+            />
+          </div>
+        </section>
 
       </div>
     </div>
@@ -74,3 +92,4 @@ const Profile = () => {
 };
 
 export default Profile;
+

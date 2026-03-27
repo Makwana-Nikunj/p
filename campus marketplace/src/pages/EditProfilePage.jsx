@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateProfilePhoto, login as authLogin } from '../store/authSlice';
 import { useNavigate } from "react-router-dom";
 import profileService from '../services/profileService';
-import AtmosphericBlooms from '../Components/AtmosphericBlooms';
 
 const EditProfile = () => {
   const user = useSelector((state) => state.auth.userData);
@@ -76,9 +75,8 @@ const EditProfile = () => {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center relative py-10">
-      <AtmosphericBlooms intensity="vibrant" />
       <div className="w-[95%] max-w-2xl section-spacing">
-        <h1 className="font-section-headline gradient-text text-center mb-10">Edit Profile</h1>
+        <h1 className="font-section-headline gradient-headline text-center mb-10">Edit Profile</h1>
 
         <form
           onSubmit={handleSubmit(onSubmit)}

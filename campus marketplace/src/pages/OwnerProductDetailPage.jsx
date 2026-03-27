@@ -5,10 +5,12 @@ import {
   Calendar,
   Package,
   ChevronLeft,
+  Eye,
 } from "lucide-react";
 import productService from '../services/productService';
 import { fetchProducts, fetchProductById, fetchMyProducts } from '../store/productSlice';
 import { useEffect, useState } from "react";
+import AtmosphericBlooms from '../Components/AtmosphericBlooms';
 
 const OwnerProductDetail = () => {
   const { id } = useParams();
@@ -21,12 +23,10 @@ const OwnerProductDetail = () => {
   useEffect(() => {
     const loadProduct = async () => {
       try {
-        // Try to fetch product directly (works for any status if user is owner)
         const result = await dispatch(fetchProductById(id));
         if (result.payload) {
           setProduct(result.payload);
         } else {
-          // Try to find in products store as fallback
           const products = useSelector((state) => state.products.products);
           const found = products.find(p => p.$id === id);
           if (found) setProduct(found);
@@ -42,153 +42,206 @@ const OwnerProductDetail = () => {
 
   if (loading) {
     return (
-      <p className="text-center mt-20 text-lg font-semibold">Loading product...</p>
+      <div className="min-h-screen w-full flex items-center justify-center bg-[#060E20]">
+        <div className="text-center space-y-4">
+          <div className="inline-block">
+            <div className="w-16 h-16 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
+          </div>
+          <p className="text-lg font-semibold text-white/80">Loading product...</p>
+        </div>
+      </div>
     );
   }
 
   if (!product) {
     return (
-      <p className="text-center mt-20 text-lg font-semibold text-red-500">
-        Product not found!
-      </p>
+      <div className="min-h-screen w-full flex items-center justify-center bg-[#060E20]">
+        <div className="text-center space-y-4">
+          <div className="text-6xl opacity-50">🔍</div>
+          <p className="text-xl font-semibold text-white">Product not found!</p>
+          <button
+            onClick={() => navigate("/profile")}
+            className="px-6 py-2 btn-gradient-primary rounded-lg shadow-lg"
+          >
+            Back to Profile
+          </button>
+        </div>
+      </div>
     );
   }
 
-  // Move status handler - toggles listing_status between 'active' and 'sold'
   const handleMoveStatus = async () => {
     const newListingStatus = product.listing_status === "active" ? "sold" : "active";
 
     await productService.updateProduct(product.$id, { listing_status: newListingStatus });
 
-    // Refresh redux store for both general products and user's own products
     dispatch(fetchProducts());
     dispatch(fetchMyProducts());
 
-    // Redirect back to profile
     navigate("/profile");
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center bg-gray-50 dark:bg-black py-6">
+    <div className="min-h-screen w-full relative">
+      <AtmosphericBlooms intensity="subtle" />
 
-      {/* Back Button */}
-      <div className="w-[90%] lg:w-[82%]">
-        <button
-          onClick={() => navigate("/profile")}
-          className="mb-4 p-2 flex items-center bg-black text-white dark:bg-white dark:text-black rounded-xl"
-        >
-          <ChevronLeft className="w-4 h-4 mr-2" />
-          Back to Profile
-        </button>
-      </div>
+      <div className="w-[95%] max-w-7xl mx-auto section-spacing">
 
-      {/* Main Container */}
-      <div className="w-[90%] lg:w-[82%] bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 flex flex-col md:flex-row gap-8 shadow">
-
-        {/* LEFT: PRODUCT IMAGE */}
-        <div className="w-full md:w-1/2 flex justify-center items-center">
-          <img
-            src={productService.getFileView(product.imageId)}
-            alt={product.title}
-            className="
-              w-full
-              max-h-[280px]
-              sm:max-h-[340px]
-              md:max-h-[480px]
-              lg:max-h-[520px]
-              object-fill
-              rounded-lg
-            "
-            loading="lazy"
-          />
+        {/* Back Button */}
+        <div className="mb-8">
+          <button
+            onClick={() => navigate("/profile")}
+            className="flex items-center gap-2 px-5 py-2.5 glass rounded-lg hover:bg-white/10 transition-all duration-300 border border-subtle group"
+          >
+            <ChevronLeft className="w-5 h-5 text-indigo-400 group-hover:-translate-x-1 transition-transform" />
+            <span className="text-white font-semibold">Back to Profile</span>
+          </button>
         </div>
 
-        {/* RIGHT SECTION */}
-        <div className="w-full md:w-1/2 flex flex-col justify-between">
+        {/* Main Container - Glass Card */}
+        <div className="tilt-card glass glass-intense rounded-3xl p-6 md:p-10 border border-subtle shadow-2xl transition-all duration-500">
 
-          {/* Product Info */}
-          <div className="space-y-4">
+          <div className="flex flex-col lg:flex-row gap-10">
 
-            <div className="w-full flex items-start justify-between ">
-              <h1 className="font-semibold text-xl sm:text-2xl md:text-3xl text-gray-800 dark:text-white">
-                {product.title}
-              </h1>
+            {/* LEFT: PRODUCT IMAGE */}
+            <div className="w-full lg:w-1/2 flex justify-center items-center">
+              <div className="relative w-full aspect-square max-h-[600px] rounded-2xl overflow-hidden bg-[#0C0C0C] border border-subtle">
+                {product.imageId ? (
+                  <img
+                    src={productService.getFileView(product.imageId)}
+                    alt={product.title}
+                    className="w-full h-full object-contain bg-[#0C0C0C]"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Package className="w-24 h-24 text-[#94A3B8] opacity-50" />
+                  </div>
+                )}
 
-              <div className="flex flex-col gap-2 items-end">
-                <span className="bg-black text-white dark:bg-white dark:text-black rounded-lg px-4 py-2 text-sm">
-                  {product.category}
-                </span>
-                <span className={`rounded-lg px-4 py-1 text-xs font-semibold ${
+                {/* Status Badge */}
+                <div className={`absolute top-4 right-4 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider ${
                   product.listing_status === 'active'
-                    ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                    ? 'bg-green-500/20 text-green-400 border border-green-500/30'
                     : product.listing_status === 'sold'
-                    ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                    : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
+                    ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                    : 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
                 }`}>
-                  {product.listing_status.toUpperCase()}
-                </span>
+                  {product.listing_status}
+                </div>
               </div>
             </div>
 
-            <p className="text-primary font-semibold text-lg sm:text-xl md:text-2xl">
-              ₹ {product.price}
-            </p>
+            {/* RIGHT SECTION */}
+            <div className="w-full lg:w-1/2 flex flex-col justify-between">
 
-            {/* Specs */}
-            <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
-              <div className="flex items-center gap-2">
-                <Package className="w-4 h-4" />
-                <span>Condition: {product.condition || "Not provided"}</span>
+              {/* Product Info */}
+              <div className="space-y-6">
+
+                {/* Title & Category */}
+                <div>
+                  <div className="flex flex-wrap items-center gap-3 mb-4">
+                    <span className="px-4 py-2 rounded-full glass border border-subtle text-sm font-semibold text-white uppercase tracking-wide">
+                      {product.category || "Uncategorized"}
+                    </span>
+                  </div>
+
+                  <h1 className="font-headline font-extrabold text-3xl md:text-4xl text-white mb-4 leading-tight">
+                    {product.title}
+                  </h1>
+
+                  {/* Price */}
+                  <div className="inline-block">
+                    <span className="px-8 py-4 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-500 text-white text-3xl md:text-4xl font-black shadow-lg shadow-indigo-500/30">
+                      ₹{parseFloat(product.price).toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Specs Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 glass rounded-xl border border-subtle">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-indigo-500/20">
+                      <Package className="w-5 h-5 text-indigo-400" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-[#94A3B8] uppercase tracking-wider">Condition</p>
+                      <p className="text-sm font-semibold text-white">{product.condition || "Not provided"}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-cyan-500/20">
+                      <MapPin className="w-5 h-5 text-cyan-400" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-[#94A3B8] uppercase tracking-wider">Location</p>
+                      <p className="text-sm font-semibold text-white">{product.location || "Not specified"}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-pink-500/20">
+                      <Calendar className="w-5 h-5 text-pink-400" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-[#94A3B8] uppercase tracking-wider">Posted</p>
+                      <p className="text-sm font-semibold text-white">
+                        {new Date(product.$createdAt).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric'
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Description */}
+                <div className="space-y-3">
+                  <h3 className="font-headline font-bold text-xl text-white">Description</h3>
+                  <div className="p-6 glass rounded-xl border border-subtle">
+                    <p className="text-[#94A3B8] leading-relaxed whitespace-pre-wrap">
+                      {product.description || "No description provided."}
+                    </p>
+                  </div>
+                </div>
+
               </div>
 
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4" />
-                <span>{product.location || "Not specified"}</span>
+              {/* BUTTONS */}
+              <div className="flex flex-col gap-4 mt-8 pt-6 border-t border-subtle">
+
+                <button
+                  onClick={() => navigate(`/edit-product/${product.$id}`)}
+                  className="w-full flex items-center justify-center gap-2 px-6 py-4 btn-gradient-primary rounded-xl font-bold shadow-lg hover:shadow-indigo-500/50 transition-all duration-300 transform-gpu hover:-translate-y-0.5"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  Edit Product
+                </button>
+
+                <button
+                  onClick={handleMoveStatus}
+                  className={`w-full py-4 rounded-xl font-bold transition-all duration-300 transform-gpu hover:-translate-y-0.5 ${
+                    product.listing_status === 'active'
+                      ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg hover:shadow-green-500/40'
+                      : 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg hover:shadow-blue-500/40'
+                  }`}
+                >
+                  {product.listing_status === "active"
+                    ? "✓ Mark as Sold"
+                    : "✓ Mark as Active"}
+                </button>
+
               </div>
 
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                <span>{new Date(product.$createdAt).toLocaleDateString()}</span>
-              </div>
             </div>
-
-            {/* Description */}
-            <div>
-              <h3 className="font-semibold text-lg mb-2">Description</h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">
-                {product.description}
-              </p>
-            </div>
-          </div>
-
-          {/* BUTTONS */}
-          <div className="flex flex-col gap-4 mt-6">
-
-            {/* EDIT PRODUCT */}
-            <button
-              onClick={() => navigate(`/edit-product/${product.$id}`)}
-              className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700"
-            >
-              Edit Product
-            </button>
-
-            {/* MOVE STATUS BUTTON */}
-            <button
-              onClick={handleMoveStatus}
-              className={`w-full py-3 rounded-lg font-semibold transition-all ${
-                product.listing_status === 'active'
-                  ? 'bg-red-600 text-white hover:bg-red-700'
-                  : 'bg-green-600 text-white hover:bg-green-700'
-              }`}
-            >
-              {product.listing_status === "active"
-                ? "✓ Mark as Sold"
-                : "✓ Mark as Active"}
-            </button>
-
           </div>
 
         </div>
+
       </div>
     </div>
   );
