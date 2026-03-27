@@ -5,7 +5,7 @@ import { login } from '../store/authSlice'
 import authService from '../services/authService'
 import chatService from '../services/chatService'
 import { useState } from "react";
-import { User, Mail, Lock, AlertCircle, CheckCircle2 } from "lucide-react";
+import { User, Mail, Lock, AlertCircle, CheckCircle2, BadgeCheck, ShoppingBag, Sparkles } from "lucide-react";
 import { useToast } from '../Components/Toast/ToastContainer';
 import AtmosphericBlooms from '../Components/AtmosphericBlooms';
 
@@ -52,193 +52,266 @@ const RegisterForm = () => {
   }
 
   return (
-    <div className="w-full flex flex-col justify-center items-center min-h-[80vh] px-4 py-8 relative">
-      {/* Vibrant Background */}
+    <div className="w-full flex flex-col min-h-screen relative">
+      {/* Vibrant Background with multiple blooms */}
       <AtmosphericBlooms intensity="vibrant" />
 
-      <form
-        onSubmit={handleSubmit(create)}
-        className="w-full max-w-md space-y-6 glass-intense rounded-2xl p-8 relative z-10 animate-fadeIn"
-      >
-        {/* Header */}
-        <div className="text-center">
-          <h2 className="text-3xl font-bold gradient-text">Create Account</h2>
-          <p className="text-gray-400 text-sm mt-1">Join our campus marketplace</p>
-        </div>
+      <main className="flex-grow flex items-center justify-center px-6 py-12 lg:py-24 relative z-10">
+        <div className="w-full max-w-7xl grid lg:grid-cols-2 gap-12 items-center">
 
-        {/* Error Alert */}
-        {error && (
-          <div className="p-4 bg-red-900/20 border border-red-500/50 rounded-xl flex gap-3 border-subtle">
-            <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-            <p className="text-sm text-red-300">{error}</p>
+          {/* Hero Content - Left Side */}
+          <div className="hidden lg:block space-y-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-bright/50 border border-outline-variant/30">
+              <Sparkles className="w-4 h-4 text-primary" />
+              <span className="text-xs font-label uppercase tracking-widest text-primary-fixed">The Future of Campus Life</span>
+            </div>
+
+            <h1 className="font-headline text-6xl font-extrabold tracking-tight leading-[1.1]">
+              Elevate your <br />
+              <span className="text-gradient-primary">University Experience.</span>
+            </h1>
+
+            <p className="text-on-surface-variant text-lg max-w-md leading-relaxed">
+              Join the exclusive student hub for trading, connecting, and thriving at Lumina Campus. Secure, verified, and built for you.
+            </p>
+
+            {/* Floating Feature Cards */}
+            <div className="grid grid-cols-2 gap-4 pt-8">
+              <div className="glass-panel p-4 rounded-2xl transform hover:scale-105 transition-transform duration-500">
+                <BadgeCheck className="w-6 h-6 text-secondary mb-3" />
+                <h3 className="font-headline font-bold text-on-surface">Verified Only</h3>
+                <p className="text-xs text-on-surface-variant">Secure campus-only access</p>
+              </div>
+              <div className="glass-panel p-4 rounded-2xl transform translate-y-6 hover:scale-105 transition-transform duration-500">
+                <ShoppingBag className="w-6 h-6 text-tertiary mb-3" />
+                <h3 className="font-headline font-bold text-on-surface">Marketplace</h3>
+                <p className="text-xs text-on-surface-variant">Buy &amp; sell with peers</p>
+              </div>
+            </div>
           </div>
-        )}
 
-        {/* Name Field */}
-        <div>
-          <label className="block text-sm font-medium text-gray-400 mb-2">Full Name</label>
-          <div className="relative">
-            <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              placeholder="John Doe"
-              {...register("name", {
-                required: "Full name is required",
-                minLength: {
-                  value: 2,
-                  message: "Name must be at least 2 characters"
-                }
-              })}
-              className={`w-full pl-12 pr-4 py-3.5 rounded-xl border transition-all outline-none bg-[rgba(255,255,255,0.03)] text-white
+          {/* Register Form Container - Right Side */}
+          <div className="relative w-full max-w-2xl mx-auto lg:mx-0">
+            {/* 3D Decorative Element */}
+            <div className="absolute -top-12 -right-12 w-24 h-24 bg-gradient-to-br from-primary to-tertiary rounded-3xl rotate-12 opacity-20 blur-xl"></div>
+
+            <div className="glass-panel p-8 lg:p-10 rounded-[2.5rem] shadow-2xl relative z-10">
+              <div className="mb-8">
+                <p className="text-on-surface-variant">Create your account to start exploring.</p>
+              </div>
+
+              <form onSubmit={handleSubmit(create)} className="space-y-6">
+
+                {/* Error Alert */}
+                {error && (
+                  <div className="p-4 bg-red-900/20 border border-red-500/50 rounded-xl flex gap-3 border-subtle">
+                    <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+                    <p className="text-sm text-red-300">{error}</p>
+                  </div>
+                )}
+
+                {/* Full Name Field */}
+                <div className="space-y-2 group">
+                  <label className="block text-sm font-label font-semibold text-on-surface-variant group-focus-within:text-primary transition-colors">Full Name</label>
+                  <div className="relative">
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-outline" />
+                    <input
+                      placeholder="Alex Rivers"
+                      {...register("name", {
+                        required: "Full name is required",
+                        minLength: {
+                          value: 2,
+                          message: "Name must be at least 2 characters"
+                        }
+                      })}
+                      className={`w-full bg-surface-container-highest border-0 rounded-2xl py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/50 transition-all
                           ${errors.name || errors.email || errors.password || errors.confirmPassword
-                  ? 'border-red-500 focus:ring-2 focus:ring-red-500/50 bg-red-900/20'
-                  : 'border-subtle focus-glow-indigo'
-                }`}
-            />
-            {nameValue && !errors.name && (
-              <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-400 animate-scaleIn" />
-            )}
-          </div>
-          {errors.name && (
-            <div className="flex items-center gap-2 mt-2">
-              <AlertCircle className="w-4 h-4 text-red-400" />
-              <p className="text-sm text-red-400">{errors.name.message}</p>
-            </div>
-          )}
-        </div>
+                          ? 'focus:ring-red-500/50 bg-red-900/20'
+                          : ''
+                        }`}
+                    />
+                    {nameValue && !errors.name && (
+                      <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-400 animate-scaleIn" />
+                    )}
+                  </div>
+                  {errors.name && (
+                    <div className="flex items-center gap-2 animate-slideInFromBottom">
+                      <AlertCircle className="w-4 h-4 text-red-400" />
+                      <p className="text-sm text-red-400">{errors.name.message}</p>
+                    </div>
+                  )}
+                </div>
 
-        {/* Email Field */}
-        <div>
-          <label className="block text-sm font-medium text-gray-400 mb-2">Email Address</label>
-          <div className="relative">
-            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              type="email"
-              placeholder="your@email.com"
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /^\S+@\S+$/i,
-                  message: "Please enter a valid email address",
-                },
-              })}
-              className={`w-full pl-12 pr-4 py-3.5 rounded-xl border transition-all outline-none bg-[rgba(255,255,255,0.03)] text-white
+                {/* Campus Email Field */}
+                <div className="space-y-2 group">
+                  <label className="block text-sm font-label font-semibold text-on-surface-variant group-focus-within:text-primary transition-colors">Campus Email</label>
+                  <div className="relative">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-outline" />
+                    <input
+                      type="email"
+                      placeholder="alex.rivers@lumina.edu"
+                      {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                          value: /^\S+@\S+$/i,
+                          message: "Please enter a valid email address",
+                        },
+                      })}
+                      className={`w-full bg-surface-container-highest border-0 rounded-2xl py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/50 transition-all
                           ${errors.email
-                  ? 'border-red-500 focus:ring-2 focus:ring-red-500/50 bg-red-900/20'
-                  : 'border-subtle focus-glow-indigo'
-                }`}
-            />
-            {emailValue && !errors.email && (
-              <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-400 animate-scaleIn" />
-            )}
-          </div>
-          {errors.email && (
-            <div className="flex items-center gap-2 mt-2">
-              <AlertCircle className="w-4 h-4 text-red-400" />
-              <p className="text-sm text-red-400">{errors.email.message}</p>
-            </div>
-          )}
-        </div>
+                          ? 'focus:ring-red-500/50 bg-red-900/20'
+                          : ''
+                        }`}
+                    />
+                    {emailValue && !errors.email && (
+                      <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-400 animate-scaleIn" />
+                    )}
+                  </div>
+                  {errors.email && (
+                    <div className="flex items-center gap-2 animate-slideInFromBottom">
+                      <AlertCircle className="w-4 h-4 text-red-400" />
+                      <p className="text-sm text-red-400">{errors.email.message}</p>
+                    </div>
+                  )}
+                </div>
 
-        {/* Password Field */}
-        <div>
-          <label className="block text-sm font-medium text-gray-400 mb-2">Password</label>
-          <div className="relative">
-            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              type="password"
-              placeholder="••••••••"
-              {...register("password", {
-                required: "Password is required",
-                minLength: {
-                  value: 8,
-                  message: "Password must be at least 8 characters",
-                },
-                pattern: {
-                  value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
-                  message: "Password must contain at least one uppercase letter, one lowercase letter, and one number"
-                }
-              })}
-              className={`w-full pl-12 pr-4 py-3.5 rounded-xl border transition-all outline-none bg-[rgba(255,255,255,0.03)] text-white
+                {/* Password Field */}
+                <div className="space-y-2 group">
+                  <label className="block text-sm font-label font-semibold text-on-surface-variant group-focus-within:text-primary transition-colors">Password</label>
+                  <div className="relative">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-outline" />
+                    <input
+                      type="password"
+                      placeholder="••••••••••••"
+                      {...register("password", {
+                        required: "Password is required",
+                        minLength: {
+                          value: 8,
+                          message: "Password must be at least 8 characters",
+                        },
+                        pattern: {
+                          value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
+                          message: "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+                        }
+                      })}
+                      className={`w-full bg-surface-container-highest border-0 rounded-2xl py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/50 transition-all
                           ${errors.password
-                  ? 'border-red-500 focus:ring-2 focus:ring-red-500/50 bg-red-900/20'
-                  : 'border-subtle focus-glow-indigo'
-                }`}
-            />
-            {passwordValue && !errors.password && (
-              <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-400 animate-scaleIn" />
-            )}
-          </div>
-          {errors.password && (
-            <div className="flex items-center gap-2 mt-2">
-              <AlertCircle className="w-4 h-4 text-red-400" />
-              <p className="text-sm text-red-400">{errors.password.message}</p>
-            </div>
-          )}
-        </div>
+                          ? 'focus:ring-red-500/50 bg-red-900/20'
+                          : ''
+                        }`}
+                    />
+                    {passwordValue && !errors.password && (
+                      <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-400 animate-scaleIn" />
+                    )}
+                  </div>
+                  {errors.password && (
+                    <div className="flex items-center gap-2 animate-slideInFromBottom">
+                      <AlertCircle className="w-4 h-4 text-red-400" />
+                      <p className="text-sm text-red-400">{errors.password.message}</p>
+                    </div>
+                  )}
+                </div>
 
-        {/* Confirm Password Field */}
-        <div>
-          <label className="block text-sm font-medium text-gray-400 mb-2">Confirm Password</label>
-          <div className="relative">
-            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              type="password"
-              placeholder="••••••••"
-              {...register("confirmPassword", {
-                required: "Please confirm your password",
-                validate: (value) =>
-                  value === password || "Passwords do not match",
-              })}
-              className={`w-full pl-12 pr-4 py-3.5 rounded-xl border transition-all outline-none bg-[rgba(255,255,255,0.03)] text-white
+                {/* Confirm Password Field */}
+                <div className="space-y-2 group">
+                  <label className="block text-sm font-label font-semibold text-on-surface-variant group-focus-within:text-primary transition-colors">Confirm Password</label>
+                  <div className="relative">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-outline" />
+                    <input
+                      type="password"
+                      placeholder="••••••••••••"
+                      {...register("confirmPassword", {
+                        required: "Please confirm your password",
+                        validate: (value) =>
+                          value === password || "Passwords do not match",
+                      })}
+                      className={`w-full bg-surface-container-highest border-0 rounded-2xl py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/50 transition-all
                           ${errors.confirmPassword
-                  ? 'border-red-500 focus:ring-2 focus:ring-red-500/50 bg-red-900/20'
-                  : 'border-subtle focus-glow-indigo'
-                }`}
-            />
-            {confirmPasswordValue && !errors.confirmPassword && (
-              <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-400 animate-scaleIn" />
-            )}
-          </div>
-          {errors.confirmPassword && (
-            <div className="flex items-center gap-2 mt-2">
-              <AlertCircle className="w-4 h-4 text-red-400" />
-              <p className="text-sm text-red-400">{errors.confirmPassword.message}</p>
+                          ? 'focus:ring-red-500/50 bg-red-900/20'
+                          : ''
+                        }`}
+                    />
+                    {confirmPasswordValue && !errors.confirmPassword && (
+                      <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-400 animate-scaleIn" />
+                    )}
+                  </div>
+                  {errors.confirmPassword && (
+                    <div className="flex items-center gap-2 animate-slideInFromBottom">
+                      <AlertCircle className="w-4 h-4 text-red-400" />
+                      <p className="text-sm text-red-400">{errors.confirmPassword.message}</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* CTA Button */}
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`w-full btn-gradient-primary hover:brightness-110 active:scale-[0.98] text-white font-headline font-extrabold text-lg py-5 rounded-2xl shadow-[0_10px_30px_rgba(186,158,255,0.3)] transition-all duration-300
+                      ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+                >
+                  {isSubmitting ? (
+                    <div className="flex items-center justify-center gap-3">
+                      <div className="w-5 h-5 border-2 border-on-tertiary-container border-t-transparent rounded-full animate-spin"></div>
+                      Creating Account...
+                    </div>
+                  ) : (
+                    'Join the Hub'
+                  )}
+                </button>
+
+                {/* Helper Text */}
+                <div className="pt-6 text-center">
+                  <p className="text-on-surface-variant font-medium">
+                    Already have an account?{' '}
+                    <button
+                      type="button"
+                      onClick={() => navigate("/login")}
+                      className="text-secondary font-bold hover:text-primary transition-colors hover:underline"
+                    >
+                      Login
+                    </button>
+                  </p>
+                </div>
+
+                {/* Social Login */}
+                <div className="space-y-6">
+                  <div className="relative flex items-center gap-4">
+                    <div className="flex-grow h-px bg-outline-variant/30"></div>
+                    <span className="text-xs font-label uppercase tracking-widest text-outline">or continue with email</span>
+                    <div className="flex-grow h-px bg-outline-variant/30"></div>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-primary/30 transition-all py-4 rounded-2xl font-headline font-semibold text-on-surface"
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 24 24">
+                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
+                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+                    </svg>
+                    Continue with Google
+                  </button>
+                </div>
+              </form>
+
+              {/* Footer-style Links */}
+              <div className="mt-8 flex justify-center gap-6 text-xs font-label text-outline uppercase tracking-widest">
+                <a className="hover:text-on-surface transition-colors" href="#">Help Center</a>
+                <span className="w-1 h-1 rounded-full bg-outline-variant mt-1"></span>
+                <a className="hover:text-on-surface transition-colors" href="#">Privacy</a>
+                <span className="w-1 h-1 rounded-full bg-outline-variant mt-1"></span>
+                <a className="hover:text-on-surface transition-colors" href="#">Terms</a>
+              </div>
             </div>
-          )}
+          </div>
         </div>
+      </main>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className={`w-full py-3.5 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 btn-press
-                      ${isSubmitting
-                        ? 'bg-gray-700 text-gray-300 cursor-not-allowed'
-                        : 'btn-gradient-primary text-white hover:shadow-indigo-500/60'
-                      }`}
-        >
-          {isSubmitting ? (
-            <>
-              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              Creating Account...
-            </>
-          ) : (
-            'Create Account'
-          )}
-        </button>
-
-        {/* Helper Text */}
-        <p className="text-center text-sm text-gray-400">
-          Already have an account?{' '}
-          <button
-            type="button"
-            onClick={() => navigate("/login")}
-            className="text-cyan-400 font-semibold hover:text-cyan-300 transition-colors hover:underline"
-          >
-            Sign in
-          </button>
-        </p>
-      </form>
+      {/* Decorative Bottom Gradient */}
+      <div className="h-2 w-full bg-gradient-to-r from-primary via-secondary to-tertiary opacity-30 fixed bottom-0"></div>
     </div>
   );
 };

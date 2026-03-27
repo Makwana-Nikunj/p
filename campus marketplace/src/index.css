@@ -769,3 +769,81 @@ select.lumina-input option {
   background-color: #0f1930;
   color: #dee5ff;
 }
+
+/* ===========================================
+   ADDITIONAL LUMINA UTILITIES
+   (from Stitch design system)
+   =========================================== */
+
+/* Glass Panel variant - used in auth pages */
+.glass-panel {
+  background: rgba(31, 43, 73, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(186, 158, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Text color utilities */
+.text-on-surface-variant {
+  color: #A3AAC4;
+}
+
+.text-outline {
+  color: #6D758C;
+}
+
+.text-primary-fixed {
+  color: #AE8DFF;
+}
+
+.text-on-tertiary-container {
+  color: #000311;
+}
+
+/* Background surface colors */
+.bg-surface-bright {
+  background-color: #1F2B49;
+}
+
+.bg-surface-container-highest {
+  background-color: #0C0C0C;
+}
+
+.bg-surface-container {
+  background-color: #0F1930;
+}
+
+.bg-surface-dim {
+  background-color: #060E20;
+}
+
+/* Border colors */
+.border-outline-variant {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Gradient CTA button (Indigo → Violet → Cyan) */
+.bg-gradient-cta {
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #22D3EE 100%);
+  background-size: 200% auto;
+}
+
+/* Ensure gradients use correct Lumina colors */
+.gradient-text {
+  background: linear-gradient(90deg, #6366F1 0%, #22D3EE 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Reset default button styles */
+button {
+  font-family: inherit;
+}
+
+/* Ensure smooth font rendering */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
