@@ -61,6 +61,8 @@ const Browse = () => {
 
   // Intersection Observer for infinite scroll
   const lastProductRef = useRef();
+  const sliderRef = useRef(null);
+  const [dragging, setDragging] = useState(null); // 'min' or 'max' or null
 
   // Initial fetch
   useEffect(() => {
@@ -98,64 +100,64 @@ const Browse = () => {
       }
       let result = [...products];
 
-    // Search
-    if (search) {
-      const s = search.toLowerCase();
-      result = result.filter((p) => p.title && p.title.toLowerCase().includes(s));
-    }
+      // Search
+      if (search) {
+        const s = search.toLowerCase();
+        result = result.filter((p) => p.title && p.title.toLowerCase().includes(s));
+      }
 
-    // Category from curated selection
-    if (selectedCategory && selectedCategory !== "all") {
-      result = result.filter((p) => p.category && p.category.toLowerCase() === selectedCategory.toLowerCase());
-    }
+      // Category from curated selection
+      if (selectedCategory && selectedCategory !== "all") {
+        result = result.filter((p) => p.category && p.category.toLowerCase() === selectedCategory.toLowerCase());
+      }
 
-    // Price range
-    const min = minPrice && !isNaN(parseInt(minPrice)) ? parseInt(minPrice) : undefined;
-    const max = maxPrice && !isNaN(parseInt(maxPrice)) ? parseInt(maxPrice) : undefined;
-    if (min !== undefined && !isNaN(min)) {
-      console.log('Filtering by min price:', min, 'Sample prices:', result.slice(0, 5).map(p => p.price));
-      result = result.filter((p) => {
-        const productPrice = parseFloat(p.price);
-        return !isNaN(productPrice) && productPrice >= min;
-      });
-      console.log('After min filter:', result.length);
-    }
-    if (max !== undefined && !isNaN(max)) {
-      console.log('Filtering by max price:', max);
-      result = result.filter((p) => {
-        const productPrice = parseFloat(p.price);
-        return !isNaN(productPrice) && productPrice <= max;
-      });
-      console.log('After max filter:', result.length);
-    }
+      // Price range
+      const min = minPrice && !isNaN(parseInt(minPrice)) ? parseInt(minPrice) : undefined;
+      const max = maxPrice && !isNaN(parseInt(maxPrice)) ? parseInt(maxPrice) : undefined;
+      if (min !== undefined && !isNaN(min)) {
+        console.log('Filtering by min price:', min, 'Sample prices:', result.slice(0, 5).map(p => p.price));
+        result = result.filter((p) => {
+          const productPrice = parseFloat(p.price);
+          return !isNaN(productPrice) && productPrice >= min;
+        });
+        console.log('After min filter:', result.length);
+      }
+      if (max !== undefined && !isNaN(max)) {
+        console.log('Filtering by max price:', max);
+        result = result.filter((p) => {
+          const productPrice = parseFloat(p.price);
+          return !isNaN(productPrice) && productPrice <= max;
+        });
+        console.log('After max filter:', result.length);
+      }
 
-    // Campus Hub (location)
-    if (campusHub) {
-      result = result.filter((p) => p.location && p.location.toLowerCase().includes(campusHub.toLowerCase()));
-    }
+      // Campus Hub (location)
+      if (campusHub) {
+        result = result.filter((p) => p.location && p.location.toLowerCase().includes(campusHub.toLowerCase()));
+      }
 
-    // Sorting
-    switch (sort) {
-      case "newest":
-        result.sort((a, b) => new Date(b.$createdAt) - new Date(a.$createdAt));
-        break;
-      case "low-high":
-        result.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
-        break;
-      case "high-low":
-        result.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
-        break;
-      case "popular":
-        result.sort((a, b) => (b.views || 0) - (a.views || 0));
-        break;
-      case "favorites":
-        result.sort((a, b) => (b.favoriteCount || 0) - (a.favoriteCount || 0));
-        break;
-      default:
-        break;
-    }
+      // Sorting
+      switch (sort) {
+        case "newest":
+          result.sort((a, b) => new Date(b.$createdAt) - new Date(a.$createdAt));
+          break;
+        case "low-high":
+          result.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+          break;
+        case "high-low":
+          result.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+          break;
+        case "popular":
+          result.sort((a, b) => (b.views || 0) - (a.views || 0));
+          break;
+        case "favorites":
+          result.sort((a, b) => (b.favoriteCount || 0) - (a.favoriteCount || 0));
+          break;
+        default:
+          break;
+      }
 
-    console.log('Filtered:', { total: result.length, filtered: result.length, filters: { search, selectedCategory, minPrice, maxPrice, campusHub, sort } });
+      console.log('Filtered:', { total: result.length, filtered: result.length, filters: { search, selectedCategory, minPrice, maxPrice, campusHub, sort } });
       return result;
     } catch (error) {
       console.error('Error in filteredProducts useMemo:', error);
@@ -184,9 +186,51 @@ const Browse = () => {
     showToast("Filters cleared", "info", 2000);
   };
 
+  // Handle slider thumb drag
+  const handleSliderMouseDown = (type) => (e) => {
+    e.preventDefault();
+    setDragging(type);
+  };
+
+  useEffect(() => {
+    if (!dragging) return;
+
+    const handleMouseMove = (e) => {
+      if (!sliderRef.current) return;
+      const rect = sliderRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+      const price = Math.round(PRICE_MIN + (percentage / 100) * (PRICE_MAX - PRICE_MIN));
+
+      if (dragging === 'min') {
+        const max = maxPrice ? parseInt(maxPrice) : PRICE_MAX;
+        if (price <= max) {
+          setMinPrice(price.toString());
+        }
+      } else if (dragging === 'max') {
+        const min = minPrice ? parseInt(minPrice) : PRICE_MIN;
+        if (price >= min) {
+          setMaxPrice(price.toString());
+        }
+      }
+    };
+
+    const handleMouseUp = () => {
+      setDragging(null);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [dragging, minPrice, maxPrice]);
+
 
   return (
-    <div className="w-full flex flex-col items-center gap-6 pt-20 pb-24 px-4 md:px-8 relative">
+    <div className="w-full flex flex-col items-center gap-2 pt-8 pb-24 px-4 md:px-8 relative">
       {/* Prominent Search Bar */}
       <SearchBar
         search={search}
@@ -195,17 +239,17 @@ const Browse = () => {
       />
 
       {/* Curated Categories */}
-      <div className="w-full max-w-7xl mx-auto mb-12 relative z-10">
+      <div className="w-full max-w-screen-2xl mx-auto sticky top-16 pt-2 pb-4 bg-[#060e20] z-30">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-black uppercase tracking-widest text-on-surface-variant/70 font-plus-jakarta">
+          <h2 className="text-base font-black uppercase tracking-widest text-on-surface-variant/70 font-plus-jakarta">
             Curated Categories
           </h2>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {curatedCategories.map((cat) => (
             <div
               key={cat.id}
-              className="h-40 rounded-2xl glass-card p-6 flex flex-col justify-end group cursor-pointer hover:border-primary/40 transition-all relative overflow-hidden"
+              className="h-30 rounded-2xl glass-card p-6 flex flex-col justify-end group cursor-pointer hover:border-primary/40 transition-all relative overflow-hidden"
               onClick={() => setSelectedCategory(cat.category)}
             >
               <img
@@ -216,17 +260,17 @@ const Browse = () => {
               <span className={`material-symbols-outlined ${selectedCategory === cat.category ? 'text-primary' : 'text-on-surface-variant'} mb-2 text-2xl`}>
                 {cat.icon}
               </span>
-              <h3 className="font-bold font-plus-jakarta text-on-surface text-lg">{cat.title}</h3>
+              <h3 className="font-bold font-plus-jakarta text-on-surface text-xl">{cat.title}</h3>
             </div>
           ))}
         </div>
       </div>
 
       {/* Main Content Grid */}
-      <div className="w-full max-w-screen-2xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-12 relative z-10">
+      <div className="w-full max-w-screen-2xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6 relative z-10">
         {/* Filters Sidebar - Inline to prevent remount issues */}
         <aside className="lg:col-span-1">
-          <div className="sticky top-24 glass-card rounded-[2rem] p-8 space-y-10 border border-white/5 shadow-2xl">
+          <div className="sticky top-[16rem] glass-card rounded-[2rem] p-8 space-y-10 border border-white/5 shadow-2xl max-h-[calc(100vh-20rem)] overflow-y-auto">
             <div>
               <h3 className="text-xl font-extrabold font-plus-jakarta mb-6 text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">filter_list</span>
@@ -234,12 +278,32 @@ const Browse = () => {
               </h3>
             </div>
 
+            {/* Sort By */}
+            <div>
+              <h4 className="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-4">
+                Sort By
+              </h4>
+              <div className="relative">
+                <select
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value)}
+                  className="w-full bg-surface-container-highest border-none rounded-xl py-3 px-4 text-xs font-bold text-on-surface appearance-none focus-glow-indigo"
+                >
+                  <option value="newest">Newest First</option>
+                  <option value="low-high">Lowest to Highest Price</option>
+                  <option value="high-low">Highest to Lowest Price</option>
+                  <option value="popular">Most Popular</option>
+                  <option value="favorites">Most Favorited</option>
+                </select>
+              </div>
+            </div>
+
             {/* Price Range */}
             <div>
               <h4 className="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-4">
                 Price Range (₹)
               </h4>
-              <div className="relative pt-2">
+              <div className="relative pt-2" ref={sliderRef}>
                 <div className="h-1.5 bg-surface-container-highest rounded-full">
                   <div
                     className="absolute h-full bg-primary rounded-full"
@@ -248,12 +312,22 @@ const Browse = () => {
                 </div>
                 {/* Thumbs */}
                 <div
-                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-2 border-[#0C0C0C] shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer"
+                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-2 border-[#0C0C0C] shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer active:cursor-grabbing"
                   style={{ left: `${minPercent}%` }}
+                  onMouseDown={handleSliderMouseDown('min')}
+                  onTouchStart={(e) => {
+                    e.preventDefault();
+                    handleSliderMouseDown('min')(e.touches[0]);
+                  }}
                 ></div>
                 <div
-                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-2 border-[#0C0C0C] shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer"
+                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-2 border-[#0C0C0C] shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer active:cursor-grabbing"
                   style={{ left: `${maxPercent}%` }}
+                  onMouseDown={handleSliderMouseDown('max')}
+                  onTouchStart={(e) => {
+                    e.preventDefault();
+                    handleSliderMouseDown('max')(e.touches[0]);
+                  }}
                 ></div>
               </div>
               {/* Price inputs */}
@@ -326,7 +400,7 @@ const Browse = () => {
           </div>
         </aside>
 
-        <div className="lg:col-span-3">
+        <div className="lg:col-span-3 xl:col-span-3 max-h-[calc(100vh-20rem)] overflow-y-auto pr-2">
           {(filteredProducts || []).length === 0 && !isLoadingMore ? (
             <div className="flex flex-col items-center justify-center py-20 px-4 animate-fadeIn">
               <div className="p-4 glass-card rounded-full mb-6">
@@ -355,14 +429,14 @@ const Browse = () => {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 border-l border-primary/10 pl-6">
                 {filteredProducts.map((doc, index) => {
                   const isLast = index === filteredProducts.length - 1;
                   return (
                     <div
                       key={doc.$id}
                       ref={isLast ? lastProductRef : null}
-                      className="animate-fadeIn"
+                      className="animate-fadeIn min-h-[320px]"
                     >
                       <ItemCard
                         id={doc.$id}
@@ -395,6 +469,9 @@ const Browse = () => {
             </>
           )}
         </div>
+
+
+
       </div>
     </div>
   );
