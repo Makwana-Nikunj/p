@@ -7,7 +7,8 @@ import {
   Calendar,
   Package,
   ChevronLeft,
-  AlertCircle
+  AlertCircle,
+  Star
 } from "lucide-react";
 import productService from '../services/productService';
 import Cart from '../Components/home/featuredproduct/ItemCard';
@@ -38,10 +39,10 @@ const ProductDetailPage = () => {
   // Show loading skeleton while product data loads
   if (isLoading) {
     return (
-      <div className="w-full min-h-screen flex flex-col items-center bg-[#060E20] py-6 relative">
+      <div className="w-full min-h-screen flex flex-col items-center bg-background py-6 relative">
         <AtmosphericBlooms intensity="medium" />
         <div className="w-[90%] lg:w-[82%] relative z-10">
-          <div className="h-10 bg-gray-800 rounded animate-pulse mb-4 w-32"></div>
+          <div className="h-10 bg-surface-bright/30 rounded-2xl animate-pulse mb-4 w-32"></div>
           <ProductDetailSkeleton />
         </div>
       </div>
@@ -50,13 +51,13 @@ const ProductDetailPage = () => {
 
   if (!product) {
     return (
-      <div className="w-full min-h-screen flex flex-col items-center justify-center bg-[#060E20] py-6 px-4 relative">
+      <div className="w-full min-h-screen flex flex-col items-center justify-center bg-background py-6 px-4 relative">
         <AtmosphericBlooms intensity="medium" />
         <div className="flex flex-col items-center text-center relative z-10">
-          <AlertCircle className="w-12 h-12 text-red-400 mb-4" />
-          <h2 className="text-2xl font-semibold text-white mb-2">Product Not Found</h2>
-          <p className="text-gray-400 mb-6 max-w-md">This product doesn't exist or has been removed.</p>
-          <button onClick={() => navigate("/browse")} className="px-6 py-2 btn-gradient-primary text-white rounded-lg flex items-center gap-2">
+          <AlertCircle className="w-12 h-12 text-error mb-4" />
+          <h2 className="text-2xl font-semibold text-on-surface mb-2">Product Not Found</h2>
+          <p className="text-on-surface-variant mb-6 max-w-md">This product doesn't exist or has been removed.</p>
+          <button onClick={() => navigate("/browse")} className="px-6 py-3 btn-gradient-primary text-on-surface font-bold rounded-xl flex items-center gap-2 shadow-lg">
             <ChevronLeft className="w-4 h-4" /> Back to Browse
           </button>
         </div>
@@ -122,89 +123,158 @@ const ProductDetailPage = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center bg-[#060E20] py-6 pb-12 relative">
+    <div className="w-full min-h-screen flex flex-col items-center bg-background py-6 pb-32 relative">
       <AtmosphericBlooms intensity="medium" />
 
-      {/* Back Button */}
+      {/* Breadcrumb */}
+      <nav className="flex items-center gap-2 text-on-surface-variant text-sm mb-8 font-medium w-[90%] lg:w-[82%] relative z-10">
+        <span className="hover:text-primary transition-colors cursor-pointer" onClick={() => navigate("/browse")}>Marketplace</span>
+        <span className="material-symbols-outlined text-xs">chevron_right</span>
+        <span className="hover:text-primary transition-colors cursor-pointer">{product.category}</span>
+        <span className="material-symbols-outlined text-xs">chevron_right</span>
+        <span className="text-primary">{product.title}</span>
+      </nav>
+
       <div className="w-[90%] lg:w-[82%] relative z-10">
-        <button
-          onClick={() => navigate("/browse")}
-          className="mb-4 p-2 flex items-center gap-2 glass text-white rounded-lg hover:scale-105 transition-all duration-300 border border-subtle"
-        >
-          <ChevronLeft className="w-5 h-5" />
-          Back to Browse
-        </button>
-      </div>
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
 
-      {/* Main Container */}
-      <div className="w-[90%] lg:w-[82%] flex flex-col md:flex-row gap-8 relative z-10">
-
-        {/* LEFT: PRODUCT IMAGE */}
-        <div className="w-full md:w-1/2 flex justify-center items-center bg-[#0C0C0C] rounded-2xl overflow-hidden min-h-[300px] aspect-square md:max-h-[600px] glass border border-subtle">
-          <div className="relative w-full h-full group overflow-hidden p-4">
-            <img
-              src={productService.getFileView(product.imageId)}
-              alt={product.title}
-              className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
-              loading="lazy"
-            />
+          {/* LEFT COLUMN: Immersive Hero & Gallery */}
+          <div className="md:col-span-7">
+            {/* Main Product Card with 3D Tilt */}
+            <div className="relative group aspect-[4/3] rounded-[2.5rem] overflow-hidden bg-surface-container-high shadow-2xl flex items-center justify-center p-8 transition-all duration-700 border border-white/10 tilt-card mt-4 md:mt-8">
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent"></div>
+              <img
+                src={productService.getFileView(product.imageId)}
+                alt={product.title}
+                className="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-700 drop-shadow-[0_25px_50px_rgba(0,0,0,0.5)]"
+                loading="lazy"
+              />
+              {/* Condition Badge - Glass Overlay */}
+              {product.condition && (
+                <div className="absolute top-8 left-8 px-4 py-2 bg-surface-bright/30 backdrop-blur-md rounded-full border border-white/10 text-xs font-bold tracking-widest uppercase flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+                  {product.condition}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* RIGHT SECTION - Sticky Action Card */}
-        <div className="w-full md:w-1/2 md:sticky md:top-24 self-start">
-          <div className="glass-intense rounded-2xl p-6 border border-subtle shadow-xl space-y-6">
+          {/* RIGHT COLUMN: Details & Floating Card */}
+          <div className="md:col-span-5 flex flex-col">
+            <div className="space-y-6">
+              {/* Product Title with gradient */}
+              <h1 className="text-4xl md:text-5xl font-extrabold font-plus-jakarta tracking-tight leading-tight">
+                {product.title}
+              </h1>
 
-            {/* Product Header */}
-            <div className="space-y-4 pb-4 border-b border-subtle">
-              <div className="w-full flex items-start justify-between gap-4 flex-col sm:flex-row">
-                <h1 className="font-bold text-2xl sm:text-3xl text-white">{product.title}</h1>
-                <span className="bg-gradient-to-r from-indigo-500 to-cyan-400 text-white rounded-lg px-4 py-2 text-xs font-semibold whitespace-nowrap shadow-lg">{product.category}</span>
-              </div>
-              <p className="text-2xl sm:text-3xl font-bold text-cyan-400">₹ {parseFloat(product.price).toLocaleString('en-IN')}</p>
-            </div>
-
-            {/* Product Specs */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 text-gray-300"><Package className="w-5 h-5 text-indigo-400" /><span><span className="font-semibold text-white">Condition:</span> {product.condition || "Not specified"}</span></div>
-              <div className="flex items-center gap-3 text-gray-300"><MapPin className="w-5 h-5 text-indigo-400" /><span><span className="font-semibold text-white">Location:</span> {product.location || "Not specified"}</span></div>
-              <div className="flex items-center gap-3 text-gray-300"><Calendar className="w-5 h-5 text-indigo-400" /><span><span className="font-semibold text-white">Posted:</span> {formatDate(product.$createdAt)}</span></div>
-            </div>
-
-            {/* Description */}
-            <div className="space-y-2">
-              <h3 className="font-semibold text-lg text-white">Description</h3>
-              <p className="text-gray-300 text-sm md:text-base leading-relaxed">{product.description || "No description provided"}</p>
-            </div>
-
-            {/* Seller Info */}
-            <div className="pt-4 border-t border-subtle space-y-4">
-              <h3 className="font-semibold text-lg text-white">Seller Information</h3>
+              {/* Price & Category */}
               <div className="flex items-center gap-4">
-                <img src={profileService.getProfilePhoto(product.sellerAvatar) || "https://img.freepik.com/free-icon/user_318-159711.jpg"} className="w-16 h-16 rounded-full object-cover border-2 border-indigo-500/50" alt={product.sellerName || "Seller"} loading="lazy" />
-                <div>
-                  <p className="font-semibold text-lg text-white">{product.sellerName || "Unknown Seller"}</p>
-                  <p className="text-sm text-gray-400">Campus Member</p>
+                <div className="text-3xl font-bold text-on-surface">₹ {parseFloat(product.price).toLocaleString('en-IN')}</div>
+                <div className="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-xs font-bold">NEGOTIABLE</div>
+              </div>
+
+              {/* Description */}
+              <p className="text-on-surface-variant leading-relaxed text-lg font-body">
+                {product.description || "No description provided"}
+              </p>
+
+              {/* Specs Grid - Clean glass cards */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-5 rounded-3xl bg-surface-container-high glass-shine">
+                  <div className="text-on-surface-variant text-sm uppercase font-bold tracking-widest mb-1.5 opacity-60">Condition</div>
+                  <div className="text-on-surface font-plus-jakarta font-bold text-lg">{product.condition || "Not specified"}</div>
+                </div>
+                <div className="p-5 rounded-3xl bg-surface-container-high glass-shine">
+                  <div className="text-on-surface-variant text-sm uppercase font-bold tracking-widest mb-1.5 opacity-60">Location</div>
+                  <div className="text-on-surface font-plus-jakarta font-bold text-lg">{product.location || "Not specified"}</div>
+                </div>
+                <div className="p-5 rounded-3xl bg-surface-container-high glass-shine">
+                  <div className="text-on-surface-variant text-sm uppercase font-bold tracking-widest mb-1.5 opacity-60">Posted</div>
+                  <div className="text-on-surface font-plus-jakarta font-bold text-lg">{formatDate(product.$createdAt)}</div>
+                </div>
+                <div className="p-5 rounded-3xl bg-surface-container-high glass-shine">
+                  <div className="text-on-surface-variant text-sm uppercase font-bold tracking-widest mb-1.5 opacity-60">Category</div>
+                  <div className="text-on-surface font-plus-jakarta font-bold text-lg">{product.category}</div>
                 </div>
               </div>
-              <button onClick={handleMessageSeller} disabled={isLoadingChat} className={`flex justify-center items-center gap-2 w-full py-3.5 rounded-xl font-semibold transition-all duration-300 btn-press ${isLoadingChat ? 'bg-gray-700 text-gray-300 cursor-not-allowed' : 'btn-gradient-primary text-white hover:shadow-indigo-500/60'}`}>
-                {isLoadingChat ? (<><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>Starting chat...</>) : (<> <MessageSquare className="w-5 h-5" /> Message Seller</>)}
-              </button>
+            </div>
+
+            {/* Seller Profile Card - Floating Glass */}
+            <div className="p-8 rounded-[2.5rem] glass-intense border border-white/5 shadow-2xl relative overflow-hidden group tilt-card backdrop-blur-xl mt-10">
+              {/* Subtle gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-transparent to-tertiary/3 pointer-events-none"></div>
+
+              {/* Animated Verified Badge */}
+              <div className="absolute top-0 right-0 p-4 opacity-10 scale-150 rotate-12 transition-transform duration-700 group-hover:rotate-0 group-hover:opacity-20">
+                <span className="material-symbols-outlined text-6xl text-tertiary" style={{ fontVariationSettings: 'FILL 1' }}>verified_user</span>
+              </div>
+
+              <div className="relative flex items-center gap-4 mb-8">
+                {/* Seller Avatar with subtle glow */}
+                <div className="relative">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-primary to-tertiary rounded-2xl blur opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                  <img
+                    src={profileService.getProfilePhoto(product.sellerAvatar) || "https://img.freepik.com/free-icon/user_318-159711.jpg"}
+                    alt={product.sellerName || "Seller"}
+                    className="relative w-16 h-16 rounded-2xl object-cover border border-tertiary/20"
+                    loading="lazy"
+                  />
+                </div>
+                <div>
+                  <div className="font-plus-jakarta font-bold text-xl text-on-surface">{product.sellerName || "Unknown Seller"}</div>
+                  <div className="flex items-center gap-2 text-tertiary text-sm">
+                    <Star className="w-4 h-4" style={{ fill: 'currentColor' }} />
+                    <span className="font-semibold">Campus Seller</span>
+                    <span className="text-on-surface-variant">• Verified</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <button
+                  onClick={handleMessageSeller}
+                  disabled={isLoadingChat}
+                  className={`w-full py-4 rounded-2xl btn-gradient-primary text-on-surface font-extrabold tracking-wide text-lg shadow-[0_0_20px_rgba(99,102,241,0.2)] hover:shadow-[0_0_30px_rgba(99,102,241,0.4)] transition-all active:scale-[0.98] flex items-center justify-center gap-3 ${isLoadingChat ? 'opacity-60 cursor-not-allowed' : ''}`}
+                >
+                  {isLoadingChat ? (
+                    <><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>Starting chat...</>
+                  ) : (
+                    <> <MessageSquare className="w-5 h-5" /> Contact Seller</>
+                  )}
+                </button>
+                <button className="w-full py-3 rounded-xl border border-error/10 text-error/80 font-medium hover:bg-error/5 hover:border-error/20 transition-all flex items-center justify-center gap-2 text-sm mt-2 hover:opacity-100">
+                  <span className="material-symbols-outlined text-sm">flag</span>
+                  Report Listing
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* RELATED PRODUCTS */}
+      {/* Related Items Section - Sideways layout with section spacing */}
       {relatedProducts.length > 0 && (
-        <div className="w-[90%] lg:w-[82%] mt-20 relative z-10">
-          <h2 className="text-2xl font-bold mb-6 gradient-text">Related Products</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <section className="w-[90%] lg:w-[82%] mt-32 relative z-10">
+          <div className="flex items-center justify-between mb-10">
+            <h2 className="text-3xl font-plus-jakarta font-extrabold tracking-tight gradient-text">Similar Products</h2>
+            <a className="text-primary font-bold flex items-center gap-1 hover:underline" href="#">
+              View Shop <span className="material-symbols-outlined">arrow_right_alt</span>
+            </a>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {relatedProducts.map((item) => (
-              <Cart key={item.$id} id={item.$id} imgUrl={productService.getFileView(item.imageId)} category={item.category} name={item.title} price={item.price} />
+              <Cart
+                key={item.$id}
+                id={item.$id}
+                imgUrl={productService.getFileView(item.imageId)}
+                category={item.category}
+                name={item.title}
+                price={item.price}
+                rating={4.5}
+              />
             ))}
           </div>
-        </div>
+        </section>
       )}
     </div>
   );

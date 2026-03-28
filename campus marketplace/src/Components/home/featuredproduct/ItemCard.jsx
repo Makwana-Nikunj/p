@@ -78,7 +78,7 @@ const Cart = ({ imgUrl, name, category, price, id, views, favoriteCount, conditi
     <Link to={`/product/${id}`} className="block">
       <div className="tilt-card glass rounded-2xl overflow-hidden relative group">
         {/* Image */}
-        <div className="relative w-full aspect-[4/3] overflow-hidden rounded-t-2xl bg-[#0C0C0C]">
+        <div className="relative w-full aspect-square overflow-hidden rounded-t-2xl bg-[#0C0C0C]">
           {imageError || !imgUrl ? (
             <div className="absolute inset-0 flex items-center justify-center">
               <Package className="w-12 h-12 text-gray-500" />
@@ -95,7 +95,7 @@ const Cart = ({ imgUrl, name, category, price, id, views, favoriteCount, conditi
 
           {/* Condition Badge - Top Left with Indigo gradient */}
           {condition && (
-            <div className="absolute top-3 left-3 px-3 py-1.5 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-full text-xs font-bold text-white uppercase tracking-wider shadow-lg">
+            <div className="absolute top-3 left-3 px-3 py-1.5 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-full text-xs font-bold text-white uppercase tracking-wider shadow-lg z-10">
               {condition}
             </div>
           )}
@@ -112,22 +112,17 @@ const Cart = ({ imgUrl, name, category, price, id, views, favoriteCount, conditi
               <FiHeart className="w-5 h-5 text-gray-400 group-hover:text-red-500 transition-colors" />
             )}
           </button>
-
-          {/* Category Badge */}
-          <div className="absolute bottom-3 left-3 px-3 py-1.5 glass rounded-full text-xs font-semibold text-white uppercase tracking-wide border border-subtle">
-            {category}
-          </div>
         </div>
 
         {/* Content */}
         <div className="p-5 flex flex-col gap-3 bg-[#0C0C0C]">
           {/* Title */}
-          <h2 className="font-card-title text-white line-clamp-2 leading-snug">
+          <h2 className="font-card-title text-on-surface line-clamp-2 leading-snug">
             {name}
           </h2>
 
           <div className="flex items-center justify-between mt-1">
-            <span className="text-xl font-extrabold text-white tracking-tight">
+            <span className="text-xl font-extrabold gradient-text tracking-tight">
               ₹{parseFloat(price).toLocaleString('en-IN')}
             </span>
 
