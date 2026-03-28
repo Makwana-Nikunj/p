@@ -594,6 +594,75 @@
   border-color: rgba(255, 255, 255, 0.08);
 }
 
+@keyframes borderGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  }
+}
+
+.animate-border-glow {
+  animation: borderGlow 3s ease-in-out infinite;
+}
+
+@keyframes buttonPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(99, 102, 241, 0);
+  }
+}
+
+.animate-button-pulse {
+  animation: buttonPulse 2s ease-in-out infinite;
+}
+
+@keyframes circularGlow {
+  0% {
+    box-shadow: 0 0 0 1.5px rgba(99, 102, 241, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 0 1.5px rgba(99, 102, 241, 1), 0 0 20px rgba(99, 102, 241, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 0 1.5px rgba(99, 102, 241, 0.8);
+  }
+}
+
+.animate-circular-glow {
+  animation: circularGlow 2s ease-in-out infinite;
+}
+
+/* Color utilities for Lumina palette */
+.text-primary {
+  color: #6366F1;
+}
+
+.text-secondary {
+  color: #EC4899;
+}
+
+.text-tertiary {
+  color: #22D3EE;
+}
+
+.text-on-surface {
+  color: rgba(255, 255, 255, 0.87);
+}
+
+/* Shine border for cards (top edge accent) */
+.shine-border {
+  border-top: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+/* Background surface container low (for card images) */
+.bg-surface-container-low {
+  background-color: #091328;
+}
+
 /* Active step indicator (multi-step forms) */
 .step-indicator-active {
   background: linear-gradient(90deg, #6366F1 0%, #22D3EE 100%);
@@ -665,10 +734,11 @@
 
 /* Glass Card variant for bento grid */
 .glass-card {
-  background: rgba(31, 43, 73, 0.3);
+  background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 /* Tab underline indicator */
@@ -715,6 +785,15 @@
 /* Material symbols */
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Font utilities */
+.font-plus-jakarta {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.font-manrope {
+  font-family: 'Manrope', sans-serif;
 }
 
 /* New listing card dashed border */
@@ -803,7 +882,7 @@ select.lumina-input option {
 
 /* Background surface colors */
 .bg-surface-bright {
-  background-color: #1F2B49;
+  background-color: #0C0C0C;
 }
 
 .bg-surface-container-highest {

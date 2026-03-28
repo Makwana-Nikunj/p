@@ -76,9 +76,9 @@ const Cart = ({ imgUrl, name, category, price, id, views, favoriteCount, conditi
 
   return (
     <Link to={`/product/${id}`} className="block">
-      <div className="tilt-card glass rounded-2xl overflow-hidden relative group">
+      <div className="tilt-card glass-card rounded-[2.5rem] overflow-hidden relative group shine-border shadow-[0_0_0_1px_rgba(99,102,241,0.1)] hover:shadow-[0_0_0_1px_rgba(99,102,241,0.2)] hover:shadow-[0_0_0_3px_rgba(99,102,241,0.15)] transition-all duration-300">
         {/* Image */}
-        <div className="relative w-full aspect-square overflow-hidden rounded-t-2xl bg-[#0C0C0C]">
+        <div className="relative w-full aspect-square overflow-hidden bg-surface-container-low group-hover:shadow-[inset_0_0_30px_rgba(99,102,241,0.1)] transition-all duration-300">
           {imageError || !imgUrl ? (
             <div className="absolute inset-0 flex items-center justify-center">
               <Package className="w-12 h-12 text-gray-500" />
@@ -87,15 +87,15 @@ const Cart = ({ imgUrl, name, category, price, id, views, favoriteCount, conditi
             <img
               src={imgUrl}
               alt={`photo of ${name}`}
-              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               loading="lazy"
               onError={() => setImageError(true)}
             />
           )}
 
-          {/* Condition Badge - Top Left with Indigo gradient */}
+          {/* Condition Badge - Top Left with Indigo-Violet gradient */}
           {condition && (
-            <div className="absolute top-3 left-3 px-3 py-1.5 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-full text-xs font-bold text-white uppercase tracking-wider shadow-lg z-10">
+            <div className="absolute top-6 left-6 z-10 px-4 py-2 bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] rounded-full text-[10px] font-black uppercase tracking-widest text-white shadow-[0_0_15px_rgba(99,102,241,0.5)] hover:shadow-[0_0_25px_rgba(99,102,241,0.7)] transition-all duration-300">
               {condition}
             </div>
           )}
@@ -103,7 +103,7 @@ const Cart = ({ imgUrl, name, category, price, id, views, favoriteCount, conditi
           {/* Favorite Button - Top Right */}
           <button
             onClick={handleFavoriteClick}
-            className={`absolute top-3 right-3 z-20 p-2.5 glass rounded-full transition-all duration-300 transform hover:scale-110 active:scale-95 ${isAnimating ? 'animate-pop' : ''} ${loading ? 'opacity-50 cursor-not-allowed' : ''} border border-subtle`}
+            className={`absolute top-6 right-6 z-20 p-2.5 glass rounded-full transition-all duration-300 transform hover:scale-110 active:scale-95 group-hover:shadow-[0_0_15px_rgba(239,68,68,0.6)] ${isAnimating ? 'animate-pop' : ''} ${loading ? 'opacity-50 cursor-not-allowed' : ''} border border-subtle`}
             disabled={loading}
           >
             {isFavorited ? (
@@ -115,19 +115,19 @@ const Cart = ({ imgUrl, name, category, price, id, views, favoriteCount, conditi
         </div>
 
         {/* Content */}
-        <div className="p-5 flex flex-col gap-3 bg-[#0C0C0C]">
+        <div className="p-8 flex flex-col gap-3 bg-surface-bright">
           {/* Title */}
           <h2 className="font-card-title text-on-surface line-clamp-2 leading-snug">
             {name}
           </h2>
 
           <div className="flex items-center justify-between mt-1">
-            <span className="text-xl font-extrabold gradient-text tracking-tight">
+            <span className="text-xl font-black text-primary tracking-tight">
               ₹{parseFloat(price).toLocaleString('en-IN')}
             </span>
 
             {/* Stats */}
-            <div className="flex items-center gap-1.5 text-xs text-gray-400">
+            <div className="flex items-center gap-1.5 text-xs text-on-surface-variant">
               {views !== undefined && views > 0 && (
                 <span className="inline-flex items-center gap-1 glass px-2 py-1 rounded-full border border-subtle">
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,7 +150,7 @@ const Cart = ({ imgUrl, name, category, price, id, views, favoriteCount, conditi
           {(sellerName || sellerAvatar) && (
             <div className="flex items-center gap-2 mt-2 pt-3 border-t border-subtle">
               {/* Seller Avatar */}
-              <div className="w-7 h-7 rounded-full glass flex items-center justify-center text-xs font-bold text-white shadow-sm">
+              <div className="w-8 h-8 rounded-full bg-surface-bright flex items-center justify-center text-[10px] font-bold shadow-sm">
                 {sellerAvatar ? (
                   <img src={sellerAvatar} alt={sellerName} className="w-full h-full rounded-full object-cover" loading="lazy" />
                 ) : (
@@ -158,15 +158,9 @@ const Cart = ({ imgUrl, name, category, price, id, views, favoriteCount, conditi
                 )}
               </div>
               {/* Seller Name */}
-              <span className="text-sm text-gray-400 truncate flex-1 font-medium">
+              <span className="text-xs font-bold text-on-surface-variant truncate flex-1">
                 {sellerName || "Unknown Seller"}
               </span>
-              {/* Star Rating */}
-              {rating !== undefined && (
-                <div className="flex items-center text-xs gap-0.5">
-                  {renderStars(rating)}
-                </div>
-              )}
             </div>
           )}
         </div>
