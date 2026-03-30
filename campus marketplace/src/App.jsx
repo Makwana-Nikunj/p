@@ -92,20 +92,20 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout><Home /></Layout>} />
           <Route path="/browse" element={<Layout><Browse /></Layout>} />
-          
+
           <Route path="/profile" element={<ProtectedRoute><Layout><Profile /></Layout></ProtectedRoute>} />
           <Route path="/chat" element={<ProtectedRoute><Layout><Chat /></Layout></ProtectedRoute>} />
           <Route path="/add-item" element={<ProtectedRoute><Layout><AddItem /></Layout></ProtectedRoute>} />
-          
+
           <Route path="/login" element={<Layout><LoginForm /></Layout>} />
           <Route path="/register" element={<Layout><RegisterForm /></Layout>} />
-          
+
           <Route path="/product/:id" element={<Layout><ProductDetailPage /></Layout>} />
           <Route path="/profile/product/:id" element={<ProtectedRoute><Layout><OwnerProductDetail /></Layout></ProtectedRoute>} />
           <Route path="/profile/edit" element={<ProtectedRoute><Layout><EditProfile /></Layout></ProtectedRoute>} />
           <Route path="/edit-product/:id" element={<ProtectedRoute><Layout><EditProduct /></Layout></ProtectedRoute>} />
           <Route path="/favorites" element={<ProtectedRoute><Layout><Favorites /></Layout></ProtectedRoute>} />
-          
+
           <Route path="/admin" element={<AdminProtectedRoute><Layout><AdminDashboard /></Layout></AdminProtectedRoute>} />
           
           <Route path="*" element={
