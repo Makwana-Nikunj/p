@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
+import feedbackService from '../../services/feedbackService'
 
 const FeedbackForm = () => {
   const [formData, setFormData] = useState({
@@ -12,18 +13,22 @@ const FeedbackForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
 
-  // Validation rules
+  // Validation rules (matches backend)
   const validateForm = () => {
     const newErrors = {}
 
     if (!formData.fullName.trim()) {
       newErrors.fullName = 'Full name is required'
+    } else if (formData.fullName.trim().length > 255) {
+      newErrors.fullName = 'Full name is too long (max 255 characters)'
     }
 
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address'
+    } else if (formData.email.trim().length > 255) {
+      newErrors.email = 'Email is too long (max 255 characters)'
     }
 
     if (formData.rating === 0) {
@@ -32,8 +37,8 @@ const FeedbackForm = () => {
 
     if (!formData.message.trim()) {
       newErrors.message = 'Feedback message is required'
-    } else if (formData.message.trim().length < 10) {
-      newErrors.message = 'Message must be at least 10 characters'
+    } else if (formData.message.trim().length > 2000) {
+      newErrors.message = 'Message is too long (max 2000 characters)'
     }
 
     setErrors(newErrors)
@@ -80,22 +85,35 @@ const FeedbackForm = () => {
 
     setIsSubmitting(true)
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500))
-
-    setIsSubmitting(false)
-    setIsSubmitted(true)
-
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setIsSubmitted(false)
-      setFormData({
-        fullName: '',
-        email: '',
-        rating: 0,
-        message: ''
+    try {
+      // Submit to backend API
+      await feedbackService.submitFeedback({
+        fullName: formData.fullName.trim(),
+        email: formData.email.trim(),
+        rating: formData.rating,
+        message: formData.message.trim()
       })
-    }, 3000)
+
+      setIsSubmitting(false)
+      setIsSubmitted(true)
+
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setIsSubmitted(false)
+        setFormData({
+          fullName: '',
+          email: '',
+          rating: 0,
+          message: ''
+        })
+      }, 3000)
+    } catch (error) {
+      setIsSubmitting(false)
+
+      // Display error message
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to submit feedback. Please try again.'
+      alert(errorMessage) // Simple approach, can be enhanced with toast
+    }
   }
 
   return (
@@ -264,8 +282,8 @@ const FeedbackForm = () => {
                 ) : (
                   <div></div>
                 )}
-                <span className={`text-xs ${formData.message.length >= 10 ? 'text-cyan-400' : 'text-gray-500'}`}>
-                  {formData.message.length}/10 minimum characters
+                <span className={`text-xs ${formData.message.length >= 10 && formData.message.length <= 2000 ? 'text-cyan-400' : 'text-gray-500'}`}>
+                  {formData.message.length}/2000 characters
                 </span>
               </div>
             </div>

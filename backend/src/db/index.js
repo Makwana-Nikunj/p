@@ -93,6 +93,30 @@ const connectToDatabase = async () => {
         );
         `;
 
+        // ===============================
+        // FEEDBACK TABLE
+        // ===============================
+        await sql`
+        CREATE TABLE IF NOT EXISTS feedback (
+            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+            full_name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+            message TEXT NOT NULL,
+            status VARCHAR(50) NOT NULL DEFAULT 'new',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        `;
+
+        // Add updated_at column if it doesn't exist (migration for existing DB)
+        try {
+            await sql`ALTER TABLE feedback ADD COLUMN IF NOT EXISTS status VARCHAR(50) NOT NULL DEFAULT 'new'`;
+            await sql`ALTER TABLE feedback ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP`;
+        } catch (error) {
+            // Columns might already exist, ignore
+        }
+
         console.log("✅ Successfully connected to the database.");
     } catch (error) {
         console.error("❌ Error connecting to the database:", error);
