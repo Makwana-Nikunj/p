@@ -4,6 +4,7 @@ import Hero from '../Components/home/Hero'
 import CuratedCollections from '../Components/home/CuratedCollections'
 import CampusPulse from '../Components/home/CampusPulse'
 import Testimonials from '../Components/home/Testimonials'
+import FeedbackForm from '../Components/home/FeedbackForm'
 
 const HomePage = () => {
   const products = useSelector((state) => state.products.products)
@@ -32,6 +33,11 @@ const HomePage = () => {
       {/* Testimonials - 5rem spacing */}
       <div className="w-full mb-20 md:mb-24 px-4 md:px-8">
         <Testimonials />
+      </div>
+
+      {/* Feedback Form - 5rem spacing */}
+      <div className="w-full mb-20 md:mb-24 px-4 md:px-8">
+        <FeedbackForm />
       </div>
     </div>
   )

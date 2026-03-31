@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { motion } from 'framer-motion'
@@ -27,16 +27,200 @@ const Hero = () => {
     }
   }
 
-  const floatVariants = {
+  // Marketplace items data - realistic product cards
+  const marketplaceItems = useMemo(() => [
+    {
+      id: 1,
+      title: 'Mechanical Keyboard',
+      price: '₹4,500',
+      category: 'Electronics',
+      condition: 'Like New',
+      icon: 'keyboard',
+      color: 'indigo'
+    },
+    {
+      id: 2,
+      title: 'Noise-Cancelling Headphones',
+      price: '₹8,999',
+      category: 'Electronics',
+      condition: 'Excellent',
+      icon: 'headphones',
+      color: 'cyan'
+    },
+    {
+      id: 3,
+      title: 'Calculus: Early Transcendentals',
+      price: '₹1,200',
+      category: 'Books',
+      condition: 'Good',
+      icon: 'menu_book',
+      color: 'violet'
+    },
+    {
+      id: 4,
+      title: 'iPad Pro 12.9"',
+      price: '₹75,000',
+      category: 'Electronics',
+      condition: 'Like New',
+      icon: 'tablet',
+      color: 'indigo'
+    },
+    {
+      id: 5,
+      title: 'Graphing Calculator',
+      price: '₹6,500',
+      category: 'Electronics',
+      condition: 'Very Good',
+      icon: 'calculate',
+      color: 'cyan'
+    },
+    {
+      id: 6,
+      title: 'Introduction to Python',
+      price: '₹800',
+      category: 'Books',
+      condition: 'Like New',
+      icon: 'book',
+      color: 'violet'
+    },
+    {
+      id: 7,
+      title: 'Wireless Mouse',
+      price: '₹1,800',
+      category: 'Electronics',
+      condition: 'New',
+      icon: 'computer',
+      color: 'indigo'
+    },
+    {
+      id: 8,
+      title: 'Dorm Room Desk',
+      price: '₹4,500',
+      category: 'Furniture',
+      condition: 'Good',
+      icon: 'desk',
+      color: 'cyan'
+    },
+    {
+      id: 9,
+      title: 'Physics for Scientists',
+      price: '₹1,500',
+      category: 'Books',
+      condition: 'Acceptable',
+      icon: 'auto_stories',
+      color: 'violet'
+    },
+    {
+      id: 10,
+      title: 'Yoga Mat',
+      price: '₹1,200',
+      category: 'Sports',
+      condition: 'Like New',
+      icon: 'fitness_center',
+      color: 'indigo'
+    },
+    {
+      id: 11,
+      title: 'Coffee Maker',
+      price: '₹3,200',
+      category: 'Home',
+      condition: 'Good',
+      icon: 'kitchen',
+      color: 'cyan'
+    },
+    {
+      id: 12,
+      title: 'Study Lamp',
+      price: '₹900',
+      category: 'Home',
+      condition: 'Very Good',
+      icon: 'lightbulb',
+      color: 'violet'
+    }
+  ], [])
+
+  // Helper function for random range
+  const random = (min, max) => Math.random() * (max - min) + min
+
+  // Helper function for random selection
+  const randomChoice = (arr) => arr[Math.floor(Math.random() * arr.length)]
+
+  // Generate random floating items with depth-based properties
+  const floatingItems = useMemo(() => {
+    const items = []
+    const zones = [
+      { xRange: [5, 25], yRange: [15, 40] },   // Top-left
+      { xRange: [75, 95], yRange: [15, 40] },  // Top-right
+      { xRange: [5, 25], yRange: [60, 85] },   // Bottom-left
+      { xRange: [75, 95], yRange: [60, 85] },  // Bottom-right
+      { xRange: [40, 60], yRange: [20, 35] },  // Top-center
+      { xRange: [40, 60], yRange: [65, 80] },  // Bottom-center
+    ]
+
+    // Create 12 floating items with depth layers
+    for (let i = 0; i < 12; i++) {
+      // Depth layer: 0 = far, 1 = mid, 2 = close
+      const depth = i % 3 // 0, 1, 2 repeating
+
+      // Scale based on depth (far = smaller)
+      const baseScale = depth === 2 ? random(0.85, 1.0) : depth === 1 ? random(0.7, 0.85) : random(0.5, 0.7)
+
+      // Blur based on depth (far = more blur)
+      const blurAmount = depth === 2 ? '0px' : depth === 1 ? '2px' : '4px'
+
+      // Opacity based on depth (far = more transparent)
+      const opacity = depth === 2 ? random(0.85, 0.95) : depth === 1 ? random(0.7, 0.85) : random(0.4, 0.6)
+
+      // Random zone selection (avoid center)
+      const zone = randomChoice(zones)
+
+      // Position within zone
+      const x = random(zone.xRange[0], zone.xRange[1])
+      const y = random(zone.yRange[0], zone.yRange[1])
+
+      // Animation timing unique per card
+      const duration = random(8, 14)
+      const delay = random(0, 4)
+      const driftX = random(-1.5, 1.5)
+      const driftY = random(-2, 2)
+      const rotation = random(-8, 8)
+
+      // Random item selection
+      const item = randomChoice(marketplaceItems)
+
+      items.push({
+        key: i,
+        item,
+        x,
+        y,
+        scale: baseScale,
+        blur: blurAmount,
+        opacity,
+        duration,
+        delay,
+        driftX,
+        driftY,
+        rotation
+      })
+    }
+
+    return items
+  }, [])
+
+  // Floating animation variant
+  const createFloatVariant = (driftX, driftY, rotation, duration) => ({
     animate: {
-      y: [-10, 10, -10],
+      x: [0, driftX, 0],
+      y: [0, driftY, 0],
+      rotate: [0, rotation, -rotation/2, 0],
       transition: {
-        duration: 6,
+        duration,
         repeat: Infinity,
-        ease: "easeInOut"
+        ease: "easeInOut",
+        repeatType: "mirror"
       }
     }
-  }
+  })
 
   return (
     <>
@@ -52,94 +236,56 @@ const Hero = () => {
           <div className="absolute top-[40%] right-[30%] w-[300px] h-[300px] bg-violet-500/8 blur-[90px] rounded-full mix-blend-screen animate-pulse-fast"></div>
         </div>
 
-        {/* Premium Product Preview Cards - Floating 3D */}
+        {/* Dynamic Floating Marketplace Items */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Left: Chat Preview */}
-          <motion.div
-            className="absolute top-[15%] left-[8%] md:left-[15%] perspective-container"
-            variants={floatVariants}
-            animate="animate"
-            style={{ animationDelay: '0s' }}
-          >
-            <div className="tilt-card glass-card p-4 rounded-2xl w-64 md:w-72 opacity-90">
-              {/* Chat header */}
-              <div className="flex items-center gap-3 mb-3 pb-3 border-b border-indigo-500/10">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-500 flex items-center justify-center">
-                  <span className="material-symbols-outlined text-white text-sm">person</span>
+          {floatingItems.map(({ key, item, x, y, scale, blur, opacity, duration, delay, driftX, driftY, rotation }) => (
+            <motion.div
+              key={key}
+              className="absolute origin-center"
+              style={{
+                left: `${x}%`,
+                top: `${y}%`,
+                filter: `blur(${blur})`,
+                opacity
+              }}
+              {...createFloatVariant(driftX, driftY, rotation, duration)}
+              initial={{ x: 0, y: 0, rotate: 0 }}
+            >
+              <div
+                className="tilt-card glass-card rounded-2xl overflow-hidden border border-white/10 shadow-lg backdrop-blur-xl"
+                style={{
+                  transform: `scale(${scale})`,
+                  boxShadow: `0 8px 32px rgba(0,0,0,0.3), 0 0 ${scale > 0.8 ? '40px' : '30px'} -5px rgba(99,102,241,${scale * 0.2})`
+                }}
+              >
+                {/* Product image placeholder with gradient */}
+                <div className={`aspect-[4/3] bg-gradient-to-br from-${item.color}-500/20 to-${item.color}-500/5 relative`}>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className={`material-symbols-outlined text-6xl md:text-7xl text-${item.color}-400/40`}>
+                      {item.icon}
+                    </span>
+                  </div>
+                  {/* Condition badge */}
+                  <div className="absolute top-2 left-2 px-2 py-1 rounded-md bg-indigo-500/20 backdrop-blur-sm border border-indigo-500/30">
+                    <span className="text-[10px] font-bold text-indigo-300">{item.condition}</span>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <div className="h-2.5 w-20 bg-indigo-400/30 rounded mb-1"></div>
-                  <div className="h-1.5 w-16 bg-cyan-400/20 rounded"></div>
-                </div>
-                <div className="h-2 w-2 bg-green-400 rounded-full"></div>
-              </div>
-              {/* Chat bubbles */}
-              <div className="space-y-2.5">
-                <div className="bg-[#0C0C0C] p-2.5 rounded-2xl rounded-bl-md max-w-[80%]">
-                  <div className="h-2 w-full bg-indigo-400/20 rounded mb-1.5"></div>
-                  <div className="h-2 w-3/4 bg-indigo-400/10 rounded"></div>
-                </div>
-                <div className="bg-indigo-500/20 p-2.5 rounded-2xl rounded-br-md ml-auto max-w-[80%]">
-                  <div className="h-2 w-full bg-indigo-300/30 rounded mb-1.5"></div>
-                  <div className="h-2 w-2/3 bg-indigo-300/20 rounded"></div>
-                </div>
-                <div className="bg-[#0C0C0C] p-2.5 rounded-2xl rounded-bl-md max-w-[80%]">
-                  <div className="h-2 w-full bg-indigo-400/20 rounded mb-1.5"></div>
-                  <div className="h-2 w-4/5 bg-indigo-400/10 rounded"></div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
 
-          {/* Right: Product Card Preview */}
-          <motion.div
-            className="absolute top-[25%] right-[10%] md:right-[18%] perspective-container"
-            variants={floatVariants}
-            animate="animate"
-            style={{ animationDelay: '2s' }}
-          >
-            <div className="tilt-card glass-card rounded-3xl overflow-hidden w-64 md:w-72 opacity-90 shadow-[0_0_30px_-5px_rgba(99,102,241,0.3)]">
-              {/* Product image */}
-              <div className="aspect-[4/3] bg-gradient-to-br from-indigo-500/20 to-cyan-500/20 relative">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="material-symbols-outlined text-7xl text-indigo-400/30">laptop_mac</span>
-                </div>
-                {/* Condition badge */}
-                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-indigo-500/20 backdrop-blur-sm border border-indigo-500/30">
-                  <span className="text-xs font-bold text-indigo-300">Like New</span>
+                {/* Product info */}
+                <div className="p-3">
+                  <h4 className="font-headline font-bold text-white text-sm mb-1 line-clamp-2 leading-tight">
+                    {item.title}
+                  </h4>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-400">{item.category}</span>
+                    <div className="text-sm font-extrabold gradient-text bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+                      {item.price}
+                    </div>
+                  </div>
                 </div>
               </div>
-              {/* Product info */}
-              <div className="p-4">
-                <h4 className="font-headline font-bold text-white text-base mb-2 line-clamp-2">Premium Wireless Keyboard</h4>
-                <div className="flex items-center justify-between text-xs text-gray-400 mb-2">
-                  <span>Electronics</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="text-lg font-extrabold gradient-text bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">₹4,999</div>
-                  <div className="text-xs text-gray-400"> Seller • 2h</div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Bottom: Small notification/trust card */}
-          <motion.div
-            className="absolute bottom-[20%] left-[20%] md:left-[25%] perspective-container"
-            variants={floatVariants}
-            animate="animate"
-            style={{ animationDelay: '4s' }}
-          >
-            <div className="glass-card p-3 rounded-xl flex items-center gap-3 opacity-80 w-56">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-xs">check_circle</span>
-              </div>
-              <div className="flex-1">
-                <div className="h-2 w-full bg-green-400/30 rounded mb-1"></div>
-                <div className="h-1.5 w-3/4 bg-green-400/20 rounded"></div>
-              </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          ))}
         </div>
 
         {/* Hero Content */}
