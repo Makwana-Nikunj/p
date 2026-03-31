@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 const Hero = () => {
-  const { user } = useSelector((state) => state.auth)
+  const { userData } = useSelector((state) => state.auth)
   return (
     <>
       {/* Hero Section */}
@@ -70,11 +70,11 @@ const Hero = () => {
         {/* Hero Content */}
         <div className="relative z-10 text-center px-4 max-w-5xl mx-auto pt-8 md:pt-12">
           {/* Welcome Message for Logged In Users */}
-          {user && (
+          {userData && (
             <div className="mb-6 animate-fadeIn">
               <span className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-indigo-500/20 to-violet-500/20 border border-indigo-500/30 text-gray-200 text-sm font-medium backdrop-blur-sm">
                 <span className="material-symbols-outlined text-indigo-400 mr-2" style={{ fontVariationSettings: "'FILL' 1" }}>wave</span>
-                Welcome back, {user.name || user.email?.split('@')[0]}!
+                Welcome back, {userData.name || userData.email?.split('@')[0]}!
               </span>
             </div>
           )}
@@ -100,12 +100,21 @@ const Hero = () => {
             >
               Explore Marketplace
             </Link>
-            <Link
-              to="/add-item"
-              className="px-8 md:px-10 py-3 md:py-4 rounded-full border border-indigo-500/30 text-gray-200 font-bold text-base md:text-lg hover:bg-indigo-500/10 transition-all duration-300 backdrop-blur-sm cursor-pointer active:scale-95 w-full sm:w-auto text-center"
-            >
-              List an Item
-            </Link>
+            {userData ? (
+              <Link
+                to="/add-item"
+                className="px-8 md:px-10 py-3 md:py-4 rounded-full border border-indigo-500/30 text-gray-200 font-bold text-base md:text-lg hover:bg-indigo-500/10 transition-all duration-300 backdrop-blur-sm cursor-pointer active:scale-95 w-full sm:w-auto text-center"
+              >
+                List an Item
+              </Link>
+            ) : (
+              <Link
+                to="/register"
+                className="px-8 md:px-10 py-3 md:py-4 rounded-full border border-cyan-500/30 text-cyan-300 font-bold text-base md:text-lg hover:bg-cyan-500/10 hover:border-cyan-400/50 transition-all duration-300 backdrop-blur-sm cursor-pointer active:scale-95 w-full sm:w-auto text-center"
+              >
+                Register
+              </Link>
+            )}
           </div>
 
           {/* Feature Strip (Marquee) */}

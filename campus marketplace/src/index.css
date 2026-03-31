@@ -108,6 +108,71 @@
   }
 }
 
+/* Orbital floating animations for product cards */
+@keyframes float-orbit-1 {
+  0%, 100% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-8px) translateX(6px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(-12px) translateX(0) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-8px) translateX(-6px) rotate(-1deg);
+  }
+}
+
+@keyframes float-orbit-2 {
+  0%, 100% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-6px) translateX(-8px) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-10px) translateX(0) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-6px) translateX(8px) rotate(1deg);
+  }
+}
+
+@keyframes float-orbit-3 {
+  0%, 100% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-10px) translateX(8px) rotate(1.5deg);
+  }
+  66% {
+    transform: translateY(-15px) translateX(-4px) rotate(-1.5deg);
+  }
+}
+
+/* Dynamic floating with scale pulse - for trending products */
+@keyframes float-pulse {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 0 20px -5px rgba(99,102,241,0.3), 0 8px 32px -8px rgba(0,0,0,0.4);
+  }
+  50% {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 0 30px -5px rgba(99,102,241,0.5), 0 0 50px -10px rgba(139,92,246,0.3), 0 12px 40px -8px rgba(0,0,0,0.5);
+  }
+}
+
+/* Gentle sway with rotation */
+@keyframes float-sway {
+  0%, 100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+}
+
 @keyframes gradient {
   0% {
     background-position: 0% 50%;
@@ -238,6 +303,28 @@
 
 .floating-anim-2 {
   animation: float 8s ease-in-out infinite reverse;
+}
+
+/* Orbital floating animations for product cards */
+.floating-orbit-1 {
+  animation: float-orbit-1 8s ease-in-out infinite;
+}
+
+.floating-orbit-2 {
+  animation: float-orbit-2 10s ease-in-out infinite;
+}
+
+.floating-orbit-3 {
+  animation: float-orbit-3 12s ease-in-out infinite reverse;
+}
+
+/* New dynamic floating animations */
+.float-pulse {
+  animation: float-pulse 4s ease-in-out infinite;
+}
+
+.float-sway {
+  animation: float-sway 5s ease-in-out infinite;
 }
 
 .animate-gradient {
