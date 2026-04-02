@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="w-full glass border-t border-subtle relative z-10">
       {/* Top Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10 text-center sm:text-left">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 text-center sm:text-left">
         {/* Brand */}
         <div className="flex flex-col items-center sm:items-start animate-fadeIn">
           <Link
@@ -51,8 +51,31 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Social */}
+        {/* Legal */}
         <div className="flex flex-col items-center sm:items-start animate-fadeIn" style={{ animationDelay: '0.2s' }}>
+          <h3 className="text-lg font-semibold mb-4 text-white">Legal</h3>
+          <ul className="space-y-3 text-sm text-gray-400">
+            <li>
+              <Link
+                to="/terms"
+                className="hover:text-cyan-400 transition-colors duration-300 hover:scale-105 inline-block"
+              >
+                Terms & Conditions
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/privacy"
+                className="hover:text-cyan-400 transition-colors duration-300 hover:scale-105 inline-block"
+              >
+                Privacy Policy
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Social */}
+        <div className="flex flex-col items-center sm:items-start animate-fadeIn" style={{ animationDelay: '0.3s' }}>
           <h3 className="text-lg font-semibold mb-4 text-white">Connect</h3>
           <div className="flex gap-3">
             <a
