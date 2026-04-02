@@ -81,37 +81,57 @@ const submitFeedback = asyncHandler(async (req, res) => {
  */
 const getAllFeedback = asyncHandler(async (req, res) => {
     try {
-        const { status, sortBy = 'newest', search = '' } = req.query;
+        const { status, sortBy = 'newest', search = '', page = 1, limit = 6 } = req.query;
+        const pageNum = parseInt(page, 10) || 1;
+        const limitNum = parseInt(limit, 10) || 6;
+        const offset = (pageNum - 1) * limitNum;
 
-        // Build query with filters
-        let query = sql`
-            SELECT id, full_name, email, rating, message, status, created_at, updated_at
-            FROM feedback
-            WHERE 1=1
-        `;
+        // Build WHERE clause
+        let conditions = sql``;
+        let filterParams = [];
 
-        // Filter by status if provided
         if (status && ['new', 'reviewed'].includes(status)) {
-            query = sql`${query} AND status = ${status}`;
+            conditions = sql` AND status = ${status}`;
         }
 
-        // Search by name or email if provided
         if (search && search.trim()) {
             const searchPattern = `%${search}%`;
-            query = sql`${query} AND (LOWER(full_name) LIKE LOWER(${searchPattern}) OR LOWER(email) LIKE LOWER(${searchPattern}))`;
+            conditions = sql`${conditions} AND (LOWER(full_name) LIKE LOWER(${searchPattern}) OR LOWER(email) LIKE LOWER(${searchPattern}))`;
         }
 
         // Sorting
-        if (sortBy === 'newest') {
-            query = sql`${query} ORDER BY created_at DESC`;
-        } else if (sortBy === 'oldest') {
-            query = sql`${query} ORDER BY created_at ASC`;
+        let orderBy = sql`ORDER BY created_at DESC`;
+        if (sortBy === 'oldest') {
+            orderBy = sql`ORDER BY created_at ASC`;
         }
 
-        const result = await query;
+        // Fetch total count
+        const countResult = await sql`
+            SELECT COUNT(*)::int as total FROM feedback WHERE 1=1 ${conditions}
+        `;
+        const total = countResult[0].total;
+
+        // Fetch paginated data
+        const result = await sql`
+            SELECT id, full_name, email, rating, message, status, created_at, updated_at
+            FROM feedback
+            WHERE 1=1 ${conditions}
+            ${orderBy}
+            LIMIT ${limitNum} OFFSET ${offset}
+        `;
+
+        const totalPages = Math.ceil(total / limitNum);
 
         return res.status(200).json(
-            new ApiResponse(200, result, "Feedback fetched successfully")
+            new ApiResponse(200, {
+                documents: result,
+                pagination: {
+                    total,
+                    page: pageNum,
+                    limit: limitNum,
+                    totalPages
+                }
+            }, "Feedback fetched successfully")
         );
     } catch (error) {
         console.error("Error fetching feedback:", error);

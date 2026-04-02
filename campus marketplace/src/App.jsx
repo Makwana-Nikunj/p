@@ -28,6 +28,7 @@ const EditProfile = lazy(() => import("./pages/EditProfilePage.jsx"));
 const EditProduct = lazy(() => import("./pages/EditProductPage.jsx"));
 const Favorites = lazy(() => import("./pages/FavoritesPage.jsx"));
 const AdminDashboard = lazy(() => import("./pages/AdminDashboardPage.jsx"));
+const FeedbackPage = lazy(() => import("./pages/FeedbackPage.jsx"));
 
 // Base layout wrapping routes
 function Layout({ children }) {
@@ -108,6 +109,8 @@ function App() {
 
           <Route path="/admin" element={<AdminProtectedRoute><Layout><AdminDashboard /></Layout></AdminProtectedRoute>} />
           
+          <Route path="/feedback" element={<Layout><FeedbackPage /></Layout>} />
+
           <Route path="*" element={
             <div className="min-h-[70vh] flex items-center justify-center">
               <div className="text-center">

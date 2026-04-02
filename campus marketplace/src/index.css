@@ -1164,6 +1164,19 @@ button {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Hero headline text shadow */
+.text-shadow-hero {
+  text-shadow:
+    0 2px 20px rgba(99, 102, 241, 0.15),
+    0 8px 40px rgba(6, 14, 32, 0.8);
+}
+
+/* Hero section enhanced spacing */
+.hero-content {
+  padding-top: env(safe-area-inset-top, 0);
+  padding-bottom: 2rem;
+}
+
 /* Reduced Motion Support for Accessibility */
 @media (prefers-reduced-motion: reduce) {
   .floating-anim-1,

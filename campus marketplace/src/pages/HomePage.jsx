@@ -36,7 +36,7 @@ const HomePage = () => {
       </div>
 
       {/* Feedback Form - 5rem spacing */}
-      <div className="w-full mb-20 md:mb-24 px-4 md:px-8">
+      <div id="feedback" className="w-full mb-20 md:mb-24 px-4 md:px-8">
         <FeedbackForm />
       </div>
     </div>

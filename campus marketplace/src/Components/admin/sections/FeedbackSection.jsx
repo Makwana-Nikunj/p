@@ -19,7 +19,8 @@ const FeedbackSection = () => {
             const params = {
                 status: statusFilter === 'all' ? undefined : statusFilter,
                 sortBy: sortBy,
-                search: search.trim() || undefined
+                search: search.trim() || undefined,
+                limit: 999
             };
             const result = await feedbackService.getFeedback(params);
             setAllFeedback(result.documents || []);

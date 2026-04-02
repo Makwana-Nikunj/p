@@ -6,281 +6,99 @@ import { motion } from 'framer-motion'
 const Hero = () => {
   const { userData } = useSelector((state) => state.auth)
 
-  // Animation variants
+  // Animation variants - staggered text entrance
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
+      transition: { staggerChildren: 0.12, delayChildren: 0.15 }
     }
   }
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
+  const fadeInUp = (delay = 0) => ({
+    hidden: { opacity: 0, y: 24 },
     visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] }
+      opacity: 1, y: 0,
+      transition: { duration: 0.7, delay: delay * 0.1, ease: [0.23, 1, 0.32, 1] }
     }
-  }
+  })
 
-  // Marketplace items data - realistic product cards
+  // Marketplace items data - realistic product cards (unchanged)
   const marketplaceItems = useMemo(() => [
-    {
-      id: 1,
-      title: 'Mechanical Keyboard',
-      price: '₹4,500',
-      category: 'Electronics',
-      condition: 'Like New',
-      icon: 'keyboard',
-      color: 'indigo'
-    },
-    {
-      id: 2,
-      title: 'Noise-Cancelling Headphones',
-      price: '₹8,999',
-      category: 'Electronics',
-      condition: 'Excellent',
-      icon: 'headphones',
-      color: 'cyan'
-    },
-    {
-      id: 3,
-      title: 'Calculus: Early Transcendentals',
-      price: '₹1,200',
-      category: 'Books',
-      condition: 'Good',
-      icon: 'menu_book',
-      color: 'violet'
-    },
-    {
-      id: 4,
-      title: 'iPad Pro 12.9"',
-      price: '₹75,000',
-      category: 'Electronics',
-      condition: 'Like New',
-      icon: 'tablet',
-      color: 'indigo'
-    },
-    {
-      id: 5,
-      title: 'Graphing Calculator',
-      price: '₹6,500',
-      category: 'Electronics',
-      condition: 'Very Good',
-      icon: 'calculate',
-      color: 'cyan'
-    },
-    {
-      id: 6,
-      title: 'Introduction to Python',
-      price: '₹800',
-      category: 'Books',
-      condition: 'Like New',
-      icon: 'book',
-      color: 'violet'
-    },
-    {
-      id: 7,
-      title: 'Wireless Mouse',
-      price: '₹1,800',
-      category: 'Electronics',
-      condition: 'New',
-      icon: 'computer',
-      color: 'indigo'
-    },
-    {
-      id: 8,
-      title: 'Dorm Room Desk',
-      price: '₹4,500',
-      category: 'Furniture',
-      condition: 'Good',
-      icon: 'desk',
-      color: 'cyan'
-    },
-    {
-      id: 9,
-      title: 'Physics for Scientists',
-      price: '₹1,500',
-      category: 'Books',
-      condition: 'Acceptable',
-      icon: 'auto_stories',
-      color: 'violet'
-    },
-    {
-      id: 10,
-      title: 'Yoga Mat',
-      price: '₹1,200',
-      category: 'Sports',
-      condition: 'Like New',
-      icon: 'fitness_center',
-      color: 'indigo'
-    },
-    {
-      id: 11,
-      title: 'Coffee Maker',
-      price: '₹3,200',
-      category: 'Home',
-      condition: 'Good',
-      icon: 'kitchen',
-      color: 'cyan'
-    },
-    {
-      id: 12,
-      title: 'Study Lamp',
-      price: '₹900',
-      category: 'Home',
-      condition: 'Very Good',
-      icon: 'lightbulb',
-      color: 'violet'
-    }
+    { id: 1, title: 'Mechanical Keyboard', price: '₹4,500', category: 'Electronics', condition: 'Like New', icon: 'keyboard', color: 'indigo' },
+    { id: 2, title: 'Noise-Cancelling Headphones', price: '₹8,999', category: 'Electronics', condition: 'Excellent', icon: 'headphones', color: 'cyan' },
+    { id: 3, title: 'Calculus: Early Transcendentals', price: '₹1,200', category: 'Books', condition: 'Good', icon: 'menu_book', color: 'violet' },
+    { id: 4, title: 'iPad Pro 12.9"', price: '₹75,000', category: 'Electronics', condition: 'Like New', icon: 'tablet', color: 'indigo' },
+    { id: 5, title: 'Graphing Calculator', price: '₹6,500', category: 'Electronics', condition: 'Very Good', icon: 'calculate', color: 'cyan' },
+    { id: 6, title: 'Introduction to Python', price: '₹800', category: 'Books', condition: 'Like New', icon: 'book', color: 'violet' },
+    { id: 7, title: 'Wireless Mouse', price: '₹1,800', category: 'Electronics', condition: 'New', icon: 'computer', color: 'indigo' },
+    { id: 8, title: 'Dorm Room Desk', price: '₹4,500', category: 'Furniture', condition: 'Good', icon: 'desk', color: 'cyan' },
+    { id: 9, title: 'Physics for Scientists', price: '₹1,500', category: 'Books', condition: 'Acceptable', icon: 'auto_stories', color: 'violet' },
+    { id: 10, title: 'Yoga Mat', price: '₹1,200', category: 'Sports', condition: 'Like New', icon: 'fitness_center', color: 'indigo' },
+    { id: 11, title: 'Coffee Maker', price: '₹3,200', category: 'Home', condition: 'Good', icon: 'kitchen', color: 'cyan' },
+    { id: 12, title: 'Study Lamp', price: '₹900', category: 'Home', condition: 'Very Good', icon: 'lightbulb', color: 'violet' }
   ], [])
 
-  // Helper function for random range
   const random = (min, max) => Math.random() * (max - min) + min
-
-  // Helper function for random selection
   const randomChoice = (arr) => arr[Math.floor(Math.random() * arr.length)]
 
-  // Generate random floating items with depth-based properties
   const floatingItems = useMemo(() => {
     const items = []
     const zones = [
-      { xRange: [5, 25], yRange: [15, 40] },   // Top-left
-      { xRange: [75, 95], yRange: [15, 40] },  // Top-right
-      { xRange: [5, 25], yRange: [60, 85] },   // Bottom-left
-      { xRange: [75, 95], yRange: [60, 85] },  // Bottom-right
-      { xRange: [40, 60], yRange: [20, 35] },  // Top-center
-      { xRange: [40, 60], yRange: [65, 80] },  // Bottom-center
+      { xRange: [5, 25], yRange: [15, 40] },
+      { xRange: [75, 95], yRange: [15, 40] },
+      { xRange: [5, 25], yRange: [60, 85] },
+      { xRange: [75, 95], yRange: [60, 85] },
+      { xRange: [40, 60], yRange: [20, 35] },
+      { xRange: [40, 60], yRange: [65, 80] },
     ]
-
-    // Create 12 floating items with depth layers
     for (let i = 0; i < 12; i++) {
-      // Depth layer: 0 = far, 1 = mid, 2 = close
-      const depth = i % 3 // 0, 1, 2 repeating
-
-      // Scale based on depth (far = smaller)
+      const depth = i % 3
       const baseScale = depth === 2 ? random(0.85, 1.0) : depth === 1 ? random(0.7, 0.85) : random(0.5, 0.7)
-
-      // Blur based on depth (far = more blur)
       const blurAmount = depth === 2 ? '0px' : depth === 1 ? '2px' : '4px'
-
-      // Opacity based on depth (far = more transparent)
-      const opacity = depth === 2 ? random(0.85, 0.95) : depth === 1 ? random(0.7, 0.85) : random(0.4, 0.6)
-
-      // Random zone selection (avoid center)
+      const opacity = depth === 2 ? random(0.4, 0.5) : depth === 1 ? random(0.3, 0.4) : random(0.2, 0.3)
       const zone = randomChoice(zones)
-
-      // Position within zone
       const x = random(zone.xRange[0], zone.xRange[1])
       const y = random(zone.yRange[0], zone.yRange[1])
-
-      // Animation timing unique per card
       const duration = random(8, 14)
       const delay = random(0, 4)
       const driftX = random(-1.5, 1.5)
       const driftY = random(-2, 2)
       const rotation = random(-8, 8)
-
-      // Random item selection
       const item = randomChoice(marketplaceItems)
-
-      items.push({
-        key: i,
-        item,
-        x,
-        y,
-        scale: baseScale,
-        blur: blurAmount,
-        opacity,
-        duration,
-        delay,
-        driftX,
-        driftY,
-        rotation
-      })
+      items.push({ key: i, item, x, y, scale: baseScale, blur: blurAmount, opacity, duration, delay, driftX, driftY, rotation })
     }
-
     return items
-  }, [])
+  }, [marketplaceItems])
 
-  // Floating animation variant
   const createFloatVariant = (driftX, driftY, rotation, duration) => ({
     animate: {
-      x: [0, driftX, 0],
-      y: [0, driftY, 0],
-      rotate: [0, rotation, -rotation/2, 0],
-      transition: {
-        duration,
-        repeat: Infinity,
-        ease: "easeInOut",
-        repeatType: "mirror"
-      }
+      x: [0, driftX, 0], y: [0, driftY, 0], rotate: [0, rotation, -rotation / 2, 0],
+      transition: { duration, repeat: Infinity, ease: "easeInOut", repeatType: "mirror" }
     }
   })
 
   return (
     <>
-      {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#060E20]">
-        {/* Atmospheric Bloom Circles */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Indigo bloom - large, subtle */}
-          <div className="absolute top-[10%] left-[20%] w-[600px] h-[600px] bg-indigo-500/15 blur-[120px] rounded-full mix-blend-screen animate-pulse-slow"></div>
-          {/* Cyan bloom - medium */}
-          <div className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] bg-cyan-500/10 blur-[100px] rounded-full mix-blend-screen animate-pulse-medium"></div>
-          {/* Violet accent bloom - small, positioned */}
-          <div className="absolute top-[40%] right-[30%] w-[300px] h-[300px] bg-violet-500/8 blur-[90px] rounded-full mix-blend-screen animate-pulse-fast"></div>
-        </div>
-
-        {/* Dynamic Floating Marketplace Items */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Floating Marketplace Items - z-[1] so they sit behind hero content */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden z-[1]">
           {floatingItems.map(({ key, item, x, y, scale, blur, opacity, duration, delay, driftX, driftY, rotation }) => (
-            <motion.div
-              key={key}
-              className="absolute origin-center"
-              style={{
-                left: `${x}%`,
-                top: `${y}%`,
-                filter: `blur(${blur})`,
-                opacity
-              }}
-              {...createFloatVariant(driftX, driftY, rotation, duration)}
-              initial={{ x: 0, y: 0, rotate: 0 }}
-            >
-              <div
-                className="tilt-card glass-card rounded-2xl overflow-hidden border border-white/10 shadow-lg backdrop-blur-xl"
-                style={{
-                  transform: `scale(${scale})`,
-                  boxShadow: `0 8px 32px rgba(0,0,0,0.3), 0 0 ${scale > 0.8 ? '40px' : '30px'} -5px rgba(99,102,241,${scale * 0.2})`
-                }}
-              >
-                {/* Product image placeholder with gradient */}
-                <div className={`aspect-[4/3] bg-gradient-to-br from-${item.color}-500/20 to-${item.color}-500/5 relative`}>
+            <motion.div key={key} className="absolute origin-center" style={{ left: `${x}%`, top: `${y}%`, filter: `blur(${blur})`, opacity }} {...createFloatVariant(driftX, driftY, rotation, duration)} initial={{ x: 0, y: 0, rotate: 0 }}>
+              <div className="tilt-card glass-card rounded-2xl overflow-hidden border border-white/10 shadow-lg backdrop-blur-xl" style={{ transform: `scale(${scale})` }}>
+                <div className={`aspect-[4/3] relative`}>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className={`material-symbols-outlined text-6xl md:text-7xl text-${item.color}-400/40`}>
-                      {item.icon}
-                    </span>
+                    <span className={`material-symbols-outlined text-6xl md:text-7xl text-${item.color}-400/40`}>{item.icon}</span>
                   </div>
-                  {/* Condition badge */}
                   <div className="absolute top-2 left-2 px-2 py-1 rounded-md bg-indigo-500/20 backdrop-blur-sm border border-indigo-500/30">
                     <span className="text-[10px] font-bold text-indigo-300">{item.condition}</span>
                   </div>
                 </div>
-
-                {/* Product info */}
                 <div className="p-3">
-                  <h4 className="font-headline font-bold text-white text-sm mb-1 line-clamp-2 leading-tight">
-                    {item.title}
-                  </h4>
+                  <h4 className="font-headline font-bold text-white text-sm mb-1 line-clamp-2 leading-tight">{item.title}</h4>
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-gray-400">{item.category}</span>
-                    <div className="text-sm font-extrabold gradient-text bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-                      {item.price}
-                    </div>
+                    <div className="text-sm font-extrabold gradient-text">{item.price}</div>
                   </div>
                 </div>
               </div>
@@ -288,75 +106,83 @@ const Hero = () => {
           ))}
         </div>
 
-        {/* Hero Content */}
+        {/* Hero Content - z-10 stays on top */}
         <motion.div
-          className="relative z-10 text-center px-4 max-w-5xl mx-auto pt-8 md:pt-12"
+          className="hero-content relative z-10 text-center px-4 sm:px-6 max-w-7xl mx-auto flex flex-col items-center"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          {/* Welcome Message for Logged In Users */}
+          {/* Welcome Badge */}
           {userData && (
-            <motion.div variants={itemVariants} className="mb-6">
-              <span className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-indigo-500/20 to-violet-500/20 border border-indigo-500/30 text-gray-200 text-sm font-medium backdrop-blur-sm">
-                <span className="material-symbols-outlined text-indigo-400 mr-2" style={{ fontVariationSettings: "'FILL' 1" }}>wave</span>
+            <motion.div variants={fadeInUp(0)} className="mb-8">
+              <span className="inline-flex items-center px-5 py-2.5 rounded-full bg-indigo-500/15 border border-indigo-400/25 text-gray-200 text-sm font-medium backdrop-blur-md">
+                <span className="material-symbols-outlined text-indigo-400 mr-2 text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>wave</span>
                 Welcome back, {userData.name || userData.email?.split('@')[0]}!
               </span>
             </motion.div>
           )}
 
-          {/* Main Headline - Stronger conversion focus */}
+          {/* =====
+              REDESIGNED TYPOGRAPHY SYSTEM
+              - Top line: medium weight, large
+              - Highlight line: bold gradient, extra large
+              - Letter spacing: tracking-tight
+              - Line height: tight for headings, relaxed for subtext
+              - Glow behind headline for visual depth
+              - Staggered fade-in animation
+              ===== */}
+
           <motion.h1
-            variants={itemVariants}
-            className="font-headline text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6 md:mb-8 leading-tight"
+            variants={fadeInUp(1)}
+            className="font-headline relative z-10"
           >
-            Buy, Sell & Connect
-            <br className="hidden sm:block" />
-            <span className="gradient-text animate-gradient-shift bg-gradient-to-r from-indigo-400 via-violet-400 to-cyan-400 bg-clip-text text-transparent" style={{ backgroundSize: '200% auto' }}>
+            {/* Line 1 — medium weight, large size */}
+            <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-7xl font-medium tracking-tight text-white/90 leading-[1.15] sm:leading-[1.1] leading-tight">
+              Buy, Sell &amp; Connect
+            </span>
+
+            {/* Line 2 — bold gradient on key phrase, extra large */}
+            <span
+              className="block text-5xl sm:text-6xl md:text-7xl lg:text-7xl font-extrabold tracking-tight mt-1 sm:mt-2 text-white"
+            >
               Inside Your Campus
             </span>
           </motion.h1>
 
-          {/* Subheadline - Clear value prop */}
+          {/* Subtext — muted, max-width constrained, generous spacing */}
           <motion.p
-            variants={itemVariants}
-            className="font-body text-lg md:text-xl text-gray-300/80 mb-10 md:mb-14 max-w-3xl mx-auto leading-relaxed"
+            variants={fadeInUp(3)}
+            className="relative font-body text-lg sm:text-xl md:text-2xl text-white/95 mt-8 sm:mt-10 mb-10 sm:mb-14 max-w-3xl mx-auto leading-relaxed"
           >
             The trusted marketplace built exclusively for students.
             <span className="text-cyan-400 font-semibold"> Verified users, zero fees, and campus-safe transactions.</span>
           </motion.p>
 
-          {/* Primary CTA - More prominent */}
+          {/* CTA Buttons */}
           <motion.div
-            variants={itemVariants}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 mb-8"
+            variants={fadeInUp(5)}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 w-full sm:w-auto"
           >
+            {/* Primary — gradient glow */}
             <Link
               to={userData ? "/add-item" : "/register"}
-              className="group px-10 md:px-12 py-4 md:py-5 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-base md:text-lg hover:scale-105 active:scale-95 transition-all duration-300 shadow-[0_0_40px_-10px_rgba(99,102,241,0.6)] hover:shadow-[0_0_60px_-10px_rgba(139,92,246,0.8)] cursor-pointer w-full sm:w-auto text-center relative overflow-hidden"
+              className="group relative px-10 py-4 sm:px-12 sm:py-4.5 rounded-full text-white font-semibold text-base sm:text-lg transition-all duration-300 hover:scale-[1.04] active:scale-[0.97] cursor-pointer w-full sm:w-auto text-center"
+              style={{ background: 'linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)' }}
             >
-              {/* Button glow effect on hover */}
-              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-violet-500 opacity-0 group-hover:opacity-30 blur-xl transition-opacity duration-300"></div>
-              <span className="relative z-10 flex items-center justify-center gap-2">
-                {userData ? (
-                  <>
-                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>add_circle</span>
-                    List Your Item Free
-                  </>
-                ) : (
-                  <>
-                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>rocket_launch</span>
-                    Get Started Free
-                  </>
-                )}
+              <span className="relative z-10 flex items-center justify-center gap-2.5">
+                <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>{userData ? 'add_circle' : 'rocket_launch'}</span>
+                {userData ? 'List Your Item Free' : 'Get Started Free'}
               </span>
             </Link>
+
+            {/* Secondary — glass outline */}
             <Link
               to="/browse"
-              className="px-10 md:px-12 py-4 md:py-5 rounded-full border-2 border-indigo-500/40 text-gray-200 font-bold text-base md:text-lg hover:bg-indigo-500/10 hover:border-indigo-500/60 transition-all duration-300 backdrop-blur-sm cursor-pointer active:scale-95 w-full sm:w-auto text-center group"
+              className="px-10 py-4 sm:px-12 sm:py-4.5 rounded-full border border-white/20 text-gray-200 font-medium text-base sm:text-lg hover:bg-white/5 hover:border-indigo-400/40 hover:shadow-[0_0_25px_-10px_rgba(99,102,241,0.3)] transition-all duration-300 backdrop-blur-sm active:scale-[0.97] cursor-pointer w-full sm:w-auto text-center"
             >
-              <span className="flex items-center justify-center gap-2">
-                <span className="material-symbols-outlined group-hover:scale-110 transition-transform" style={{ fontVariationSettings: "'FILL' 1" }}>explore</span>
+              <span className="flex items-center justify-center gap-2.5">
+                <span className="material-symbols-outlined group-hover:scale-110 transition-transform duration-300" style={{ fontVariationSettings: "'FILL' 1" }}>explore</span>
                 Browse Marketplace
               </span>
             </Link>
@@ -364,11 +190,10 @@ const Hero = () => {
 
           {/* Feature Strip (Marquee) */}
           <motion.div
-            variants={itemVariants}
-            className="w-full mt-20 md:mt-24 py-6 bg-surface-container-low/50 backdrop-blur-md overflow-hidden border-y border-indigo-500/10 relative"
+            variants={fadeInUp(7)}
+            className="w-full mt-16 sm:mt-20 md:mt-24 py-5 rounded-2xl bg-white/[0.02] backdrop-blur-md overflow-hidden border border-white/[0.06] relative"
           >
             <div className="marquee-content">
-              {/* First set of features */}
               {[
                 { icon: 'verified', text: 'Verified Student Accounts', color: 'text-indigo-400' },
                 { icon: 'verified_user', text: 'Secure Transactions', color: 'text-indigo-400' },
@@ -378,37 +203,24 @@ const Hero = () => {
                 { icon: 'school', text: 'Verified Students Only', color: 'text-indigo-400' },
                 { icon: 'location_on', text: 'Campus-Specific', color: 'text-cyan-400' },
                 { icon: 'bolt', text: 'Real-Time Deals', color: 'text-violet-400' }
-              ].map((feature, index) => (
-                <div key={`first-${index}`} className="flex items-center space-x-3 px-6 md:px-8">
-                  <span className={`material-symbols-outlined text-2xl md:text-3xl ${feature.color}`} style={{ fontVariationSettings: "'FILL' 1" }}>
-                    {feature.icon}
-                  </span>
-                  <span className="font-headline font-bold text-base md:text-lg tracking-tight text-gray-200">
+              ].map((feature, idx) => (
+                <div key={`m1-${idx}`} className="flex items-center space-x-3 px-7 md:px-10 whitespace-nowrap min-w-max">
+                  <span className={`material-symbols-outlined text-2xl ${feature.color}`} style={{ fontVariationSettings: "'FILL' 1" }}>{feature.icon}</span>
+                  <span className="font-headline font-bold text-sm md:text-base tracking-tight text-gray-300">
                     {feature.text}
                   </span>
                 </div>
               ))}
-
-              {/* Duplicate set for seamless loop */}
-              {[
-                { icon: 'verified', text: 'Verified Student Accounts', color: 'text-indigo-400' },
-                { icon: 'verified_user', text: 'Secure Transactions', color: 'text-indigo-400' },
-                { icon: 'lock', text: 'Secure Campus Meetups', color: 'text-cyan-400' },
-                { icon: 'chat_bubble', text: 'In-App Chat Included', color: 'text-cyan-400' },
-                { icon: 'payments', text: 'Zero Fees Forever', color: 'text-violet-400' },
-                { icon: 'school', text: 'Verified Students Only', color: 'text-indigo-400' },
-                { icon: 'location_on', text: 'Campus-Specific', color: 'text-cyan-400' },
-                { icon: 'bolt', text: 'Real-Time Deals', color: 'text-violet-400' }
-              ].map((feature, index) => (
-                <div key={`second-${index}`} className="flex items-center space-x-3 px-6 md:px-8">
-                  <span className={`material-symbols-outlined text-2xl md:text-3xl ${feature.color}`} style={{ fontVariationSettings: "'FILL' 1" }}>
-                    {feature.icon}
-                  </span>
-                  <span className="font-headline font-bold text-base md:text-lg tracking-tight text-gray-200">
-                    {feature.text}
-                  </span>
-                </div>
-              ))}
+              {Array.from({ length: 8 }).map((_, idx) => {
+                const features = [{ icon: 'verified', text: 'Verified Student Accounts', color: 'text-indigo-400' }, { icon: 'verified_user', text: 'Secure Transactions', color: 'text-indigo-400' }, { icon: 'lock', text: 'Secure Campus Meetups', color: 'text-cyan-400' }, { icon: 'chat_bubble', text: 'In-App Chat Included', color: 'text-cyan-400' }, { icon: 'payments', text: 'Zero Fees Forever', color: 'text-violet-400' }, { icon: 'school', text: 'Verified Students Only', color: 'text-indigo-400' }, { icon: 'location_on', text: 'Campus-Specific', color: 'text-cyan-400' }, { icon: 'bolt', text: 'Real-Time Deals', color: 'text-violet-400' }];
+                const feature = features[idx];
+                return (
+                  <div key={`m2-${idx}`} className="flex items-center space-x-3 px-7 md:px-10 whitespace-nowrap min-w-max">
+                    <span className={`material-symbols-outlined text-2xl ${feature.color}`} style={{ fontVariationSettings: "'FILL' 1" }}>{feature.icon}</span>
+                    <span className="font-headline font-bold text-sm md:text-base tracking-tight text-gray-300">{feature.text}</span>
+                  </div>
+                );
+              })}
             </div>
           </motion.div>
         </motion.div>
