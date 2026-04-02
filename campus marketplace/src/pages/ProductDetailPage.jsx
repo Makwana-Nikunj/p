@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import {
   MessageSquare,
   MapPin,
@@ -22,6 +22,11 @@ const ProductDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { showToast } = useToast();
+
+  // Reset scroll to top on mount and when id changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [id]);
 
   const products = useSelector((state) => state.products.products);
   const user = useSelector((state) => state.auth.userData);
@@ -127,7 +132,7 @@ const ProductDetailPage = () => {
       <AtmosphericBlooms intensity="medium" />
 
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-on-surface-variant text-sm mb-8 font-medium w-[90%] lg:w-[82%] relative z-10">
+      <nav className="animate-fadeIn flex items-center gap-2 text-on-surface-variant text-sm mb-8 font-medium w-[90%] lg:w-[82%] relative z-10">
         <span className="hover:text-primary transition-colors cursor-pointer" onClick={() => navigate("/browse")}>Marketplace</span>
         <span className="material-symbols-outlined text-xs">chevron_right</span>
         <span className="hover:text-primary transition-colors cursor-pointer">{product.category}</span>
@@ -135,7 +140,7 @@ const ProductDetailPage = () => {
         <span className="text-primary">{product.title}</span>
       </nav>
 
-      <div className="w-[90%] lg:w-[82%] relative z-10">
+      <div className="w-[90%] lg:w-[82%] relative z-10 animate-fadeIn">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
 
           {/* LEFT COLUMN: Immersive Hero & Gallery */}

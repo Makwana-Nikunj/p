@@ -30,6 +30,7 @@ const CampusPulse = ({ trendingProducts }) => {
                 price={product.price}
                 condition={product.condition}
                 category={product.category}
+                showFavorite={false}
               />
             </div>
           ))

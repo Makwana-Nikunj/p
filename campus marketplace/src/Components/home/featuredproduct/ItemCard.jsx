@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import favoriteService from '../../../services/favoriteService'
 import { Package } from 'lucide-react'
 
-const ItemCard = ({ imgUrl, name, price, id, condition, category }) => {
+const ItemCard = ({ imgUrl, name, price, id, condition, category, showFavorite = true }) => {
   const user = useSelector((state) => state.auth.userData)
   const [isFavorited, setIsFavorited] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -82,18 +82,20 @@ const ItemCard = ({ imgUrl, name, price, id, condition, category }) => {
             ₹{parseFloat(price).toLocaleString('en-IN')}
           </div>
 
-          <button
-            onClick={handleFavoriteClick}
-            className={`absolute top-6 right-6 z-10 p-2 rounded-full bg-white/5 border border-white/10 hover:bg-red-500/20 hover:border-red-500/40 transition-all duration-200 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            disabled={loading}
-            title={isFavorited ? "Remove from favorites" : "Add to favorites"}
-          >
-            {isFavorited ? (
-              <FaHeart className="w-4 h-4 text-red-500" />
-            ) : (
-              <FiHeart className="w-4 h-4 text-gray-400 group-hover:text-red-400" />
-            )}
-          </button>
+          {showFavorite && (
+            <button
+              onClick={handleFavoriteClick}
+              className={`absolute top-6 right-6 z-10 p-2 rounded-full bg-white/5 border border-white/10 hover:bg-red-500/20 hover:border-red-500/40 transition-all duration-200 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={loading}
+              title={isFavorited ? "Remove from favorites" : "Add to favorites"}
+            >
+              {isFavorited ? (
+                <FaHeart className="w-4 h-4 text-red-500" />
+              ) : (
+                <FiHeart className="w-4 h-4 text-gray-400 group-hover:text-red-400" />
+              )}
+            </button>
+          )}
 
           <div className="w-full py-3 rounded-xl border border-white/20 text-sm font-medium text-white/80 hover:bg-white/10 transition-all duration-200 text-center">
             View Details
