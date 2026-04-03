@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import { FiSearch, FiArrowLeft, FiSend } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import chatService from '../services/chatService';
 import MessageBubble from '../Components/chat/MessageBubble';
@@ -17,6 +16,7 @@ const Chat = () => {
   const [loading, setLoading] = useState(true);
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [sendingMessage, setSendingMessage] = useState(false);
+  const [typingUser, setTypingUser] = useState(null);
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -31,27 +31,21 @@ const Chat = () => {
     const date = new Date(dateString);
     const now = new Date();
     const diff = now - date;
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = diff / (1000 * 60 * 60);
+    const days = Math.floor(hours);
 
-    if (days === 0) {
-      return date.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
-    } else if (days === 1) {
-      return 'Yesterday';
-    } else if (days < 7) {
-      return date.toLocaleDateString('en-IN', { weekday: 'short' });
-    }
+    if (hours < 1) return 'Just now';
+    if (hours < 2) return '1h ago';
+    if (hours < 24) return `${Math.floor(hours)}h ago`;
+    if (days === 1) return 'Yesterday';
+    if (days < 7) return date.toLocaleDateString('en-IN', { weekday: 'short' });
     return date.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
   };
 
-  // Auto-scroll to bottom
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
-  };
 
-  // Load conversations for the logged-in user
+  // Load conversations
   useEffect(() => {
     if (!user) return;
-
     const loadConversations = async () => {
       try {
         setLoading(true);
@@ -63,21 +57,20 @@ const Chat = () => {
         setLoading(false);
       }
     };
-
     loadConversations();
   }, [user]);
 
-  // Open a conversation and load its messages
+  // Open a conversation and load messages
   const openChat = async (conv) => {
     setActiveConversation(conv);
     setLoadingMessages(true);
     setMessages([]);
+    setTypingUser(null);
 
     try {
       const res = await chatService.getMessages(conv.$id);
       setMessages(res.documents);
 
-      // Mark conversation as read
       if (conv.unreadCount > 0) {
         await chatService.markAsRead(conv.$id, user.$id);
         setConversations((prev) =>
@@ -93,23 +86,14 @@ const Chat = () => {
     }
   };
 
-  // Send a message in the active conversation
+  // Send a message
   const sendMessage = async () => {
-    if (!activeConversation) return;
-    if (!input.trim() || sendingMessage) return;
+    if (!activeConversation || !input.trim() || sendingMessage) return;
 
     try {
       setSendingMessage(true);
-
-      const newMsg = await chatService.sendMessage(
-        activeConversation.$id,
-        user.$id,
-        input
-      );
-
-      if (!newMsg) {
-        throw new Error("Failed to send message");
-      }
+      const newMsg = await chatService.sendMessage(activeConversation.$id, user.$id, input);
+      if (!newMsg) throw new Error("Failed to send message");
 
       await chatService.updateLastMessage(activeConversation.$id, input);
 
@@ -129,27 +113,20 @@ const Chat = () => {
     }
   };
 
-  // Realtime updates for the active conversation
+  // Realtime updates
   useEffect(() => {
     if (!activeConversation || !user) return;
-
     try {
       const unsub = chatService.subscribeMessages(activeConversation.$id, (event) => {
         const msg = event.payload;
-
         if (msg.conversationId !== activeConversation.$id) return;
         if (msg.senderId === user.$id) return;
-
         setMessages((prev) => [...prev, msg]);
       });
-
       return () => {
         try {
-          if (typeof unsub === "function") {
-            unsub();
-          } else if (unsub && typeof unsub.unsubscribe === "function") {
-            unsub.unsubscribe();
-          }
+          if (typeof unsub === "function") unsub();
+          else if (unsub && typeof unsub.unsubscribe === "function") unsub.unsubscribe();
         } catch (err) {
           console.error("Failed to unsubscribe from messages:", err);
         }
@@ -159,30 +136,25 @@ const Chat = () => {
     }
   }, [activeConversation, user]);
 
-  // Auto-scroll when messages change
+  // Scroll effect — fires when messages change or conversation switches
   useEffect(() => {
-    if (messages.length > 0) {
-      scrollToBottom();
-    }
-  }, [messages]);
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  }, [messages, activeConversation]);
 
-  // Focus input when conversation opens
+  // Focus input
   useEffect(() => {
-    if (activeConversation && !loadingMessages) {
-      inputRef.current?.focus();
-    }
+    if (activeConversation && !loadingMessages) inputRef.current?.focus();
   }, [activeConversation, loadingMessages]);
 
-  // Filter conversations by search query
+  // Filter conversations
   const filteredConversations = conversations.filter((conv) => {
     if (!searchQuery.trim()) return true;
-
     const query = searchQuery.toLowerCase();
-    const otherPersonName =
-      conv.buyerId === user.$id ? conv.sellerName : conv.buyerName;
-
+    const otherName = conv.buyerId === user.$id ? conv.sellerName : conv.buyerName;
     return (
-      otherPersonName?.toLowerCase().includes(query) ||
+      otherName?.toLowerCase().includes(query) ||
       conv.productName?.toLowerCase().includes(query) ||
       conv.lastMessage?.toLowerCase().includes(query)
     );
@@ -190,10 +162,12 @@ const Chat = () => {
 
   const getOtherParticipantName = (conv) => {
     if (!conv) return "";
-    if (conv.buyerId === user.$id) {
-      return conv.sellerName || "Seller";
-    }
-    return conv.buyerName || "Buyer";
+    return conv.buyerId === user.$id ? (conv.sellerName || "Seller") : (conv.buyerName || "Buyer");
+  };
+
+  const getParticipantRole = (conv) => {
+    if (!conv) return "";
+    return conv.buyerId === user.$id ? "Buyer" : "Seller";
   };
 
   const getProductName = (conv) => {
@@ -208,39 +182,50 @@ const Chat = () => {
     return prod?.price ? `₹${parseFloat(prod.price).toLocaleString('en-IN')}` : '';
   };
 
+  const getProductImage = (conv) => {
+    const prod = products.find((p) => p.$id === conv.productId);
+    return prod?.imageUrl || prod?.images?.[0] || '';
+  };
+
+  const getUnreadCount = (conv) => conv.unreadCount || 0;
+
   return (
-    <div className="min-h-[80vh] py-4 px-2 md:px-4 relative">
+    <div className="relative min-h-screen bg-surface-dim py-4 md:py-6">
       <AtmosphericBlooms intensity="subtle" />
-      <div className="max-w-6xl mx-auto glass rounded-xl shadow-lg overflow-hidden border border-subtle perspective-1000" style={{ minHeight: '75vh' }}>
-        <div className="grid grid-cols-[280px_1fr]" style={{ minHeight: '75vh' }}>
-          {/* Conversations list - 280px fixed */}
-          <div className={`border-r border-subtle flex flex-col perspective-1000 ${activeConversation ? 'hidden md:flex' : 'flex'}`} style={{ height: '100%', overflow: 'hidden' }}>
-            {/* Header */}
-            <div className="glass z-10 p-4 border-b border-subtle shrink-0">
-              <h2 className="font-section-headline gradient-text mb-3">Messages</h2>
-              <div className="flex items-center gap-2 glass rounded-lg px-3 py-2">
-                <FiSearch className="text-gray-400" />
+      <div className="max-w-7xl mx-auto px-4 lg:px-6 h-full">
+        <div className="flex gap-6 h-[calc(100vh-80px)] md:h-[calc(100vh-128px)] rounded-2xl overflow-hidden border border-white/5">
+          {/* ========== LEFT PANE: Conversations List ========== */}
+          <aside className={`w-full md:w-[400px] h-full flex flex-col bg-surface-container-low/50 backdrop-blur-md shrink-0 rounded-2xl ${activeConversation ? 'hidden md:flex' : 'flex'}`}>
+            {/* Inbox Header */}
+            <div className="px-6 pt-6 pb-4 flex flex-col gap-4 border-b border-white/5">
+              <div className="flex items-center justify-between">
+                <h1 className="font-headline text-xl font-extrabold gradient-text tracking-tight">Inbox</h1>
+                <button className="w-10 h-10 rounded-full glass flex items-center justify-center text-primary hover:bg-primary/10 transition-colors">
+                  <span className="material-symbols-outlined text-lg">edit_square</span>
+                </button>
+              </div>
+              <div className="relative">
+                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
                 <input
-                  className="w-full bg-transparent text-sm outline-none text-white placeholder-gray-400"
-                  placeholder="Search"
+                  className="w-full bg-surface-container-highest border-none rounded-2xl pl-11 pr-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:ring-2 focus:ring-primary/40 outline-none transition-all"
+                  placeholder="Search conversations..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
             </div>
 
-            {/* Scrollable conversation list */}
-            <div className="flex-1 overflow-y-auto scrollbar-thin">
+            {/* Conversation List */}
+            <div className="flex-1 overflow-y-auto custom-scrollbar px-3 py-3 space-y-2">
               {loading ? (
                 <div className="space-y-3 p-3">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <div key={i} className="p-3 border-b border-subtle">
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-sm font-semibold shrink-0 animate-pulse"></div>
-                        <div className="flex-1 min-w-0 space-y-2">
-                          <div className="h-4 bg-gray-700 rounded w-3/4 animate-pulse"></div>
-                          <div className="h-3 bg-gray-800 rounded w-1/2 animate-pulse"></div>
-                          <div className="h-3 bg-gray-800 rounded w-full animate-pulse"></div>
+                    <div key={i} className="p-4 rounded-2xl glass animate-pulse">
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-gray-800 shrink-0"></div>
+                        <div className="flex-1 space-y-2">
+                          <div className="h-4 bg-gray-700 rounded w-3/4"></div>
+                          <div className="h-3 bg-gray-800 rounded w-1/2"></div>
                         </div>
                       </div>
                     </div>
@@ -250,113 +235,142 @@ const Chat = () => {
                 filteredConversations.map((conv) => {
                   const isActive = activeConversation?.$id === conv.$id;
                   const otherName = getOtherParticipantName(conv);
-                  const isSeller = conv.buyerId === user.$id;
-                  const hasUnread = conv.unreadCount > 0;
+                  const role = getParticipantRole(conv);
+                  const unread = getUnreadCount(conv);
 
                   return (
                     <div
                       key={conv.$id}
                       onClick={() => openChat(conv)}
                       className={`
-                        p-3 cursor-pointer border-b border-subtle transition-all duration-300 tilt-card glass
-                        ${isActive ? 'bg-indigo-500/10' : 'hover:bg-white/5'}
-                      `}
+                      rounded-2xl p-4 flex gap-4 cursor-pointer transition-all duration-200 border
+                      ${isActive
+                          ? 'glass-panel border-primary/20 active-glow'
+                          : 'hover:bg-white/5 border-transparent'
+                        }
+                    `}
                     >
-                      <div className="flex items-start gap-3">
-                        {/* Avatar with initials */}
-                        <div className="w-10 h-10 rounded-full glass flex items-center justify-center text-sm font-semibold text-white shrink-0">
+                      {/* Avatar */}
+                      <div className="relative shrink-0">
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center text-sm font-semibold text-white shrink-0 border border-white/10 overflow-hidden glass">
                           {getInitials(otherName)}
                         </div>
+                        {unread > 0 && (
+                          <div className="absolute -top-1 -right-1 min-w-[20px] h-5 bg-secondary text-on-secondary rounded-full flex items-center justify-center text-[10px] font-bold border-2 border-surface-container px-1">
+                            {unread}
+                          </div>
+                        )}
+                      </div>
 
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="font-semibold text-white text-sm truncate">
+                      {/* Info */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-start mb-1">
+                          <div>
+                            <h3 className="font-headline font-bold text-on-surface text-sm truncate">
                               {otherName}
-                            </span>
-                            <span className="text-xs text-gray-400 shrink-0">
-                              {formatTime(conv.$updatedAt)}
-                            </span>
+                            </h3>
+                            <p className="text-[9px] text-on-surface-variant/50 font-bold uppercase tracking-widest mt-0.5">
+                              {role}
+                            </p>
                           </div>
-
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${isSeller ? 'bg-indigo-500/20 text-cyan-300 border border-indigo-500/30' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'}`}>
-                              {isSeller ? 'Seller' : 'Buyer'}
-                            </span>
-                            {hasUnread && (
-                              <span className="w-2 h-2 rounded-full shrink-0 bg-gradient-to-r from-indigo-400 to-cyan-400 animate-pulse" />
-                            )}
-                          </div>
-
-                          <p className="text-xs text-gray-400 truncate mb-0.5">
-                            {conv.lastMessage || 'No messages yet'}
-                          </p>
-
-                          <p className="text-xs text-gray-500 truncate">
-                            Re: {getProductName(conv)}
-                          </p>
+                          <span className={`text-[10px] font-bold ${isActive ? 'text-primary uppercase' : 'text-on-surface-variant'}`}>
+                            {formatTime(conv.$updatedAt)}
+                          </span>
                         </div>
+                        <p className={`text-xs truncate ${unread > 0 ? 'text-on-surface font-bold' : 'text-on-surface-variant'}`}>
+                          {conv.lastMessage || 'No messages yet'}
+                        </p>
                       </div>
                     </div>
                   );
                 })
               ) : conversations.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-                  <p className="text-gray-600 dark:text-gray-400 font-medium mb-2">No conversations yet</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-500">
-                    Start chatting by clicking "Message Seller" on any product
-                  </p>
+                  <span className="material-symbols-outlined text-5xl text-on-surface-variant/30 mb-3">forum</span>
+                  <p className="text-on-surface-variant font-medium mb-1">No conversations yet</p>
+                  <p className="text-xs text-on-surface-variant/60">Start chatting from any product listing</p>
                 </div>
               ) : (
-                <div className="p-4 text-center text-gray-500">No conversations found</div>
+                <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+                  <span className="material-symbols-outlined text-5xl text-on-surface-variant/30 mb-3">search_off</span>
+                  <p className="text-on-surface-variant">No conversations found</p>
+                </div>
               )}
             </div>
-          </div>
+          </aside>
 
-          {/* Chat window */}
-          <div className={`flex flex-col ${!activeConversation ? 'hidden md:flex' : 'flex'}`} style={{ height: '100%', overflow: 'hidden' }}>
+          {/* ========== RIGHT PANE: Chat Window ========== */}
+          <section className={`flex-1 flex flex-col h-full bg-surface relative ${!activeConversation ? 'hidden md:flex' : 'flex'}`}>
             {activeConversation ? (
               <>
-                {/* Header with avatar + name + product context */}
-                <div className="glass border-b border-subtle shrink-0">
-                  <div className="flex items-center justify-between p-4">
+                {/* Chat Header */}
+                <header className="h-20 border-b border-white/5 px-6 flex items-center justify-between glass-panel z-20 shrink-0">
+                  <div className="flex items-center gap-4">
+                    <button
+                      className="md:hidden p-2 text-on-surface-variant hover:bg-white/5 rounded-lg transition-colors"
+                      onClick={() => setActiveConversation(null)}
+                    >
+                      <span className="material-symbols-outlined">arrow_back</span>
+                    </button>
                     <div className="flex items-center gap-3">
-                      <button
-                        className="md:hidden text-gray-300 shrink-0 hover:bg-white/10 p-2 rounded-lg transition-all duration-300 tilt-card active:scale-95"
-                        onClick={() => setActiveConversation(null)}
-                      >
-                        <FiArrowLeft size={20} />
-                      </button>
-
-                      {/* Avatar */}
-                      <div className="w-10 h-10 rounded-full glass flex items-center justify-center text-sm font-semibold text-white shrink-0">
-                        {getInitials(getOtherParticipantName(activeConversation))}
+                      <div className="relative shrink-0">
+                        <div className="w-10 h-10 rounded-full overflow-hidden border border-primary/30 bg-surface-container-highest flex items-center justify-center text-xs font-semibold text-white">
+                          {getInitials(getOtherParticipantName(activeConversation))}
+                        </div>
+                        <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-surface" />
                       </div>
-
                       <div>
-                        <p className="font-semibold text-white">
-                          {getOtherParticipantName(activeConversation)}
-                        </p>
-                        <p className="text-xs text-cyan-400">● Active now</p>
+                        <div className="flex items-center gap-2">
+                          <h2 className="font-headline font-bold text-on-surface leading-tight text-sm">
+                            {getOtherParticipantName(activeConversation)}
+                          </h2>
+                          <span className="px-2 py-0.5 rounded bg-primary/20 text-primary text-[9px] font-extrabold uppercase tracking-widest">
+                            {getParticipantRole(activeConversation)}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Active now</p>
                       </div>
                     </div>
+                  </div>
+                </header>
 
-                    {/* Product context pill */}
-                    <div className="flex items-center gap-2 glass px-3 py-2 rounded-lg border border-subtle">
-                      <span className="text-lg">📦</span>
-                      <div className="text-left">
-                        <p className="text-xs font-medium text-white truncate max-w-[150px]">
-                          {getProductName(activeConversation)}
-                        </p>
-                        <p className="text-xs text-gray-400">
-                          {getProductPrice(activeConversation)}
-                        </p>
+                {/* Product Context Card */}
+                <div className="px-6 py-3 bg-surface-container/30 border-b border-white/5 z-10 shrink-0">
+                  <div className="flex items-center justify-between glass p-3 px-5 rounded-2xl border border-white/5 shadow-2xl product-card-hover transition-all cursor-pointer">
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div className="w-14 h-14 rounded-xl overflow-hidden shadow-xl border border-white/10 rotate-[-2deg] shrink-0">
+                        {getProductImage(activeConversation) ? (
+                          <img className="w-full h-full object-cover" src={getProductImage(activeConversation)} alt={getProductName(activeConversation)} />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-on-surface-variant/30 bg-surface-container-highest">
+                            <span className="material-symbols-outlined">image</span>
+                          </div>
+                        )}
                       </div>
+                      <div className="min-w-0">
+                        <span className="text-[9px] text-primary font-black uppercase tracking-widest mb-1 block">Product Context</span>
+                        <h3 className="font-headline font-bold text-on-surface text-sm truncate">{getProductName(activeConversation)}</h3>
+                        <p className="text-xs font-bold text-primary">{getProductPrice(activeConversation)}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3 shrink-0">
+                      <div className="hidden sm:block text-right mr-2">
+                        <p className="text-[10px] text-on-surface-variant font-bold uppercase tracking-tighter">Your Role</p>
+                        <p className="text-xs font-black text-on-surface">{getParticipantRole(activeConversation) === 'Buyer' ? 'Buyer' : 'Seller'}</p>
+                      </div>
+                      <button className="bg-primary/20 text-primary text-xs font-black px-4 py-2 rounded-xl hover:scale-105 transition-transform border border-primary/20 whitespace-nowrap">
+                        View Listing
+                      </button>
                     </div>
                   </div>
                 </div>
 
-                {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-transparent">
+                {/* Messages Stream */}
+                <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2 custom-scrollbar relative bg-transparent">
+                  {/* Decorative background blooms */}
+                  <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+                  <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-tertiary/5 rounded-full blur-[120px] pointer-events-none" />
+
                   {loadingMessages ? (
                     <div className="space-y-4">
                       {Array.from({ length: 5 }).map((_, i) => (
@@ -367,76 +381,94 @@ const Chat = () => {
                     </div>
                   ) : messages.length > 0 ? (
                     <>
-                      {messages.map((msg, index) => {
+                      {/* Date separator */}
+                      <div className="flex justify-center relative z-10">
+                        <span className="px-4 py-1 rounded-full bg-surface-container text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                          Today
+                        </span>
+                      </div>
+
+                      {messages.map((msg, i) => {
                         if (!msg) return null;
                         const isOwn = msg.senderId === user?.$id;
+                        const prevMsg = i > 0 ? messages[i - 1] : null;
+                        const showLabel = !isOwn && (!prevMsg || prevMsg.senderId !== msg.senderId);
 
                         return (
                           <MessageBubble
-                            key={msg.$id || index}
+                            key={msg.$id || i}
                             isOwn={isOwn}
                             text={msg.text || ""}
                             timestamp={msg.$createdAt}
                           />
                         );
                       })}
+
+                      {/* Typing indicator (demo) */}
+                      {typingUser && (
+                        <div className="flex items-center gap-3 ml-11">
+                          <div className="flex gap-1">
+                            <div className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                            <div className="w-1.5 h-1.5 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                            <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                          </div>
+                          <span className="text-[10px] text-on-surface-variant font-bold italic">{typingUser} is typing...</span>
+                        </div>
+                      )}
                       <div ref={messagesEndRef} />
                     </>
                   ) : (
-                    <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-                      No messages yet. Start the conversation!
+                    <div className="flex flex-col items-center justify-center h-full text-center text-on-surface-variant/60">
+                      <span className="material-symbols-outlined text-5xl text-on-surface-variant/30 mb-3">chat_bubble_outline</span>
+                      <p className="text-sm">No messages yet. Start the conversation!</p>
                     </div>
                   )}
                 </div>
 
-                {/* Input bar */}
-                <div className="p-3 border-t border-subtle flex gap-3 glass shrink-0">
-                  <input
-                    ref={inputRef}
-                    className="flex-1 glass rounded-full px-4 py-2.5 text-sm outline-none focus-glow-indigo transition-all duration-300"
-                    placeholder="Type a message…"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey && !sendingMessage) {
-                        e.preventDefault();
-                        sendMessage();
-                      }
-                    }}
-                    disabled={sendingMessage}
-                  />
-
-                  <button
-                    className="btn-gradient-primary p-3 rounded-full disabled:opacity-50 disabled:cursor-not-allowed shrink-0 transition-all duration-300 hover:shadow-[0_0_30px_rgba(99,102,241,0.6)] active:scale-95"
-                    onClick={sendMessage}
-                    disabled={sendingMessage || !input.trim()}
-                  >
-                    <FiSend size={18} />
-                  </button>
-                </div>
+                {/* Input Area */}
+                <footer className="p-4 md:p-6 bg-surface/80 backdrop-blur-xl border-t border-white/5 shrink-0">
+                  <div className="max-w-4xl mx-auto relative flex items-center gap-3">
+                    <div className="flex-1 relative">
+                      <input
+                        ref={inputRef}
+                        className="w-full bg-surface-container-highest/50 border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary/10 rounded-2xl px-6 py-4 text-sm text-on-surface placeholder:text-on-surface-variant/40 transition-all outline-none pr-24"
+                        placeholder="Type a message..."
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && !e.shiftKey && !sendingMessage) {
+                            e.preventDefault();
+                            sendMessage();
+                          }
+                        }}
+                        disabled={sendingMessage}
+                      />
+                    </div>
+                    <button
+                      className="shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-tertiary text-on-primary shadow-lg shadow-primary/30 flex items-center justify-center hover:scale-110 active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                      onClick={sendMessage}
+                      disabled={sendingMessage || !input.trim()}
+                    >
+                      <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>send</span>
+                    </button>
+                  </div>
+                </footer>
               </>
             ) : (
-              <div className="flex flex-col items-center justify-center h-full text-center p-8 text-gray-400">
-                <svg
-                  className="w-20 h-20 text-gray-600 mb-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-                  />
-                </svg>
-                <p className="text-lg font-medium mb-2 text-white">Select a conversation</p>
-                <p className="text-sm text-gray-500">
-                  Choose a conversation from the list to start messaging
-                </p>
+              /* Empty state - no conversation selected */
+              <div className="flex flex-col items-center justify-center h-full text-center p-8 relative">
+                <div className="absolute top-1/3 left-1/3 w-80 h-80 bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
+                <div className="absolute bottom-1/3 right-1/3 w-64 h-64 bg-tertiary/5 rounded-full blur-[100px] pointer-events-none" />
+                <div className="relative z-10">
+                  <div className="w-24 h-24 rounded-3xl glass flex items-center justify-center mx-auto mb-6 rotate-[-2deg]">
+                    <span className="material-symbols-outlined text-5xl text-primary/60">forum</span>
+                  </div>
+                  <h2 className="font-headline text-2xl font-extrabold text-on-surface mb-2">Your Messages</h2>
+                  <p className="text-sm text-on-surface-variant max-w-xs">Select a conversation from the sidebar to start chatting with buyers and sellers.</p>
+                </div>
               </div>
             )}
-          </div>
+          </section>
         </div>
       </div>
     </div>

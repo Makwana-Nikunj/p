@@ -523,18 +523,18 @@
 /* Glassmorphism */
 .glass {
   background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
 }
 
 .glass-intense {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 /* Gradient Text - Indigo to Cyan */
@@ -1024,6 +1024,57 @@
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
+/* Custom scrollbar for chat (thin, dark) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #40485d;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6d758c;
+}
+
+/* Message bubble gradients */
+.message-gradient-sent {
+  background: linear-gradient(135deg, rgba(186, 158, 255, 0.25) 0%, rgba(105, 156, 255, 0.15) 100%);
+  color: #dee5ff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(186, 158, 255, 0.2);
+}
+
+.message-gradient-received {
+  background: rgba(25, 37, 64, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  color: #dee5ff;
+}
+
+/* Active glow for conversation items */
+.active-glow {
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+}
+
+/* Product card hover effect */
+.product-card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.product-card-hover:hover {
+  transform: translateY(-2px) rotate(-1deg);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
 /* Font utilities */
 .font-plus-jakarta {
   font-family: 'Plus Jakarta Sans', sans-serif;
@@ -1162,6 +1213,41 @@ button {
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Z-index scale for layering */
+.z-sticky {
+  z-index: 10;
+}
+
+.z-fixed {
+  z-index: 20;
+}
+
+.z-modal {
+  z-index: 40;
+}
+
+.z-overlay {
+  z-index: 30;
+}
+
+.z-tooltip {
+  z-index: 50;
+}
+
+/* Active glow effect */
+.active-glow {
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+}
+
+/* Product card hover */
+.product-card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.product-card-hover:hover {
+  border-color: rgba(99, 102, 241, 0.3);
 }
 
 /* Hero headline text shadow */
