@@ -22,6 +22,7 @@ const Browse = () => {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [campusHub, setCampusHub] = useState("");
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   // Curated categories
   const curatedCategories = [
@@ -62,6 +63,7 @@ const Browse = () => {
   // Intersection Observer for infinite scroll
   const lastProductRef = useRef();
   const sliderRef = useRef(null);
+  const scrollContainerRef = useRef(null);
   const [dragging, setDragging] = useState(null); // 'min' or 'max' or null
 
   // Initial fetch
@@ -78,7 +80,7 @@ const Browse = () => {
           dispatch(fetchMoreProducts());
         }
       },
-      { threshold: 0.1 }
+      { root: scrollContainerRef.current, threshold: 0.1 }
     );
 
     if (lastProductRef.current) {
@@ -230,249 +232,468 @@ const Browse = () => {
 
 
   return (
-    <div className="w-full flex flex-col items-center gap-2 pt-8 pb-24 px-4 md:px-8 relative">
-      {/* Prominent Search Bar */}
-      <SearchBar
-        search={search}
-        setSearch={setSearch}
-        onSearch={() => { }} // search is reactive, no need explicit submit
-      />
-
-      {/* Curated Categories */}
-      <div className="w-full max-w-screen-2xl mx-auto sticky top-16 pt-2 pb-4 bg-[#060e20] z-30">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-black uppercase tracking-widest text-on-surface-variant/70 font-plus-jakarta">
-            Curated Categories
-          </h2>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {curatedCategories.map((cat) => (
-            <div
-              key={cat.id}
-              className="h-30 rounded-2xl glass-card p-6 flex flex-col justify-end group cursor-pointer hover:border-primary/40 transition-all relative overflow-hidden"
-              onClick={() => setSelectedCategory(cat.category)}
-            >
-              <img
-                src={cat.image}
-                alt={cat.title}
-                className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:scale-110 transition-transform duration-700 -z-10"
-              />
-              <span className={`material-symbols-outlined ${selectedCategory === cat.category ? 'text-primary' : 'text-on-surface-variant'} mb-2 text-2xl`}>
-                {cat.icon}
-              </span>
-              <h3 className="font-bold font-plus-jakarta text-on-surface text-xl">{cat.title}</h3>
-            </div>
-          ))}
+    <div className="min-h-screen bg-[#060e20]">
+      {/* Sticky Search Bar */}
+      <div className="sticky top-0 z-50 bg-[#060e20]/95 backdrop-blur-sm border-b border-white/5 pb-4">
+        <div className="max-w-screen-2xl mx-auto px-4 md:px-8 pt-4">
+          <SearchBar
+            search={search}
+            setSearch={setSearch}
+            onSearch={() => { }}
+            compact
+          />
         </div>
       </div>
 
-      {/* Main Content Grid */}
-      <div className="w-full max-w-screen-2xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6 relative z-10">
-        {/* Filters Sidebar - Inline to prevent remount issues */}
-        <aside className="lg:col-span-1">
-          <div className="sticky top-[16rem] glass-card rounded-[2rem] p-8 space-y-10 border border-white/5 shadow-2xl max-h-[calc(100vh-20rem)] overflow-y-auto">
-            <div>
-              <h3 className="text-xl font-extrabold font-plus-jakarta mb-6 text-on-surface flex items-center gap-2">
+      <div className="max-w-screen-2xl mx-auto px-4 md:px-8">
+        {/* Sticky Categories */}
+        <div className="sticky top-[72px] z-40 bg-[#060e20]/95 backdrop-blur-sm border-b border-white/5 py-4">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-black uppercase tracking-widest text-on-surface-variant/70 font-plus-jakarta">
+              Curated Categories
+            </h2>
+            {/* Mobile filter toggle button */}
+            <button
+              className="lg:hidden flex items-center gap-2 px-4 py-2 rounded-lg glass-card border border-white/10 text-on-surface-variant hover:border-primary/40 transition-all"
+              onClick={() => setShowMobileFilters(!showMobileFilters)}
+            >
+              <span className="material-symbols-outlined">tune</span>
+              <span className="text-sm font-bold">Filters</span>
+              {(selectedCategory !== "all" || sort !== "newest" || minPrice || maxPrice || campusHub) && (
+                <span className="w-2 h-2 rounded-full bg-primary"></span>
+              )}
+            </button>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {curatedCategories.map((cat) => (
+              <div
+                key={cat.id}
+                className="h-24 rounded-xl glass-card p-4 flex flex-col justify-end group cursor-pointer hover:border-primary/40 transition-all relative overflow-hidden"
+                onClick={() => setSelectedCategory(cat.category)}
+              >
+                <img
+                  src={cat.image}
+                  alt={cat.title}
+                  className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:scale-110 transition-transform duration-700 -z-10"
+                />
+                <span className={`material-symbols-outlined ${selectedCategory === cat.category ? 'text-primary' : 'text-on-surface-variant'} mb-1 text-xl`}>
+                  {cat.icon}
+                </span>
+                <h3 className="font-bold font-plus-jakarta text-on-surface text-lg leading-tight">{cat.title}</h3>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mt-6 relative">
+          {/* Filters Sidebar - Sticky (desktop only) */}
+          <aside className="hidden lg:block lg:col-span-1">
+            <div className="sticky top-[240px] glass-card rounded-2xl p-6 space-y-6 border border-white/5 max-h-[calc(100vh-280px)] overflow-y-auto scrollbar-thin">
+              <div>
+                <h3 className="text-lg font-extrabold font-plus-jakarta mb-4 text-on-surface flex items-center gap-2">
+                  <span className="material-symbols-outlined text-primary">filter_list</span>
+                  Filters
+                </h3>
+              </div>
+
+              {/* Category Dropdown */}
+              <div>
+                <h4 className="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-3">
+                  Category
+                </h4>
+                <div className="relative">
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="w-full bg-surface-container-highest border-none rounded-lg py-2.5 px-3 text-sm font-medium text-on-surface appearance-none focus-glow-indigo"
+                  >
+                    <option value="all">All Categories</option>
+                    {curatedCategories.map((cat) => (
+                      <option key={cat.id} value={cat.category}>{cat.title}</option>
+                    ))}
+                  </select>
+                  <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm pointer-events-none">
+                    arrow_drop_down
+                  </span>
+                </div>
+              </div>
+
+              {/* Sort By */}
+              <div>
+                <h4 className="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-3">
+                  Sort By
+                </h4>
+                <div className="relative">
+                  <select
+                    value={sort}
+                    onChange={(e) => setSort(e.target.value)}
+                    className="w-full bg-surface-container-highest border-none rounded-lg py-2.5 px-3 text-sm font-medium text-on-surface appearance-none focus-glow-indigo"
+                  >
+                    <option value="newest">Newest First</option>
+                    <option value="low-high">Price: Low to High</option>
+                    <option value="high-low">Price: High to Low</option>
+                    <option value="popular">Most Popular</option>
+                    <option value="favorites">Most Favorited</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Price Range */}
+              <div>
+                <h4 className="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-3">
+                  Price Range (₹)
+                </h4>
+                <div className="relative pt-2" ref={sliderRef}>
+                  <div className="h-1.5 bg-surface-container-highest rounded-full">
+                    <div
+                      className="absolute h-full bg-primary rounded-full"
+                      style={{ left: `${minPercent}%`, right: `${100 - maxPercent}%` }}
+                    ></div>
+                  </div>
+                  {/* Thumbs */}
+                  <div
+                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-2 border-[#0C0C0C] shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer active:cursor-grabbing"
+                    style={{ left: `${minPercent}%` }}
+                    onMouseDown={handleSliderMouseDown('min')}
+                    onTouchStart={(e) => {
+                      e.preventDefault();
+                      handleSliderMouseDown('min')(e.touches[0]);
+                    }}
+                  ></div>
+                  <div
+                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-2 border-[#0C0C0C] shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer active:cursor-grabbing"
+                    style={{ left: `${maxPercent}%` }}
+                    onMouseDown={handleSliderMouseDown('max')}
+                    onTouchStart={(e) => {
+                      e.preventDefault();
+                      handleSliderMouseDown('max')(e.touches[0]);
+                    }}
+                  ></div>
+                </div>
+                {/* Price inputs */}
+                <div className="flex justify-between mt-4 gap-2">
+                  <div className="relative flex-1">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-on-surface-variant">₹</span>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      value={minPrice}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, '');
+                        setMinPrice(value);
+                      }}
+                      className="w-full pl-6 pr-2 py-2 rounded-lg bg-surface-container-highest text-on-surface text-sm border border-subtle focus-glow-indigo transition-all"
+                      placeholder="Min"
+                    />
+                  </div>
+                  <span className="self-center text-on-surface-variant">-</span>
+                  <div className="relative flex-1">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-on-surface-variant">₹</span>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      value={maxPrice}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, '');
+                        setMaxPrice(value);
+                      }}
+                      className="w-full pl-6 pr-2 py-2 rounded-lg bg-surface-container-highest text-on-surface text-sm border border-subtle focus-glow-indigo transition-all"
+                      placeholder="Max"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Campus Hub */}
+              <div>
+                <h4 className="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-3">
+                  Campus Hub
+                </h4>
+                <div className="relative">
+                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary text-sm">
+                    location_on
+                  </span>
+                  <select
+                    value={campusHub}
+                    onChange={(e) => setCampusHub(e.target.value)}
+                    className="w-full bg-surface-container-highest border-none rounded-lg py-2.5 pl-10 pr-4 text-sm font-medium text-on-surface appearance-none focus-glow-indigo"
+                  >
+                    <option value="">All Locations</option>
+                    <option value="North Campus Library">North Campus Library</option>
+                    <option value="Engineering Block A">Engineering Block A</option>
+                    <option value="Student Activity Center">Student Activity Center</option>
+                    <option value="Hostel Block C">Hostel Block C</option>
+                  </select>
+                </div>
+              </div>
+
+              <button
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-primary/10 to-tertiary/10 border border-primary/20 text-primary font-bold text-sm hover:bg-primary hover:text-on-primary transition-all"
+                onClick={handleResetFilters}
+              >
+                Reset Filters
+              </button>
+            </div>
+          </aside>
+
+          {/* Product Grid - Internal Scroll */}
+          <div className="lg:col-span-3 xl:col-span-3">
+            <div ref={scrollContainerRef} className="h-[calc(100vh-280px)] overflow-y-auto pr-2 scrollbar-thin space-y-4">
+              {(filteredProducts || []).length === 0 && !isLoadingMore ? (
+                <div className="flex flex-col items-center justify-center py-20 px-4 animate-fadeIn">
+                  <div className="p-4 glass-card rounded-full mb-6">
+                    {search || selectedCategory !== "all" || minPrice || maxPrice || campusHub ? (
+                      <SearchX className="w-12 h-12 text-primary" />
+                    ) : (
+                      <Package className="w-12 h-12 text-on-surface-variant" />
+                    )}
+                  </div>
+                  <h3 className="text-2xl font-bold font-plus-jakarta text-on-surface mb-2">
+                    No products found
+                  </h3>
+                  <p className="text-on-surface-variant text-center max-w-md mb-6">
+                    {search || selectedCategory !== "all" || minPrice || maxPrice || campusHub
+                      ? "Try adjusting your filters or search terms"
+                      : "No products available at the moment. Be the first to list one!"}
+                  </p>
+                  {(search || selectedCategory !== "all" || minPrice || maxPrice || campusHub) && (
+                    <button
+                      onClick={handleResetFilters}
+                      className="px-6 py-2 bg-primary/10 border border-primary/30 text-primary font-bold rounded-xl hover:bg-primary hover:text-on-primary transition-all"
+                    >
+                      Clear Filters
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 pl-6 border-l border-primary/10">
+                    {filteredProducts.map((doc, index) => {
+                      const isLast = index === filteredProducts.length - 1;
+                      return (
+                        <div
+                          key={doc.$id}
+                          ref={isLast ? lastProductRef : null}
+                          className="animate-fadeIn"
+                        >
+                          <ItemCard
+                            id={doc.$id}
+                            imgUrl={doc.imageId}
+                            category={doc.category}
+                            name={doc.title}
+                            price={doc.price}
+                            views={doc.views}
+                            favoriteCount={doc.favoriteCount}
+                            condition={doc.condition}
+                            sellerName={doc.sellerName}
+                            sellerAvatar={doc.sellerAvatar}
+                            rating={doc.rating}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {isLoadingMore && (
+                    <div className="w-full py-8">
+                      <ProductGridSkeleton count={8} />
+                    </div>
+                  )}
+
+                  <div className="text-center text-on-surface-variant text-sm py-4 animate-fadeIn">
+                    Showing {(filteredProducts || []).length} of {(products || []).length} loaded
+                    {pagination?.hasMore && " • Scroll for more"}
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Filter Overlay */}
+      {showMobileFilters && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowMobileFilters(false)}
+          ></div>
+
+          {/* Filter Panel */}
+          <div className="absolute right-0 top-0 h-full w-full max-w-sm bg-[#0C0C0C] shadow-2xl overflow-y-auto">
+            <div className="sticky top-0 bg-[#0C0C0C] border-b border-white/10 p-4 flex items-center justify-between">
+              <h3 className="text-lg font-extrabold font-plus-jakarta text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">filter_list</span>
                 Filters
               </h3>
+              <button
+                className="p-2 text-on-surface-variant hover:text-primary transition-colors"
+                onClick={() => setShowMobileFilters(false)}
+              >
+                <span className="material-symbols-outlined text-2xl">close</span>
+              </button>
             </div>
 
-            {/* Sort By */}
-            <div>
-              <h4 className="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-4">
-                Sort By
-              </h4>
-              <div className="relative">
-                <select
-                  value={sort}
-                  onChange={(e) => setSort(e.target.value)}
-                  className="w-full bg-surface-container-highest border-none rounded-xl py-3 px-4 text-xs font-bold text-on-surface appearance-none focus-glow-indigo"
-                >
-                  <option value="newest">Newest First</option>
-                  <option value="low-high">Lowest to Highest Price</option>
-                  <option value="high-low">Highest to Lowest Price</option>
-                  <option value="popular">Most Popular</option>
-                  <option value="favorites">Most Favorited</option>
-                </select>
+            <div className="p-6 space-y-6">
+              {/* Category Dropdown */}
+              <div>
+                <h4 className="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-3">
+                  Category
+                </h4>
+                <div className="relative">
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => {
+                      setSelectedCategory(e.target.value);
+                      setShowMobileFilters(false);
+                    }}
+                    className="w-full bg-surface-container-highest border-none rounded-lg py-2.5 px-3 text-sm font-medium text-on-surface appearance-none focus-glow-indigo"
+                  >
+                    <option value="all">All Categories</option>
+                    {curatedCategories.map((cat) => (
+                      <option key={cat.id} value={cat.category}>{cat.title}</option>
+                    ))}
+                  </select>
+                  <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm pointer-events-none">
+                    arrow_drop_down
+                  </span>
+                </div>
               </div>
-            </div>
 
-            {/* Price Range */}
-            <div>
-              <h4 className="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-4">
-                Price Range (₹)
-              </h4>
-              <div className="relative pt-2" ref={sliderRef}>
-                <div className="h-1.5 bg-surface-container-highest rounded-full">
+              {/* Sort By */}
+              <div>
+                <h4 className="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-3">
+                  Sort By
+                </h4>
+                <div className="relative">
+                  <select
+                    value={sort}
+                    onChange={(e) => {
+                      setSort(e.target.value);
+                      setShowMobileFilters(false);
+                    }}
+                    className="w-full bg-surface-container-highest border-none rounded-lg py-2.5 px-3 text-sm font-medium text-on-surface appearance-none focus-glow-indigo"
+                  >
+                    <option value="newest">Newest First</option>
+                    <option value="low-high">Price: Low to High</option>
+                    <option value="high-low">Price: High to Low</option>
+                    <option value="popular">Most Popular</option>
+                    <option value="favorites">Most Favorited</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Price Range */}
+              <div>
+                <h4 className="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-3">
+                  Price Range (₹)
+                </h4>
+                <div className="relative pt-2" ref={sliderRef}>
+                  <div className="h-1.5 bg-surface-container-highest rounded-full">
+                    <div
+                      className="absolute h-full bg-primary rounded-full"
+                      style={{ left: `${minPercent}%`, right: `${100 - maxPercent}%` }}
+                    ></div>
+                  </div>
+                  {/* Thumbs */}
                   <div
-                    className="absolute h-full bg-primary rounded-full"
-                    style={{ left: `${minPercent}%`, right: `${100 - maxPercent}%` }}
+                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-2 border-[#0C0C0C] shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer active:cursor-grabbing"
+                    style={{ left: `${minPercent}%` }}
+                    onMouseDown={handleSliderMouseDown('min')}
+                    onTouchStart={(e) => {
+                      e.preventDefault();
+                      handleSliderMouseDown('min')(e.touches[0]);
+                    }}
+                  ></div>
+                  <div
+                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-2 border-[#0C0C0C] shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer active:cursor-grabbing"
+                    style={{ left: `${maxPercent}%` }}
+                    onMouseDown={handleSliderMouseDown('max')}
+                    onTouchStart={(e) => {
+                      e.preventDefault();
+                      handleSliderMouseDown('max')(e.touches[0]);
+                    }}
                   ></div>
                 </div>
-                {/* Thumbs */}
-                <div
-                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-2 border-[#0C0C0C] shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer active:cursor-grabbing"
-                  style={{ left: `${minPercent}%` }}
-                  onMouseDown={handleSliderMouseDown('min')}
-                  onTouchStart={(e) => {
-                    e.preventDefault();
-                    handleSliderMouseDown('min')(e.touches[0]);
-                  }}
-                ></div>
-                <div
-                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-2 border-[#0C0C0C] shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer active:cursor-grabbing"
-                  style={{ left: `${maxPercent}%` }}
-                  onMouseDown={handleSliderMouseDown('max')}
-                  onTouchStart={(e) => {
-                    e.preventDefault();
-                    handleSliderMouseDown('max')(e.touches[0]);
-                  }}
-                ></div>
-              </div>
-              {/* Price inputs */}
-              <div className="flex justify-between mt-6 gap-2">
-                <div className="relative flex-1">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-on-surface-variant">₹</span>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    value={minPrice}
-                    onChange={(e) => {
-                      // Only allow digits
-                      const value = e.target.value.replace(/\D/g, '');
-                      setMinPrice(value);
-                    }}
-                    className="w-full pl-6 pr-2 py-2 rounded-lg bg-surface-container-highest text-on-surface text-sm border border-subtle focus-glow-indigo transition-all"
-                    placeholder="500+"
-                  />
-                </div>
-                <span className="self-center text-on-surface-variant">-</span>
-                <div className="relative flex-1">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-on-surface-variant">₹</span>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    value={maxPrice}
-                    onChange={(e) => {
-                      // Only allow digits
-                      const value = e.target.value.replace(/\D/g, '');
-                      setMaxPrice(value);
-                    }}
-                    className="w-full pl-6 pr-2 py-2 rounded-lg bg-surface-container-highest text-on-surface text-sm border border-subtle focus-glow-indigo transition-all"
-                    placeholder="25000"
-                  />
+                {/* Price inputs */}
+                <div className="flex justify-between mt-4 gap-2">
+                  <div className="relative flex-1">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-on-surface-variant">₹</span>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      value={minPrice}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, '');
+                        setMinPrice(value);
+                      }}
+                      className="w-full pl-6 pr-2 py-2 rounded-lg bg-surface-container-highest text-on-surface text-sm border border-subtle focus-glow-indigo transition-all"
+                      placeholder="Min"
+                    />
+                  </div>
+                  <span className="self-center text-on-surface-variant">-</span>
+                  <div className="relative flex-1">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-on-surface-variant">₹</span>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      value={maxPrice}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, '');
+                        setMaxPrice(value);
+                      }}
+                      className="w-full pl-6 pr-2 py-2 rounded-lg bg-surface-container-highest text-on-surface text-sm border border-subtle focus-glow-indigo transition-all"
+                      placeholder="Max"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Campus Hub */}
-            <div>
-              <h4 className="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-4">
-                Campus Hub
-              </h4>
-              <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary text-sm">
-                  location_on
-                </span>
-                <select
-                  value={campusHub}
-                  onChange={(e) => setCampusHub(e.target.value)}
-                  className="w-full bg-surface-container-highest border-none rounded-xl py-3 pl-10 pr-4 text-xs font-bold text-on-surface appearance-none focus-glow-indigo"
-                >
-                  <option value="">All Locations</option>
-                  <option value="North Campus Library">North Campus Library</option>
-                  <option value="Engineering Block A">Engineering Block A</option>
-                  <option value="Student Activity Center">Student Activity Center</option>
-                  <option value="Hostel Block C">Hostel Block C</option>
-                </select>
+              {/* Campus Hub */}
+              <div>
+                <h4 className="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-3">
+                  Campus Hub
+                </h4>
+                <div className="relative">
+                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary text-sm">
+                    location_on
+                  </span>
+                  <select
+                    value={campusHub}
+                    onChange={(e) => {
+                      setCampusHub(e.target.value);
+                      setShowMobileFilters(false);
+                    }}
+                    className="w-full bg-surface-container-highest border-none rounded-lg py-2.5 pl-10 pr-4 text-sm font-medium text-on-surface appearance-none focus-glow-indigo"
+                  >
+                    <option value="">All Locations</option>
+                    <option value="North Campus Library">North Campus Library</option>
+                    <option value="Engineering Block A">Engineering Block A</option>
+                    <option value="Student Activity Center">Student Activity Center</option>
+                    <option value="Hostel Block C">Hostel Block C</option>
+                  </select>
+                </div>
               </div>
-            </div>
 
-            <button
-              className="w-full py-4 rounded-2xl bg-gradient-to-r from-primary/10 to-tertiary/10 border border-primary/20 text-primary font-bold text-sm hover:bg-primary hover:text-on-primary transition-all"
-              onClick={handleResetFilters}
-            >
-              Reset Filters
-            </button>
+              <button
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-primary/10 to-tertiary/10 border border-primary/20 text-primary font-bold text-sm hover:bg-primary hover:text-on-primary transition-all"
+                onClick={() => {
+                  handleResetFilters();
+                  setShowMobileFilters(false);
+                }}
+              >
+                Reset Filters
+              </button>
+            </div>
           </div>
-        </aside>
-
-        <div className="lg:col-span-3 xl:col-span-3 max-h-[calc(100vh-20rem)] overflow-y-auto pr-2">
-          {(filteredProducts || []).length === 0 && !isLoadingMore ? (
-            <div className="flex flex-col items-center justify-center py-20 px-4 animate-fadeIn">
-              <div className="p-4 glass-card rounded-full mb-6">
-                {search || selectedCategory !== "all" || minPrice || maxPrice || campusHub ? (
-                  <SearchX className="w-12 h-12 text-primary" />
-                ) : (
-                  <Package className="w-12 h-12 text-on-surface-variant" />
-                )}
-              </div>
-              <h3 className="text-2xl font-bold font-plus-jakarta text-on-surface mb-2">
-                No products found
-              </h3>
-              <p className="text-on-surface-variant text-center max-w-md mb-6">
-                {search || selectedCategory !== "all" || minPrice || maxPrice || campusHub
-                  ? "Try adjusting your filters or search terms"
-                  : "No products available at the moment. Be the first to list one!"}
-              </p>
-              {(search || selectedCategory !== "all" || minPrice || maxPrice || campusHub) && (
-                <button
-                  onClick={handleResetFilters}
-                  className="px-6 py-2 bg-primary/10 border border-primary/30 text-primary font-bold rounded-xl hover:bg-primary hover:text-on-primary transition-all"
-                >
-                  Clear Filters
-                </button>
-              )}
-            </div>
-          ) : (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 border-l border-primary/10 pl-6">
-                {filteredProducts.map((doc, index) => {
-                  const isLast = index === filteredProducts.length - 1;
-                  return (
-                    <div
-                      key={doc.$id}
-                      ref={isLast ? lastProductRef : null}
-                      className="animate-fadeIn min-h-[320px]"
-                    >
-                      <ItemCard
-                        id={doc.$id}
-                        imgUrl={doc.imageId}
-                        category={doc.category}
-                        name={doc.title}
-                        price={doc.price}
-                        views={doc.views}
-                        favoriteCount={doc.favoriteCount}
-                        condition={doc.condition}
-                        sellerName={doc.sellerName}
-                        sellerAvatar={doc.sellerAvatar}
-                        rating={doc.rating}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-
-              {isLoadingMore && (
-                <div className="w-full py-8">
-                  <ProductGridSkeleton count={8} />
-                </div>
-              )}
-
-              <div className="text-center text-on-surface-variant text-sm mt-6 animate-fadeIn">
-                Showing {(filteredProducts || []).length} of {(products || []).length} loaded
-                {pagination?.hasMore && " • Scroll for more"}
-              </div>
-            </>
-          )}
         </div>
-
-
-
-      </div>
+      )}
     </div>
   );
 };
