@@ -22,6 +22,7 @@ const Chat = () => {
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const containerRef = useRef(null);
 
   // Safe string comparison for user IDs (Postgres int vs Redux string)
   const isCurrentUser = (id) => {
@@ -173,10 +174,8 @@ const Chat = () => {
 
   // Scroll effect — fires when messages change or conversation switches
   useEffect(() => {
-    setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  }, [messages, activeConversation]);
+    containerRef.current?.scrollTo(0, containerRef.current.scrollHeight);
+  }, [messages]);
 
   // Focus input
   useEffect(() => {
@@ -427,7 +426,7 @@ const Chat = () => {
                 </div>
 
                 {/* Messages Stream */}
-                <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2 custom-scrollbar relative bg-transparent">
+                <div ref={containerRef} className="flex-1 overflow-y-auto px-4 py-3 space-y-2 custom-scrollbar relative bg-transparent">
                   {/* Decorative background blooms */}
                   <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
                   <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-tertiary/5 rounded-full blur-[120px] pointer-events-none" />
