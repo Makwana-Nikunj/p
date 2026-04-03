@@ -88,20 +88,40 @@ class ChatService {
       const response = await apiClient.get('/chats');
       const docs = response.data?.data || [];
       return {
-        documents: docs.map(chat => ({
-          ...chat,
-          $id: String(chat.id),
-          buyerId: chat.buyer_id,
-          sellerId: chat.seller_id,
-          productId: chat.product_id,
-          // Defaulting since backend doesn't explicitly store these right now
-          buyerName: chat.buyer_name || "Buyer",
-          sellerName: chat.seller_name || "Seller",
-          productName: chat.product_name || "Product",
-          lastMessage: chat.last_message || "Click to chat",
-          unreadCount: chat.unread_count || 0,
-          $updatedAt: chat.updated_at || chat.created_at
-        }))
+        documents: docs.map(chat => {
+          // Determine which user is the "other" person
+          const isUser1 = String(chat.user1_id) === String(userId);
+          const otherUserId = isUser1 ? chat.user2_id : chat.user1_id;
+          const otherUsername = isUser1 ? chat.user2_username : chat.user1_username;
+          const otherUserAvatar = isUser1 ? chat.user2_avatar : chat.user1_avatar;
+          const myUserId = isUser1 ? chat.user1_id : chat.user2_id;
+          const myUsername = isUser1 ? chat.user1_username : chat.user2_username;
+          const myUserAvatar = isUser1 ? chat.user1_avatar : chat.user2_avatar;
+
+          return {
+            ...chat,
+            $id: String(chat.id),
+            buyerId: chat.user1_id,
+            sellerId: chat.seller_id,
+            productId: chat.product_id,
+            buyerName: chat.user1_username || "Buyer",
+            sellerName: chat.user2_username || "Seller",
+            buyerAvatar: chat.user1_avatar || null,
+            sellerAvatar: chat.user2_avatar || null,
+            productName: chat.title || "Product",
+            productImage: chat.image_url || null,
+            lastMessage: chat.last_message || chat.lastMessage || "Click to chat",
+            unreadCount: chat.unread_count || 0,
+            $updatedAt: chat.updated_at || chat.created_at,
+            // Extra metadata for avatar lookups
+            otherUserId: String(otherUserId),
+            otherUserName: otherUsername || "User",
+            otherUserAvatar: otherUserAvatar || null,
+            // Determine roles from seller_id
+            otherUserRole: String(chat.seller_id) === String(otherUserId) ? "Seller" : "Buyer",
+            myUserRole: String(chat.seller_id) === String(myUserId) ? "Seller" : "Buyer"
+          };
+        })
       };
     } catch (e) { console.error(e); return { documents: [] }; }
   }
@@ -124,7 +144,7 @@ class ChatService {
     } catch (e) { console.error(e); return { documents: [] }; }
   }
 
-  // 4️⃣ Send message
+  // 4️⃣ Send message (socket emits; backend broadcasts to all in chat room via receive_message)
   async sendMessage(conversationId, senderId, text) {
     const socket = this.connectSocket();
 
@@ -133,21 +153,17 @@ class ChatService {
       return null;
     }
 
-    return new Promise((resolve, reject) => {
-      socket.emit("send_message", { chatId: conversationId, content: text }, (response) => {
-        if (response?.success) {
-          resolve({
-            $id: response.messageId || Date.now().toString(),
-            conversationId,
-            senderId,
-            text,
-            $createdAt: new Date().toISOString()
-          });
-        } else {
-          reject(new Error(response?.message || "Failed to send message"));
-        }
-      });
-    });
+    // Backend just emits receive_message to all users in chatId room
+    socket.emit("send_message", { chatId: conversationId, content: text });
+
+    // Optimistic return - caller shows immediately in UI
+    return {
+      $id: Date.now().toString(),
+      conversationId: String(conversationId),
+      senderId: String(senderId),
+      text,
+      $createdAt: new Date().toISOString()
+    };
   }
 
   // 5️⃣ Update last message + time

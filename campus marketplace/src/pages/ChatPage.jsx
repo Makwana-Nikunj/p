@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import chatService from '../services/chatService';
 import MessageBubble from '../Components/chat/MessageBubble';
 import AtmosphericBlooms from '../Components/Theme/AtmosphericBlooms';
@@ -7,6 +8,7 @@ import AtmosphericBlooms from '../Components/Theme/AtmosphericBlooms';
 const Chat = () => {
   const user = useSelector((state) => state.auth.userData);
   const products = useSelector((state) => state.products.products);
+  const navigate = useNavigate();
 
   const [conversations, setConversations] = useState([]);
   const [activeConversation, setActiveConversation] = useState(null);
@@ -20,6 +22,13 @@ const Chat = () => {
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+
+  // Safe string comparison for user IDs (Postgres int vs Redux string)
+  const isCurrentUser = (id) => {
+    if (!user || !id) return false;
+    // user.$id is String(u.id) from authService; user.id is the raw int
+    return String(id) === String(user.id);
+  };
 
   const getInitials = (name) => {
     if (!name) return "?";
@@ -86,42 +95,68 @@ const Chat = () => {
     }
   };
 
-  // Send a message
+  // Send a message — optimistic, don't wait for backend
   const sendMessage = async () => {
-    if (!activeConversation || !input.trim() || sendingMessage) return;
+    if (!activeConversation || !input.trim()) return;
 
-    try {
-      setSendingMessage(true);
-      const newMsg = await chatService.sendMessage(activeConversation.$id, user.$id, input);
-      if (!newMsg) throw new Error("Failed to send message");
+    const textToSend = input;
+    setInput("");
 
-      await chatService.updateLastMessage(activeConversation.$id, input);
+    // Optimistic: add message to UI immediately
+    const tempId = `temp-${Date.now()}`;
+    const tempMsg = {
+      $id: tempId,
+      isTemp: true,
+      $createdAt: new Date().toISOString(),
+      conversationId: activeConversation.$id,
+      senderId: String(user.id),
+      text: textToSend,
+    };
 
-      setMessages((prev) => [...prev, newMsg]);
-      setConversations((prev) =>
-        prev.map((c) =>
-          c.$id === activeConversation.$id
-            ? { ...c, lastMessage: input, $updatedAt: new Date().toISOString() }
-            : c
-        )
-      );
-      setInput("");
-    } catch (error) {
-      console.error("Failed to send message:", error);
-    } finally {
-      setSendingMessage(false);
-    }
+    setMessages((prev) => [...prev, tempMsg]);
+
+    // Fire-and-forget to backend via socket
+    chatService.sendMessage(activeConversation.$id, user?.$id || user?.id, textToSend).catch((err) => {
+      console.error("Failed to send message:", err);
+      setMessages((prev) => prev.filter((m) => m.$id !== tempId));
+      setInput(textToSend);
+    });
+
+    setConversations((prev) =>
+      prev.map((c) =>
+        c.$id === activeConversation.$id
+          ? { ...c, lastMessage: textToSend, $updatedAt: new Date().toISOString() }
+          : c
+      )
+    );
   };
 
-  // Realtime updates
+  // Realtime updates — receives echo from backend for ALL messages (own + others)
   useEffect(() => {
     if (!activeConversation || !user) return;
     try {
       const unsub = chatService.subscribeMessages(activeConversation.$id, (event) => {
         const msg = event.payload;
-        if (msg.conversationId !== activeConversation.$id) return;
-        if (msg.senderId === user.$id) return;
-        setMessages((prev) => [...prev, msg]);
+        if (String(msg.conversationId) !== String(activeConversation.$id)) return;
+
+        setMessages((prev) => {
+          // Skip if message with same id already exists
+          if (prev.some((m) => String(m.$id) === String(msg.$id))) return prev;
+
+          // If it's our own message from backend echo, replace the temp message
+          if (isCurrentUser(msg.senderId)) {
+            const tempIdx = prev.findIndex((m) => m.isTemp && String(m.text) === String(msg.text));
+            if (tempIdx !== -1) {
+              const copy = [...prev];
+              copy[tempIdx] = msg;
+              return copy;
+            }
+            return [...prev, msg];
+          }
+
+          // Other person's message
+          return [...prev, msg];
+        });
       });
       return () => {
         try {
@@ -152,7 +187,7 @@ const Chat = () => {
   const filteredConversations = conversations.filter((conv) => {
     if (!searchQuery.trim()) return true;
     const query = searchQuery.toLowerCase();
-    const otherName = conv.buyerId === user.$id ? conv.sellerName : conv.buyerName;
+    const otherName = getOtherParticipantName(conv);
     return (
       otherName?.toLowerCase().includes(query) ||
       conv.productName?.toLowerCase().includes(query) ||
@@ -162,12 +197,14 @@ const Chat = () => {
 
   const getOtherParticipantName = (conv) => {
     if (!conv) return "";
-    return conv.buyerId === user.$id ? (conv.sellerName || "Seller") : (conv.buyerName || "Buyer");
+    // Use otherUserName directly from service mapping (avoids ID format mismatch)
+    if (conv.otherUserName) return conv.otherUserName;
+    return conv.sellerName || conv.buyerName || "User";
   };
 
   const getParticipantRole = (conv) => {
     if (!conv) return "";
-    return conv.buyerId === user.$id ? "Buyer" : "Seller";
+    return conv.otherUserRole || (conv.sellerId ? "Buyer" : "Seller");
   };
 
   const getProductName = (conv) => {
@@ -183,8 +220,20 @@ const Chat = () => {
   };
 
   const getProductImage = (conv) => {
+    // Direct from backend mapping
+    if (conv?.productImage) return conv.productImage;
     const prod = products.find((p) => p.$id === conv.productId);
-    return prod?.imageUrl || prod?.images?.[0] || '';
+    if (prod) return prod?.imageUrl || prod?.images?.[0] || '';
+    return '';
+  };
+
+  const getOtherParticipantAvatar = (conv) => {
+    if (!conv) return '';
+    // Use otherUserAvatar directly from service mapping (avoids ID format mismatch)
+    if (conv.otherUserAvatar) return conv.otherUserAvatar;
+    return conv.buyerId === user?.$id
+      ? (conv.sellerAvatar || '')
+      : (conv.buyerAvatar || '');
   };
 
   const getUnreadCount = (conv) => conv.unreadCount || 0;
@@ -237,6 +286,7 @@ const Chat = () => {
                   const otherName = getOtherParticipantName(conv);
                   const role = getParticipantRole(conv);
                   const unread = getUnreadCount(conv);
+                  const avatarUrl = getOtherParticipantAvatar(conv);
 
                   return (
                     <div
@@ -250,11 +300,15 @@ const Chat = () => {
                         }
                     `}
                     >
-                      {/* Avatar */}
+                      {/* Avatar with image or fallback */}
                       <div className="relative shrink-0">
-                        <div className="w-12 h-12 rounded-xl flex items-center justify-center text-sm font-semibold text-white shrink-0 border border-white/10 overflow-hidden glass">
-                          {getInitials(otherName)}
-                        </div>
+                        {avatarUrl ? (
+                          <img className="w-12 h-12 rounded-xl object-cover border border-white/10 bg-surface-container-highest" src={avatarUrl} alt={otherName} />
+                        ) : (
+                          <div className="w-12 h-12 rounded-xl flex items-center justify-center text-sm font-semibold text-white shrink-0 border border-white/10 overflow-hidden glass">
+                            {getInitials(otherName)}
+                          </div>
+                        )}
                         {unread > 0 && (
                           <div className="absolute -top-1 -right-1 min-w-[20px] h-5 bg-secondary text-on-secondary rounded-full flex items-center justify-center text-[10px] font-bold border-2 border-surface-container px-1">
                             {unread}
@@ -314,9 +368,13 @@ const Chat = () => {
                     </button>
                     <div className="flex items-center gap-3">
                       <div className="relative shrink-0">
-                        <div className="w-10 h-10 rounded-full overflow-hidden border border-primary/30 bg-surface-container-highest flex items-center justify-center text-xs font-semibold text-white">
-                          {getInitials(getOtherParticipantName(activeConversation))}
-                        </div>
+                        {getOtherParticipantAvatar(activeConversation) ? (
+                          <img className="w-10 h-10 rounded-full object-cover border border-primary/30 bg-surface-container-highest" src={getOtherParticipantAvatar(activeConversation)} alt={getOtherParticipantName(activeConversation)} />
+                        ) : (
+                          <div className="w-10 h-10 rounded-full overflow-hidden border border-primary/30 bg-surface-container-highest flex items-center justify-center text-xs font-semibold text-white">
+                            {getInitials(getOtherParticipantName(activeConversation))}
+                          </div>
+                        )}
                         <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-surface" />
                       </div>
                       <div>
@@ -356,9 +414,12 @@ const Chat = () => {
                     <div className="flex items-center gap-3 shrink-0">
                       <div className="hidden sm:block text-right mr-2">
                         <p className="text-[10px] text-on-surface-variant font-bold uppercase tracking-tighter">Your Role</p>
-                        <p className="text-xs font-black text-on-surface">{getParticipantRole(activeConversation) === 'Buyer' ? 'Buyer' : 'Seller'}</p>
+                        <p className="text-xs font-black text-on-surface">{activeConversation.myUserRole || "Buyer"}</p>
                       </div>
-                      <button className="bg-primary/20 text-primary text-xs font-black px-4 py-2 rounded-xl hover:scale-105 transition-transform border border-primary/20 whitespace-nowrap">
+                      <button
+                        className="bg-primary/20 text-primary text-xs font-black px-4 py-2 rounded-xl hover:scale-105 transition-transform border border-primary/20 whitespace-nowrap"
+                        onClick={() => navigate(`/product/${activeConversation.productId}`)}
+                      >
                         View Listing
                       </button>
                     </div>
@@ -390,9 +451,9 @@ const Chat = () => {
 
                       {messages.map((msg, i) => {
                         if (!msg) return null;
-                        const isOwn = msg.senderId === user?.$id;
+                        const isOwn = isCurrentUser(msg.senderId);
                         const prevMsg = i > 0 ? messages[i - 1] : null;
-                        const showLabel = !isOwn && (!prevMsg || prevMsg.senderId !== msg.senderId);
+                        const showLabel = !isOwn && (!prevMsg || String(prevMsg.senderId) !== String(msg.senderId));
 
                         return (
                           <MessageBubble
@@ -441,13 +502,12 @@ const Chat = () => {
                             sendMessage();
                           }
                         }}
-                        disabled={sendingMessage}
                       />
                     </div>
                     <button
                       className="shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-tertiary text-on-primary shadow-lg shadow-primary/30 flex items-center justify-center hover:scale-110 active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                       onClick={sendMessage}
-                      disabled={sendingMessage || !input.trim()}
+                      disabled={!input.trim()}
                     >
                       <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>send</span>
                     </button>

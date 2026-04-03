@@ -10,9 +10,9 @@ const getUserChats = asyncHandler(async (req, res) => {
         select c.id, c.product_id, c.created_at, c.updated_at,
                u1.id as user1_id, u1.username as user1_username, u1.avatar as user1_avatar,
                u2.id as user2_id, u2.username as user2_username, u2.avatar as user2_avatar,
-               p.title, p.image_url, p.status
+               p.title, p.image_url, p.status, p.user_id as seller_id
         from chats c
-        join users u1 on c.user1_id = u1.id 
+        join users u1 on c.user1_id = u1.id
         join users u2 on c.user2_id = u2.id
         join products p on c.product_id = p.id
         where c.user1_id = ${userId} or c.user2_id = ${userId}
