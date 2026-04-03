@@ -73,7 +73,7 @@ const FeedbackSection = () => {
     const reviewedCount = allFeedback.filter(f => f.status === 'reviewed').length;
 
     return (
-        <section>
+        <section className="mt-6">
             <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold font-headline text-on-surface">User Feedback</h2>
                 <div className="flex items-center gap-3">

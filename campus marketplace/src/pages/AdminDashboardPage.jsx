@@ -56,9 +56,9 @@ const AdminDashboard = () => {
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 pb-12">
+        <div className="max-w-7xl mx-auto px-4 lg:px-6 mt-6 pb-12">
             {/* Header Section */}
-            <header className="mb-10 flex flex-col md:flex-row md:justify-between md:items-end gap-6">
+            <header className="mb-6 flex flex-col md:flex-row md:justify-between md:items-end gap-6">
                 <div>
                     <h1 className="text-4xl lg:text-5xl font-extrabold font-headline bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent tracking-tight">Admin Dashboard</h1>
                     <p className="text-on-surface-variant mt-2 text-lg">Welcome back, {userData?.name || 'Administrator'}</p>
@@ -81,7 +81,9 @@ const AdminDashboard = () => {
             />
 
             {/* Tab Content */}
-            {renderTabContent()}
+            <div className="mt-6">
+                {renderTabContent()}
+            </div>
         </div>
     );
 };

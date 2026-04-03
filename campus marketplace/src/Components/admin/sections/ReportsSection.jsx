@@ -2,7 +2,7 @@ import React from 'react';
 
 const ReportsSection = () => {
     return (
-        <section className="mb-12">
+        <section className="mt-6 mb-12">
             <div className="glass-panel rounded-3xl p-20 shadow-2xl">
                 <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto">
                     {/* Icon */}
