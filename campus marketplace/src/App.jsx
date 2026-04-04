@@ -33,6 +33,7 @@ const Terms = lazy(() => import("./pages/TermsPage.jsx"));
 const PrivacyPolicy = lazy(() => import("./pages/DataPrivacyPolicy.jsx"));
 const CheckInbox = lazy(() => import("./pages/CheckInboxPage.jsx"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmailPage.jsx"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPasswordPage.jsx"));
 
 // Base layout wrapping routes
 function Layout({ children }) {
@@ -106,6 +107,7 @@ function App() {
           <Route path="/register" element={<Layout><RegisterForm /></Layout>} />
           <Route path="/verify-email" element={<Layout><CheckInbox /></Layout>} />
           <Route path="/verify-email/:token" element={<Layout><VerifyEmail /></Layout>} />
+          <Route path="/forgot-password" element={<Layout><ForgotPassword /></Layout>} />
 
           <Route path="/product/:id" element={<Layout><ProductDetailPage /></Layout>} />
           <Route path="/profile/product/:id" element={<ProtectedRoute><Layout><OwnerProductDetail /></Layout></ProtectedRoute>} />

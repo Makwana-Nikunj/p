@@ -40,6 +40,27 @@ const connectToDatabase = async () => {
         await sql`CREATE INDEX IF NOT EXISTS idx_users_verification_token ON users(verification_token)`;
 
         // ===============================
+        // OTPS TABLE (password reset)
+        // ===============================
+        await sql`
+            CREATE TABLE IF NOT EXISTS otps (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                email VARCHAR(255) NOT NULL,
+                otp VARCHAR(6),
+                reset_token VARCHAR(255),
+                reset_token_expiry TIMESTAMP,
+                purpose VARCHAR(50) NOT NULL,
+                expiry TIMESTAMP,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `;
+
+        await sql`CREATE INDEX IF NOT EXISTS idx_otps_email ON otps(email)`;
+        await sql`CREATE INDEX IF NOT EXISTS idx_otps_user_id ON otps(user_id)`;
+        await sql`CREATE INDEX IF NOT EXISTS idx_otps_reset_token ON otps(reset_token)`;
+
+        // ===============================
         // PRODUCTS TABLE
         // ===============================
         await sql`

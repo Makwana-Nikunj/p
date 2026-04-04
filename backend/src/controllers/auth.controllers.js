@@ -3,7 +3,8 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { sql } from "../db/index.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
-import { sendVerificationEmail } from "../utils/email.util.js";
+import { sendVerificationEmail, sendOtpEmail } from "../utils/email.util.js";
+import { generateOTP } from "../utils/otp.util.js";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
@@ -324,11 +325,182 @@ const resendVerification = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, {}, "Verification email resent. Please check your inbox."));
 });
 
+
+// ============================================
+// PASSWORD RESET CONTROLLERS
+// ============================================
+
+const forgotPassword = asyncHandler(async (req, res) => {
+    const { email } = req.body;
+
+    if (!email?.trim()) {
+        throw new ApiError(400, "Email is required");
+    }
+
+    const users = await sql`
+        SELECT id, username, email, is_verified FROM users WHERE email = ${email}
+    `;
+
+    if (users.length === 0) {
+        throw new ApiError(404, "No account found with this email");
+    }
+
+    const user = users[0];
+
+    if (!user.is_verified) {
+        throw new ApiError(403, "Please verify your email before resetting password");
+    }
+
+    // Rate limit check
+    const recentOtps = await sql`
+        SELECT created_at FROM otps
+        WHERE user_id = ${user.id}
+        AND purpose = 'password_reset'
+        ORDER BY created_at DESC
+        LIMIT 1
+    `;
+
+    if (recentOtps.length > 0) {
+        const elapsed = (Date.now() - new Date(recentOtps[0].created_at).getTime()) / 1000;
+        if (elapsed < 60) {
+            throw new ApiError(429, "Please wait before requesting another OTP");
+        }
+    }
+
+    // Delete existing OTPs
+    await sql`
+        DELETE FROM otps
+        WHERE user_id = ${user.id}
+        AND purpose = 'password_reset'
+    `;
+
+    // Generate new OTP
+    const otp = generateOTP();
+
+    await sql`
+        INSERT INTO otps (user_id, email, otp, purpose, expiry)
+        VALUES (${user.id}, ${email}, ${otp}, 'password_reset', NOW() + INTERVAL '10 minutes')
+    `;
+
+    await sendOtpEmail(email, otp);
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, {}, "OTP sent to your email"));
+});
+
+const verifyOtp = asyncHandler(async (req, res) => {
+    const { email, otp } = req.body;
+
+    if (!email?.trim() || !otp?.trim()) {
+        throw new ApiError(400, "Email and OTP are required");
+    }
+
+    // Find valid (not expired) OTP
+    const otpRows = await sql`
+        SELECT * FROM otps
+        WHERE email = ${email}
+        AND otp = ${otp}
+        AND purpose = 'password_reset'
+        AND expiry > NOW()
+    `;
+
+    if (otpRows.length === 0) {
+        // Check if OTP existed but expired
+        const expired = await sql`
+            SELECT * FROM otps
+            WHERE email = ${email}
+            AND otp = ${otp}
+            AND purpose = 'password_reset'
+        `;
+        if (expired.length > 0) {
+            await sql`DELETE FROM otps WHERE id = ${expired[0].id}`;
+            throw new ApiError(400, "OTP has expired. Please request a new one.");
+        }
+        throw new ApiError(400, "Invalid OTP");
+    }
+
+    const otpRow = otpRows[0];
+
+    // Generate reset token
+    const resetToken = crypto.randomUUID();
+
+    await sql`
+        UPDATE otps
+        SET otp = NULL,
+            reset_token = ${resetToken},
+            reset_token_expiry = NOW() + INTERVAL '15 minutes'
+        WHERE id = ${otpRow.id}
+    `;
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, { resetToken }, "OTP verified successfully"));
+});
+
+const resetPassword = asyncHandler(async (req, res) => {
+    const { resetToken, password, confirmPassword } = req.body;
+
+    if (!resetToken?.trim() || !password?.trim() || !confirmPassword?.trim()) {
+        throw new ApiError(400, "All fields are required");
+    }
+
+    if (password !== confirmPassword) {
+        throw new ApiError(400, "Passwords do not match");
+    }
+
+    // Password strength validation
+    if (password.length < 8) {
+        throw new ApiError(400, "Password must be at least 8 characters");
+    }
+    if (!/[A-Z]/.test(password)) {
+        throw new ApiError(400, "Password must contain at least one uppercase letter");
+    }
+    if (!/[a-z]/.test(password)) {
+        throw new ApiError(400, "Password must contain at least one lowercase letter");
+    }
+    if (!/[0-9]/.test(password)) {
+        throw new ApiError(400, "Password must contain at least one number");
+    }
+
+    const otpRows = await sql`
+        SELECT * FROM otps
+        WHERE reset_token = ${resetToken}
+        AND purpose = 'password_reset'
+        AND reset_token_expiry > NOW()
+    `;
+
+    if (otpRows.length === 0) {
+        throw new ApiError(400, "Invalid or expired reset token");
+    }
+
+    const otpRow = otpRows[0];
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await sql`
+        UPDATE users
+        SET password = ${hashedPassword},
+            updated_at = NOW()
+        WHERE id = ${otpRow.user_id}
+    `;
+
+    // Delete the OTP row
+    await sql`DELETE FROM otps WHERE id = ${otpRow.id}`;
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, {}, "Password reset successfully. Please login."));
+});
+
 export {
     registerUser,
     loginUser,
     logoutUser,
     refreshAccessToken,
     verifyEmail,
-    resendVerification
+    resendVerification,
+    forgotPassword,
+    verifyOtp,
+    resetPassword
 };

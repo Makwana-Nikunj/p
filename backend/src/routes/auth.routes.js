@@ -5,7 +5,10 @@ import {
     logoutUser,
     refreshAccessToken,
     verifyEmail,
-    resendVerification
+    resendVerification,
+    forgotPassword,
+    verifyOtp,
+    resetPassword
 } from "../controllers/auth.controllers.js";
 import { verifyJwt } from "../middlewares/auth.middleware.js";
 
@@ -22,5 +25,10 @@ router.route("/logout").post(verifyJwt, logoutUser);
 // Email verification routes
 router.route("/verify-email/:token").get(verifyEmail);
 router.route("/resend-verification").post(resendVerification);
+
+// Password reset routes (OTP-based)
+router.route("/forgot-password").post(forgotPassword);
+router.route("/verify-otp").post(verifyOtp);
+router.route("/reset-password").post(resetPassword);
 
 export default router;

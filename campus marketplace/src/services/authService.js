@@ -102,6 +102,37 @@ export class AuthService {
         }
     }
 
+    async forgotPassword(email) {
+        try {
+            const response = await apiClient.post('/auth/forgot-password', { email });
+            return response.data;
+        } catch (error) {
+            throw error.response?.data?.message || "Failed to send OTP. Please try again.";
+        }
+    }
+
+    async verifyOtp(email, otp) {
+        try {
+            const response = await apiClient.post('/auth/verify-otp', { email, otp });
+            return response.data;
+        } catch (error) {
+            throw error.response?.data?.message || "OTP verification failed. Please try again.";
+        }
+    }
+
+    async resetPassword(resetToken, password, confirmPassword) {
+        try {
+            const response = await apiClient.post('/auth/reset-password', {
+                resetToken,
+                password,
+                confirmPassword
+            });
+            return response.data;
+        } catch (error) {
+            throw error.response?.data?.message || "Password reset failed. Please try again.";
+        }
+    }
+
     async resendVerificationEmail(email) {
         try {
             const response = await apiClient.post('/auth/resend-verification', { email });

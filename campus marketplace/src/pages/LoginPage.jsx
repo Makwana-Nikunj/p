@@ -209,6 +209,16 @@ const LoginForm = () => {
                   )}
                 </div>
 
+                <div className="text-right pt-1">
+                  <button
+                    type="button"
+                    onClick={() => navigate("/forgot-password")}
+                    className="text-xs text-secondary hover:text-primary transition-colors font-medium"
+                  >
+                    Forgot Password?
+                  </button>
+                </div>
+
                 {/* CTA Button */}
                 <button
                   type="submit"
