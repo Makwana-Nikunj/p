@@ -18,7 +18,7 @@ export class AuthService {
 
         const promise = (async () => {
             try {
-                const response = await apiClient.post('/users/register', {
+                const response = await apiClient.post('/auth/register', {
                     email,
                     password,
                     username: name,
@@ -50,7 +50,7 @@ export class AuthService {
 
         const promise = (async () => {
             try {
-                const response = await apiClient.post('/users/login', { email, password });
+                const response = await apiClient.post('/auth/login', { email, password });
                 return response.data;
             } catch (error) {
                 throw error.response?.data?.message || "Login failed";
@@ -80,7 +80,7 @@ export class AuthService {
         try {
             // Clear pending requests on logout
             this.pendingRequests.clear();
-            await apiClient.post('/users/logout');
+            await apiClient.post('/auth/logout');
         } catch (error) {
             console.log("AuthService :: logout :: error", error);
         }

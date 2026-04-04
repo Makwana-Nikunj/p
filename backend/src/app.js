@@ -59,7 +59,7 @@ import favoriteRouter from "./routes/favorite.routes.js";
 import chatRouter from "./routes/chats.routes.js";
 import messageRouter from "./routes/messages.routes.js";
 import feedbackRouter from "./routes/feedback.routes.js";
-
+import authRouter from "./routes/auth.routes.js";
 
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
@@ -67,6 +67,7 @@ app.use("/api/favorites", favoriteRouter);
 app.use("/api/chats", chatRouter);
 app.use("/api/messages", messageRouter);
 app.use("/api/feedback", feedbackRouter);
+app.use("/api/auth", authRouter);
 
 // Health check endpoint for keep-alive pings
 app.get("/api/health", (req, res) => {
