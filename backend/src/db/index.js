@@ -25,6 +25,21 @@ const connectToDatabase = async () => {
             )
         `;
         // ===============================
+        // EMAIL VERIFICATION COLUMNS
+        // ===============================
+        await sql`
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS is_verified BOOLEAN DEFAULT false,
+            ADD COLUMN IF NOT EXISTS verification_token VARCHAR(255),
+            ADD COLUMN IF NOT EXISTS verification_token_expiry TIMESTAMP
+        `;
+
+        // Mark existing users as verified so they aren't locked out
+        await sql`UPDATE users SET is_verified = true WHERE is_verified = false`;
+
+        await sql`CREATE INDEX IF NOT EXISTS idx_users_verification_token ON users(verification_token)`;
+
+        // ===============================
         // PRODUCTS TABLE
         // ===============================
         await sql`

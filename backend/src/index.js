@@ -4,6 +4,7 @@ dotenv.config()
 
 import { server } from './app.js'
 import { connectToDatabase } from "./db/index.js";
+import { startCleanupJob } from "./jobs/cleanupUnverified.js";
 
 // Environment validation
 const requiredEnvVars = [
@@ -28,6 +29,11 @@ server.listen(port, "0.0.0.0", () => {
 
 // Connect to DB asynchronously
 connectToDatabase()
+    .then(() => {
+        // Start cleanup cron job after DB is connected
+        startCleanupJob();
+        console.log("🧹 Cleanup job started — deletes expired unverified accounts hourly");
+    })
     .catch((err) => {
         console.error("❌ Database connection failed:", err);
         process.exit(1);

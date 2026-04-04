@@ -31,20 +31,9 @@ const RegisterForm = () => {
   const create = async (data) => {
     setError("")
     try {
-      const userData = await authService.createAccount(data)
-      if (userData) {
-        const currentUser = await authService.getCurrentUser()
-        if (currentUser) {
-          dispatch(login({
-            userData: currentUser,
-            profilePhoto: currentUser.prefs?.profilePhoto || null,
-            accessToken: userData?.data?.accessToken || null
-          }));
-          setTimeout(() => chatService.reconnect(), 100);
-          showToast(`Welcome, ${currentUser.name}! Your account has been created.`, 'success', 3000);
-          navigate("/")
-        }
-      }
+      await authService.createAccount(data)
+      showToast("Account created! Please check your email to verify your account.", 'success', 5000);
+      navigate("/verify-email")
     } catch (error) {
       const errorMsg = error.message || "Registration failed. Please try again.";
       setError(errorMsg)

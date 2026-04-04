@@ -23,6 +23,7 @@ const LoginForm = () => {
   } = useForm({ mode: 'onChange' });
 
   const [error, setError] = useState("");
+  const [isResending, setIsResending] = useState(false);
   const emailValue = watch("email");
   const passwordValue = watch("password");
 
@@ -50,6 +51,21 @@ const LoginForm = () => {
       const errorMsg = error.message || "Login failed. Please try again.";
       setError(errorMsg);
       showToast(errorMsg, 'error', 4000);
+    }
+  };
+
+  const handleResendVerification = async () => {
+    if (!emailValue) return;
+    setIsResending(true);
+    try {
+      await authService.resendVerificationEmail(emailValue);
+      showToast("Verification email resent! Please check your inbox.", 'success', 3000);
+    } catch (error) {
+      const msg = error.message || "Failed to resend. Please try again.";
+      setError(msg);
+      showToast(msg, 'error', 4000);
+    } finally {
+      setIsResending(false);
     }
   };
 
@@ -109,9 +125,21 @@ const LoginForm = () => {
 
                 {/* Error Alert */}
                 {error && (
-                  <div className="p-4 bg-red-900/20 border border-red-500/50 rounded-xl flex gap-3 animate-slideInFromBottom border-subtle">
-                    <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-                    <p className="text-sm text-red-300">{error}</p>
+                  <div className="p-4 bg-red-900/20 border border-red-500/50 rounded-xl flex flex-col gap-2 animate-slideInFromBottom border-subtle">
+                    <div className="flex gap-3">
+                      <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+                      <p className="text-sm text-red-300">{error}</p>
+                    </div>
+                    {error.includes("verify your email") && emailValue && (
+                      <button
+                        type="button"
+                        disabled={isResending}
+                        onClick={handleResendVerification}
+                        className="ml-8 text-xs text-secondary hover:text-primary transition-colors font-medium disabled:opacity-50"
+                      >
+                        {isResending ? "Resending..." : "Resend verification email"}
+                      </button>
+                    )}
                   </div>
                 )}
 

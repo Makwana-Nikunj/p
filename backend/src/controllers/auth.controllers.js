@@ -3,7 +3,9 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { sql } from "../db/index.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { sendVerificationEmail } from "../utils/email.util.js";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 import jwt from "jsonwebtoken";
 
 
@@ -126,13 +128,23 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(500, "Something went wrong while registering the user");
     }
 
-    const { accessToken, refreshToken } = await generateAndSaveTokens(newUser[0].id);
+    // Generate verification token
+    const verificationToken = crypto.randomUUID();
+    const verificationExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24h
+
+    await sql`
+        UPDATE users
+        SET verification_token = ${verificationToken},
+            verification_token_expiry = ${verificationExpiry}
+        WHERE id = ${newUser[0].id}
+    `;
+
+    // Send verification email
+    await sendVerificationEmail(email, verificationToken);
 
     return res
         .status(201)
-        .cookie("accessToken", accessToken, accessCookieOptions)
-        .cookie("refreshToken", refreshToken, refreshCookieOptions)
-        .json(new ApiResponse(201, { user: newUser[0], accessToken }, "User registered successfully"));
+        .json(new ApiResponse(201, {}, "Registration successful. Please check your email to verify your account."));
 });
 
 
@@ -144,7 +156,7 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 
     const users = await sql`
-        SELECT id, username, email, password, avatar, role, created_at
+        SELECT id, username, email, password, avatar, role, is_verified, created_at
         FROM users WHERE email = ${email}
     `;
 
@@ -153,6 +165,11 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 
     const user = users[0];
+
+    if (!user.is_verified) {
+        throw new ApiError(403, "Please verify your email before logging in");
+    }
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
@@ -210,9 +227,108 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, { accessToken }, "Access token refreshed"));
 });
 
+
+// ============================================
+// EMAIL VERIFICATION CONTROLLERS
+// ============================================
+
+const verifyEmail = asyncHandler(async (req, res) => {
+    const { token } = req.params;
+
+    const users = await sql`
+        SELECT id, username, email, avatar, role, is_verified, verification_token_expiry
+        FROM users
+        WHERE verification_token = ${token}
+    `;
+
+    if (users.length === 0) {
+        throw new ApiError(400, "Invalid verification token");
+    }
+
+    const user = users[0];
+
+    if (user.is_verified) {
+        throw new ApiError(400, "Email is already verified");
+    }
+
+    if (new Date(user.verification_token_expiry) < new Date()) {
+        throw new ApiError(400, "Verification token has expired. Please request a new one.");
+    }
+
+    // Mark as verified and clear token fields
+    await sql`
+        UPDATE users
+        SET is_verified = true,
+            verification_token = NULL,
+            verification_token_expiry = NULL
+        WHERE id = ${user.id}
+    `;
+
+    // Auto-login — generate tokens
+    const { accessToken, refreshToken } = await generateAndSaveTokens(user.id);
+
+    const { password, ...safeUser } = user;
+
+    return res
+        .status(200)
+        .cookie("accessToken", accessToken, accessCookieOptions)
+        .cookie("refreshToken", refreshToken, refreshCookieOptions)
+        .json(new ApiResponse(200, { user: safeUser, accessToken }, "Email verified successfully. You are now logged in."));
+});
+
+const resendVerification = asyncHandler(async (req, res) => {
+    const { email } = req.body;
+
+    if (!email?.trim()) {
+        throw new ApiError(400, "Email is required");
+    }
+
+    const users = await sql`
+        SELECT id, email, is_verified, verification_token_expiry
+        FROM users WHERE email = ${email}
+    `;
+
+    if (users.length === 0) {
+        throw new ApiError(404, "No account found with this email");
+    }
+
+    const user = users[0];
+
+    if (user.is_verified) {
+        throw new ApiError(400, "This email is already verified");
+    }
+
+    // Rate limit — 60 seconds between resends
+    if (user.verification_token_expiry) {
+        const tokenAge = (new Date(user.verification_token_expiry) - new Date()) / 1000;
+        const remainingWindow = 86400 - tokenAge;
+        if (remainingWindow < 60) {
+            throw new ApiError(429, "Please wait 60 seconds before requesting another email");
+        }
+    }
+
+    const verificationToken = crypto.randomUUID();
+    const verificationExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+    await sql`
+        UPDATE users
+        SET verification_token = ${verificationToken},
+            verification_token_expiry = ${verificationExpiry}
+        WHERE id = ${user.id}
+    `;
+
+    await sendVerificationEmail(user.email, verificationToken);
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, {}, "Verification email resent. Please check your inbox."));
+});
+
 export {
     registerUser,
     loginUser,
     logoutUser,
-    refreshAccessToken
+    refreshAccessToken,
+    verifyEmail,
+    resendVerification
 };

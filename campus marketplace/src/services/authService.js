@@ -92,6 +92,24 @@ export class AuthService {
     clearPendingRequests() {
         this.pendingRequests.clear();
     }
+
+    async verifyEmail(token) {
+        try {
+            const response = await apiClient.get(`/auth/verify-email/${token}`);
+            return response.data;
+        } catch (error) {
+            throw error.response?.data?.message || "Email verification failed";
+        }
+    }
+
+    async resendVerificationEmail(email) {
+        try {
+            const response = await apiClient.post('/auth/resend-verification', { email });
+            return response.data;
+        } catch (error) {
+            throw error.response?.data?.message || "Failed to resend verification email";
+        }
+    }
 }
 
 const authService = new AuthService();
