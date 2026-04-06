@@ -124,9 +124,9 @@ const Browse = () => {
           <div className="flex flex-col items-center justify-center py-20 px-4 animate-fadeIn">
             <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-full mb-6">
               {search || category !== "all" || minPrice || maxPrice ? (
-                <SearchX className="w-12 h-12 text-gray-400" />
+                <SearchX className="w-12 h-12 dark:text-gray-400 text-gray-600" />
               ) : (
-                <Package className="w-12 h-12 text-gray-400" />
+                <Package className="w-12 h-12 dark:text-gray-400 text-gray-600" />
               )}
             </div>
             <h3 className="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-2">No products found</h3>

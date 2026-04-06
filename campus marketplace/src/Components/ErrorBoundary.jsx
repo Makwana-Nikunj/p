@@ -39,7 +39,7 @@ class ErrorBoundary extends React.Component {
             <h2 className="font-section-headline gradient-text mb-3">
               Oops! Something went wrong
             </h2>
-            <p className="text-gray-400 mb-8 leading-relaxed">
+            <p className="dark:text-gray-400 text-gray-600 mb-8 leading-relaxed">
               We encountered an unexpected error. Please try refreshing the page.
             </p>
             <button

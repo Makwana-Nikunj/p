@@ -80,22 +80,22 @@ const ClubsPage = () => {
 
   const colorClasses = {
     indigo: {
-      bg: 'bg-indigo-500/10',
-      border: 'border-indigo-500/20',
-      text: 'text-indigo-400',
-      button: 'bg-gradient-to-r from-indigo-600 to-indigo-500'
+      bg: 'bg-indigo-400 dark:bg-indigo-500/10 bg-indigo-500/20',
+      border: 'border-indigo-400 dark:border-indigo-500/20 border-indigo-500/30',
+      text: 'dark:text-indigo-300 text-indigo-600',
+      button: 'dark:bg-gradient-to-r from-indigo-600 to-indigo-500'
     },
     violet: {
-      bg: 'bg-violet-500/10',
-      border: 'border-violet-500/20',
-      text: 'text-violet-400',
-      button: 'bg-gradient-to-r from-violet-600 to-violet-500'
+      bg: 'bg-violet-400 dark:bg-violet-500/10 bg-violet-500/20',
+      border: 'border-violet-400 dark:border-violet-500/20 border-violet-500/30',
+      text: 'dark:text-violet-300 text-violet-600',
+      button: 'dark:bg-gradient-to-r from-violet-600 to-violet-500'
     },
     cyan: {
-      bg: 'bg-cyan-500/10',
-      border: 'border-cyan-500/20',
-      text: 'text-cyan-400',
-      button: 'bg-gradient-to-r from-cyan-600 to-cyan-500'
+      bg: 'bg-cyan-400 dark:bg-cyan-500/10 bg-cyan-500/20',
+      border: 'border-cyan-400 dark:border-cyan-500/20 border-cyan-500/30',
+      text: 'dark:text-cyan-300 text-cyan-600',
+      button: 'dark:bg-gradient-to-r from-cyan-600 to-cyan-500'
     }
   }
 
@@ -110,13 +110,13 @@ const ClubsPage = () => {
       {/* Clubs Header */}
       <section className="w-full max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-20">
         <div className="text-center mb-12">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 font-bold text-xs uppercase tracking-widest mb-4 backdrop-blur-sm">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 dark:text-indigo-300 text-indigo-600 font-bold text-xs uppercase tracking-widest mb-4 backdrop-blur-sm">
             Campus Community
           </span>
           <h1 className="font-headline text-4xl md:text-5xl font-extrabold mb-4 gradient-text bg-gradient-to-r from-indigo-300 via-violet-300 to-cyan-300 bg-clip-text text-transparent">
             Student Clubs & Organizations
           </h1>
-          <p className="text-gray-300/70 max-w-2xl mx-auto text-lg">
+          <p className="dark:text-gray-300 text-gray-600 max-w-2xl mx-auto text-lg">
             Find your tribe. Join communities that match your passions and make your campus experience unforgettable.
           </p>
         </div>
@@ -130,7 +130,7 @@ const ClubsPage = () => {
               className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 ${
                 activeFilter === filter.id
                   ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-[0_0_20px_-5px_rgba(99,102,241,0.5)]'
-                  : 'glass-card text-gray-300 hover:border-indigo-500/30'
+                  : 'glass-card dark:text-gray-300 text-gray-600 hover:border-indigo-500/30'
               }`}
             >
               {filter.label} ({filter.count})
@@ -179,7 +179,7 @@ const ClubsPage = () => {
 
                   {/* Content */}
                   <div className="p-6">
-                    <h3 className="font-headline font-extrabold text-xl mb-2 text-gray-100">{club.name}</h3>
+                    <h3 className="font-headline font-extrabold text-xl mb-2 dark:text-gray-100 text-gray-800">{club.name}</h3>
                     <p className="text-sm text-gray-400/80 mb-6 leading-relaxed">{club.description}</p>
 
                     {/* Tags */}
@@ -232,7 +232,7 @@ const ClubsPage = () => {
               <button className="px-8 py-4 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold hover:scale-105 transition-all duration-300 shadow-[0_0_30px_-5px_rgba(99,102,241,0.5)]">
                 Propose a Club
               </button>
-              <button className="px-8 py-4 rounded-full border border-indigo-500/30 text-gray-200 font-bold hover:bg-indigo-500/10 transition-all duration-300 backdrop-blur-sm">
+              <button className="px-8 py-4 rounded-full border border-indigo-500/30 dark:text-gray-200 text-gray-700 font-bold hover:bg-indigo-500/10 transition-all duration-300 backdrop-blur-sm">
                 Learn More
               </button>
             </div>

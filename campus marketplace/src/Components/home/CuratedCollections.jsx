@@ -6,7 +6,7 @@ const CuratedCollections = () => {
     {
       title: "Tech",
       iconName: "laptop_mac",
-      color: "text-indigo-400",
+      color: "dark:text-indigo-400 text-indigo-600",
       bg: "bg-indigo-500/15",
       border: "border-indigo-500/30",
       glow: "shadow-[0_0_40px_-10px_rgba(99,102,241,0.5)]",
@@ -17,7 +17,7 @@ const CuratedCollections = () => {
     {
       title: "Books",
       iconName: "menu_book",
-      color: "text-violet-400",
+      color: "dark:text-violet-400 text-violet-600",
       bg: "bg-violet-500/15",
       border: "border-violet-500/30",
       glow: "shadow-[0_0_40px_-10px_rgba(139,92,246,0.5)]",
@@ -28,7 +28,7 @@ const CuratedCollections = () => {
     {
       title: "Lifestyle",
       iconName: "chair",
-      color: "text-cyan-400",
+      color: "dark:text-cyan-400 text-cyan-600",
       bg: "bg-cyan-500/15",
       border: "border-cyan-500/30",
       glow: "shadow-[0_0_40px_-10px_rgba(34,211,238,0.5)]",
@@ -39,7 +39,7 @@ const CuratedCollections = () => {
     {
       title: "Services",
       iconName: "design_services",
-      color: "text-indigo-400",
+      color: "dark:text-indigo-400 text-indigo-600",
       bg: "bg-indigo-500/15",
       border: "border-indigo-500/30",
       glow: "shadow-[0_0_40px_-10px_rgba(99,102,241,0.5)]",
@@ -56,7 +56,7 @@ const CuratedCollections = () => {
         <h2 className="font-headline text-2xl md:text-3xl font-extrabold gradient-text bg-gradient-to-r from-indigo-300 via-violet-300 to-cyan-300 bg-clip-text text-transparent mb-4">
           Curated Collections
         </h2>
-        <p className="text-gray-400 text-sm md:text-base max-w-2xl mx-auto">
+        <p className="dark:text-gray-400 text-gray-600 text-sm md:text-base max-w-2xl mx-auto">
           Handpicked essentials for your major. Explore gear, books, and services tailored to campus life.
         </p>
       </div>
@@ -97,15 +97,14 @@ const CuratedCollections = () => {
               </div>
 
               {/* Title */}
-              <span className="font-headline font-bold text-xl md:text-2xl text-white mb-2 group-hover:text-indigo-300 transition-colors duration-300">
+              <span className="font-headline font-bold text-xl md:text-2xl text-text-onSurface dark:text-white mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition-colors duration-300">
                 {collection.title}
               </span>
 
               {/* Count badge */}
               <span className={`
                 text-xs md:text-sm font-medium px-3 py-1 rounded-full
-                ${collection.bg} border ${collection.border} text-gray-300
-                group-hover:text-white group-hover:bg-gradient-to-r group-hover:from-indigo-500/20 group-hover:to-violet-500/20
+                ${collection.bg} border ${collection.border} text-text-onSurfaceVariant dark:text-gray-300 group-hover:text-white group-hover:bg-gradient-to-r group-hover:from-indigo-500/20 group-hover:to-violet-500/20
                 transition-all duration-300
               `}>
                 {collection.count}

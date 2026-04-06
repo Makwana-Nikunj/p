@@ -49,7 +49,7 @@ const Favorites = () => {
   if (!user) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center">
-        <h2 className="text-2xl font-bold mb-4 dark:text-white">Please login to view your favorites</h2>
+        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Please login to view your favorites</h2>
         <Link to="/" className="px-6 py-2 bg-black text-white dark:bg-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200">
           Go to Home
         </Link>
@@ -92,14 +92,14 @@ const Favorites = () => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-2 glass rounded-lg text-sm border border-subtle focus-glow-indigo transition-all duration-300 text-white"
+              className="px-4 py-2 glass rounded-lg text-sm border border-subtle focus-glow-indigo transition-all duration-300 text-text-onSurface"
             >
               <option value="recent" className="text-gray-900">Recently saved</option>
               <option value="price-low" className="text-gray-900">Price: Low to High</option>
               <option value="price-high" className="text-gray-900">Price: High to Low</option>
             </select>
           </div>
-          <p className="text-gray-400">
+          <p className="dark:text-gray-400 text-gray-600">
             {favoriteProducts.length} {favoriteProducts.length === 1 ? 'item' : 'items'} saved
           </p>
         </div>
@@ -129,7 +129,7 @@ const Favorites = () => {
               <FaHeart className="w-24 h-24 text-gray-500" />
             </div>
             <h3 className="font-section-headline gradient-text mb-2">No favorites yet</h3>
-            <p className="text-gray-400 text-center max-w-md mb-6">
+            <p className="text-gray-600 dark:text-gray-400 text-center max-w-md mb-6">
               Start adding products to your wishlist by clicking the heart icon
             </p>
             <Link to="/browse" className="btn-gradient-primary px-8 py-3 rounded-lg font-semibold shadow-lg">

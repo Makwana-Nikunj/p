@@ -94,12 +94,12 @@ const ProfileDropdown = () => {
 
       {/* Dropdown Menu */}
       <div
-        className={`absolute right-0 mt-2 w-48 bg-[#1a1a1a] rounded-lg shadow-lg border border-gray-800 transition-all duration-300 origin-top-right ${
+        className={`absolute right-0 mt-2 w-48 dark:bg-[#1a1a1a] bg-white rounded-lg shadow-lg dark:border-gray-800 border-gray-200 transition-all duration-300 origin-top-right ${
           isOpen ? "scale-100 opacity-100 visible" : "scale-95 opacity-0 invisible"
         } z-50 overflow-hidden`}
       >
         <div className="py-1">
-          <div className="px-4 py-2 border-b border-gray-800">
+          <div className="px-4 py-2 border-b dark:border-gray-800 border-gray-200">
             <p className="text-sm font-medium text-on-surface truncate">
               {user?.name || user?.username || "Campus Member"}
             </p>
@@ -111,7 +111,7 @@ const ProfileDropdown = () => {
           <NavLink
             to="/profile"
             onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 transition-colors"
+            className="flex items-center gap-3 px-4 py-2 text-sm dark:text-gray-300 text-gray-700 hover:bg-gray-800 hover:dark:bg-gray-800 hover:bg-gray-100 transition-colors"
           >
             <User className="w-4 h-4" />
             Profile
@@ -119,7 +119,7 @@ const ProfileDropdown = () => {
 
           <button
             onClick={toggleTheme}
-            className="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 transition-colors"
+            className="w-full flex items-center justify-between px-4 py-2 text-sm dark:text-gray-300 text-gray-700 hover:bg-gray-800 hover:dark:bg-gray-800 hover:bg-gray-100 transition-colors"
           >
             <div className="flex items-center gap-3">
               {theme === 'dark' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
@@ -130,11 +130,11 @@ const ProfileDropdown = () => {
             </div>
           </button>
 
-          <div className="border-t border-gray-800 my-1"></div>
+          <div className="border-t dark:border-gray-800 border-gray-200 my-1"></div>
 
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-gray-800 transition-colors text-left"
+            className="w-full flex items-center gap-3 px-4 py-2 text-sm dark:text-red-400 text-red-600 dark:hover:bg-gray-800 hover:bg-gray-100 transition-colors text-left"
           >
             <LogOut className="w-4 h-4" />
             Logout

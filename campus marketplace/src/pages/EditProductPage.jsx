@@ -102,7 +102,7 @@ const EditProduct = () => {
           <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight text-on-surface mb-2">
             Refine Your Listing
           </h1>
-          <p className="text-gray-400 text-lg">
+          <p className="dark:text-gray-400 text-gray-600 text-lg">
             Update details for <span className="text-indigo-400 font-bold">{product.title}</span>
           </p>
         </header>
@@ -141,15 +141,15 @@ const EditProduct = () => {
               </h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-4 rounded-2xl bg-black/30 border border-white/5">
-                  <span className="text-xs text-gray-400 font-label uppercase tracking-widest">Views</span>
+                  <span className="text-xs dark:text-gray-400 text-gray-600 font-label uppercase tracking-widest">Views</span>
                   <span className="font-bold text-on-surface text-lg">1,248</span>
                 </div>
                 <div className="flex justify-between items-center p-4 rounded-2xl bg-black/30 border border-white/5">
-                  <span className="text-xs text-gray-400 font-label uppercase tracking-widest">Inquiries</span>
+                  <span className="text-xs dark:text-gray-400 text-gray-600 font-label uppercase tracking-widest">Inquiries</span>
                   <span className="font-bold text-on-surface text-lg">14</span>
                 </div>
                 <div className="flex justify-between items-center p-4 rounded-2xl bg-black/30 border border-white/5">
-                  <span className="text-xs text-gray-400 font-label uppercase tracking-widest">Listed Since</span>
+                  <span className="text-xs dark:text-gray-400 text-gray-600 font-label uppercase tracking-widest">Listed Since</span>
                   <span className="font-bold text-on-surface">Oct 12, 2023</span>
                 </div>
               </div>
@@ -162,7 +162,7 @@ const EditProduct = () => {
               <div className="glass-panel rounded-[2rem] p-8 shadow-2xl shadow-indigo-500/5 space-y-6">
                 {/* Listing Title */}
                 <div className="space-y-2">
-                  <label className="font-label text-xs uppercase tracking-[0.2em] text-gray-400 ml-1">
+                  <label className="font-label text-xs uppercase tracking-[0.2em] dark:text-gray-400 text-gray-600 ml-1">
                     Listing Title
                   </label>
                   <input
@@ -178,7 +178,7 @@ const EditProduct = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {/* Category */}
                   <div className="space-y-2">
-                    <label className="font-label text-xs uppercase tracking-[0.2em] text-gray-400 ml-1">
+                    <label className="font-label text-xs uppercase tracking-[0.2em] dark:text-gray-400 text-gray-600 ml-1">
                       Category
                     </label>
                     <div className="relative">
@@ -194,7 +194,7 @@ const EditProduct = () => {
                         <option value="apparel">Apparel</option>
                         <option value="other">Other</option>
                       </select>
-                      <span className="material-symbols-outlined absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                      <span className="material-symbols-outlined absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none dark:text-gray-400 text-gray-600">
                         expand_more
                       </span>
                     </div>
@@ -202,7 +202,7 @@ const EditProduct = () => {
 
                   {/* Brand (Optional) */}
                   <div className="space-y-2">
-                    <label className="font-label text-xs uppercase tracking-[0.2em] text-gray-400 ml-1">
+                    <label className="font-label text-xs uppercase tracking-[0.2em] dark:text-gray-400 text-gray-600 ml-1">
                       Brand (Optional)
                     </label>
                     <input
@@ -216,7 +216,7 @@ const EditProduct = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {/* Price */}
                   <div className="space-y-2">
-                    <label className="font-label text-xs uppercase tracking-[0.2em] text-gray-400 ml-1">
+                    <label className="font-label text-xs uppercase tracking-[0.2em] dark:text-gray-400 text-gray-600 ml-1">
                       Price (USD)
                     </label>
                     <div className="relative">
@@ -239,7 +239,7 @@ const EditProduct = () => {
 
                   {/* Condition */}
                   <div className="space-y-2">
-                    <label className="font-label text-xs uppercase tracking-[0.2em] text-gray-400 ml-1">
+                    <label className="font-label text-xs uppercase tracking-[0.2em] dark:text-gray-400 text-gray-600 ml-1">
                       Condition
                     </label>
                     <div className="relative">
@@ -253,7 +253,7 @@ const EditProduct = () => {
                         <option value="gently-used">Gently Used</option>
                         <option value="well-worn">Well Worn</option>
                       </select>
-                      <span className="material-symbols-outlined absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                      <span className="material-symbols-outlined absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none dark:text-gray-400 text-gray-600">
                         expand_more
                       </span>
                     </div>
@@ -262,7 +262,7 @@ const EditProduct = () => {
 
                 {/* Location */}
                 <div className="space-y-2">
-                  <label className="font-label text-xs uppercase tracking-[0.2em] text-gray-400 ml-1">
+                  <label className="font-label text-xs uppercase tracking-[0.2em] dark:text-gray-400 text-gray-600 ml-1">
                     Location
                   </label>
                   <div className="relative">
@@ -280,7 +280,7 @@ const EditProduct = () => {
 
                 {/* Description */}
                 <div className="space-y-2">
-                  <label className="font-label text-xs uppercase tracking-[0.2em] text-gray-400 ml-1">
+                  <label className="font-label text-xs uppercase tracking-[0.2em] dark:text-gray-400 text-gray-600 ml-1">
                     Description
                   </label>
                   <textarea
@@ -303,7 +303,7 @@ const EditProduct = () => {
                     <span className="material-symbols-outlined text-indigo-400">visibility</span>
                     <div>
                       <p className="font-bold text-sm text-on-surface">Active Listing</p>
-                      <p className="text-xs text-gray-400">Visible to all verified students</p>
+                      <p className="text-xs dark:text-gray-400 text-gray-600">Visible to all verified students</p>
                     </div>
                   </div>
                   <div className="relative inline-block w-12 h-6 rounded-full bg-indigo-500/30 cursor-pointer">

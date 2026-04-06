@@ -73,25 +73,22 @@ const ReportPage = () => {
         </button>
 
         {/* Card */}
-        <div
-          className="rounded-3xl overflow-hidden border border-white/10 shadow-[0_0_80px_rgba(99,102,241,0.1)]"
-          style={{ background: 'rgba(15,12,41,0.95)', backdropFilter: 'blur(24px)' }}
-        >
+        <div className="rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(99,102,241,0.1)] glass-card">
           {/* Header */}
-          <div className="px-8 py-6 border-b border-white/10">
+          <div className="px-8 py-6 border-b border-outline-variant/50">
             <div className="flex items-center gap-4 mb-3">
               <div className="w-12 h-12 rounded-xl bg-red-500/15 border border-red-500/20 flex items-center justify-center flex-shrink-0">
-                <span className="material-symbols-outlined text-red-400 text-2xl" data-icon="flag">flag</span>
+                <span className="material-symbols-outlined dark:text-red-400 text-red-500 text-2xl" data-icon="flag">flag</span>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-white">Report Listing</h1>
+                <h1 className="text-xl font-bold text-on-surface">Report Listing</h1>
                 <p className="text-sm text-on-surface-variant/60 mt-0.5">Help us keep the marketplace safe</p>
               </div>
             </div>
             {productName && (
-              <div className="bg-white/5 rounded-xl border border-white/8 px-4 py-3 flex items-center gap-3">
-                <span className="material-symbols-outlined text-slate-400 text-sm" data-icon="inventory_2">inventory_2</span>
-                <span className="text-sm text-slate-300 font-medium truncate">{productName}</span>
+              <div className="bg-surface-variant dark:bg-white/5 rounded-xl border border-outline-variant px-4 py-3 flex items-center gap-3">
+                <span className="material-symbols-outlined dark:text-slate-400 text-gray-500 text-sm" data-icon="inventory_2">inventory_2</span>
+                <span className="text-sm text-on-surface dark:text-slate-300 font-medium truncate">{productName}</span>
               </div>
             )}
           </div>
@@ -112,8 +109,8 @@ const ReportPage = () => {
                         onClick={() => pickReason(r.value)}
                         className={`w-full flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium border transition-all ${
                           active
-                            ? 'bg-red-500/20 border-red-500/40 text-red-300 shadow-sm'
-                            : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/8 hover:border-white/15'
+                            ? 'bg-red-500/20 border-red-500/40 dark:text-red-400 text-red-600 shadow-sm'
+                            : 'bg-surface-variant/70 dark:bg-white/5 border-outline-variant/50 dark:border-white/10 text-on-surface-variant dark:text-slate-400 hover:bg-surface-variant dark:hover:bg-white/8 transition-all'
                         }`}
                       >
                         <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '18px' }}>{r.icon}</span>
@@ -134,7 +131,7 @@ const ReportPage = () => {
             {/* Comment / Description - Always visible */}
             <div>
               <label className="block text-sm font-semibold text-on-surface mb-3">
-                Describe the issue <span className={selectedReason !== 'other' ? 'text-slate-500' : 'text-red-400'}>
+                Describe the issue <span className={selectedReason !== 'other' ? 'text-on-surface-variant/60 dark:text-slate-500' : 'text-red-400'}>
                   {selectedReason === 'other' ? '*' : '(optional)'}
                 </span>
               </label>
@@ -150,10 +147,10 @@ const ReportPage = () => {
                 {...register('message', {
                   required: selectedReason === 'other' ? 'Please provide details about the issue' : false,
                 })}
-                className={`w-full bg-white/5 border rounded-xl px-4 py-3.5 text-sm leading-relaxed text-white placeholder:text-slate-500 focus:outline-none resize-none transition-all ${
+                className={`w-full bg-surface-variant/70 dark:bg-white/5 border rounded-xl px-4 py-3.5 text-sm leading-relaxed text-on-surface border-outline-variant/50 dark:border-white/10 placeholder:text-on-surface-variant/40 focus:outline-none resize-none transition-all ${
                   selectedReason === 'other'
-                    ? 'border-white/10 focus:border-red-500/40 focus:ring-1 focus:ring-red-500/20'
-                    : 'border-white/10 focus:border-indigo-500/40 focus:ring-1 focus:ring-indigo-500/20'
+                    ? 'focus:border-red-500/40 focus:ring-1 focus:ring-red-500/20'
+                    : 'focus:border-indigo-500/40 focus:ring-1 focus:ring-indigo-500/20'
                 }`}
               />
               {errors.message && (
@@ -167,7 +164,7 @@ const ReportPage = () => {
               disabled={!selectedReason || isSubmitting}
               className={`w-full py-4 rounded-xl text-base font-bold transition-all flex items-center justify-center gap-2 ${
                 !selectedReason || isSubmitting
-                  ? 'bg-white/5 text-slate-500 cursor-not-allowed'
+                  ? 'bg-surface-variant/70 dark:bg-white/5 text-on-surface-variant/60 dark:text-slate-500 cursor-not-allowed'
                   : 'bg-gradient-to-r from-red-500 to-orange-500 text-white shadow-lg shadow-red-500/20 hover:shadow-red-500/30 active:scale-[0.98]'
               }`}
             >

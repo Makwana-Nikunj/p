@@ -123,7 +123,7 @@ const FeedbackForm = () => {
         <h2 className="font-headline text-3xl md:text-4xl font-extrabold mb-4 gradient-text bg-gradient-to-r from-indigo-300 via-violet-300 to-cyan-300 bg-clip-text text-transparent">
           Share Your Experience
         </h2>
-        <p className="text-gray-300/70 max-w-xl mx-auto leading-relaxed">
+        <p className="dark:text-gray-300 text-gray-600 max-w-xl mx-auto leading-relaxed">
           Help us improve Lumina. Your feedback shapes the future of campus marketplace.
         </p>
       </div>
@@ -145,10 +145,10 @@ const FeedbackForm = () => {
                 check_circle
               </span>
             </div>
-            <h3 className="font-headline font-bold text-2xl md:text-3xl text-white mb-3">
+            <h3 className="font-headline font-bold text-2xl md:text-3xl dark:text-white text-gray-900 mb-3">
               Thank You!
             </h3>
-            <p className="text-gray-300/80 max-w-md mx-auto">
+            <p className="dark:text-gray-300 text-gray-600 max-w-md mx-auto">
               Your feedback has been submitted successfully. We appreciate you taking the time to help us improve.
             </p>
           </motion.div>
@@ -157,7 +157,7 @@ const FeedbackForm = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Full Name */}
             <div className="space-y-2">
-              <label htmlFor="fullName" className="block text-sm font-medium text-gray-300">
+              <label htmlFor="fullName" className="block text-sm font-medium dark:text-gray-300 text-gray-600">
                 Full Name
               </label>
               <input
@@ -181,7 +181,7 @@ const FeedbackForm = () => {
 
             {/* Email */}
             <div className="space-y-2">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300">
+              <label htmlFor="email" className="block text-sm font-medium dark:text-gray-300 text-gray-600">
                 Email Address
               </label>
               <input
@@ -205,8 +205,8 @@ const FeedbackForm = () => {
 
             {/* Star Rating */}
             <div className="space-y-3">
-              <label className="block text-sm font-medium text-gray-300">
-                Rating <span className="text-gray-500 font-normal">(required)</span>
+              <label className="block text-sm font-medium dark:text-gray-300 text-gray-600">
+                Rating <span className="dark:text-gray-500 text-gray-400 font-normal">(required)</span>
               </label>
               <div className="flex items-center gap-2">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -259,7 +259,7 @@ const FeedbackForm = () => {
 
             {/* Feedback Message */}
             <div className="space-y-2">
-              <label htmlFor="message" className="block text-sm font-medium text-gray-300">
+              <label htmlFor="message" className="block text-sm font-medium dark:text-gray-300 text-gray-600">
                 Your Feedback <span className="text-red-400">*</span>
               </label>
               <textarea
@@ -282,7 +282,7 @@ const FeedbackForm = () => {
                 ) : (
                   <div></div>
                 )}
-                <span className={`text-xs ${formData.message.length >= 10 && formData.message.length <= 2000 ? 'text-cyan-400' : 'text-gray-500'}`}>
+                <span className={`text-xs ${formData.message.length >= 10 && formData.message.length <= 2000 ? 'dark:text-cyan-400 text-cyan-600' : 'dark:text-gray-500 text-gray-400'}`}>
                   {formData.message.length}/2000 characters
                 </span>
               </div>

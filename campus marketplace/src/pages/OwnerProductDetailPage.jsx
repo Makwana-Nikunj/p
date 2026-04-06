@@ -114,7 +114,7 @@ const OwnerProductDetail = () => {
                   />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <Package className="w-24 h-24 text-[#94A3B8] opacity-50" />
+                    <Package className="w-24 h-24 dark:text-gray-400 text-gray-500 opacity-50" />
                   </div>
                 )}
 
@@ -124,7 +124,7 @@ const OwnerProductDetail = () => {
                     ? 'bg-green-500/20 text-green-400 border border-green-500/30'
                     : product.listing_status === 'sold'
                     ? 'bg-red-500/20 text-red-400 border border-red-500/30'
-                    : 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+                    : 'bg-gray-500/20 dark:text-gray-400 text-gray-500 border border-gray-500/30'
                 }`}>
                   {product.listing_status}
                 </div>
@@ -164,7 +164,7 @@ const OwnerProductDetail = () => {
                       <Package className="w-5 h-5 text-indigo-400" />
                     </div>
                     <div>
-                      <p className="text-xs text-[#94A3B8] uppercase tracking-wider">Condition</p>
+                      <p className="text-xs dark:text-gray-400 text-gray-500 uppercase tracking-wider">Condition</p>
                       <p className="text-sm font-semibold text-on-surface">{product.condition || "Not provided"}</p>
                     </div>
                   </div>
@@ -174,7 +174,7 @@ const OwnerProductDetail = () => {
                       <MapPin className="w-5 h-5 text-cyan-400" />
                     </div>
                     <div>
-                      <p className="text-xs text-[#94A3B8] uppercase tracking-wider">Location</p>
+                      <p className="text-xs dark:text-gray-400 text-gray-500 uppercase tracking-wider">Location</p>
                       <p className="text-sm font-semibold text-on-surface">{product.location || "Not specified"}</p>
                     </div>
                   </div>
@@ -184,7 +184,7 @@ const OwnerProductDetail = () => {
                       <Calendar className="w-5 h-5 text-pink-400" />
                     </div>
                     <div>
-                      <p className="text-xs text-[#94A3B8] uppercase tracking-wider">Posted</p>
+                      <p className="text-xs dark:text-gray-400 text-gray-500 uppercase tracking-wider">Posted</p>
                       <p className="text-sm font-semibold text-on-surface">
                         {new Date(product.$createdAt).toLocaleDateString('en-US', {
                           month: 'short',
@@ -200,7 +200,7 @@ const OwnerProductDetail = () => {
                 <div className="space-y-3">
                   <h3 className="font-headline font-bold text-xl text-on-surface">Description</h3>
                   <div className="p-6 glass rounded-xl border border-subtle">
-                    <p className="text-[#94A3B8] leading-relaxed whitespace-pre-wrap">
+                    <p className="dark:text-gray-400 text-gray-500 leading-relaxed whitespace-pre-wrap">
                       {product.description || "No description provided."}
                     </p>
                   </div>

@@ -441,6 +441,11 @@
   animation: shimmer 1.5s ease-in-out infinite;
 }
 
+.light .skeleton {
+  background: linear-gradient(90deg, #e5e7eb 25%, #d1d5db 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+}
+
 /* Pulse skeleton - gentle opacity pulse for glass surfaces */
 @keyframes pulse-skeleton {
   0%, 100% { opacity: 0.6; }
@@ -925,7 +930,7 @@
 
 /* Background surface container low (for card images) */
 .bg-surface-container-low {
-  background-color: #091328;
+  background-color: var(--bg-surface-container-low);
 }
 
 /* Active step indicator (multi-step forms) */

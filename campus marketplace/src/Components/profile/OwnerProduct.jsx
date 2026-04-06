@@ -21,7 +21,7 @@ const OwnerProduct = ({ products, showNewListing = true, emptyMessage }) => {
             <div className="glass rounded-2xl p-16 text-center border border-subtle">
               <div className="space-y-4">
                 <div className="text-6xl opacity-50">{message.icon}</div>
-                <h3 className="text-xl font-semibold text-white">{message.title}</h3>
+                <h3 className="text-xl font-semibold text-text-onSurface dark:text-white">{message.title}</h3>
                 <p className="text-[#94A3B8]">{message.message}</p>
               </div>
             </div>

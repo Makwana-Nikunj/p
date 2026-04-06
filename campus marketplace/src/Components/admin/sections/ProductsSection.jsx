@@ -121,7 +121,7 @@ const ProductsSection = ({ onApprove, onReject }) => {
                                 />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-slate-500">inventory_2</span>
+                                    <span className="material-symbols-outlined text-on-surface-variant/40">inventory_2</span>
                                 </div>
                             )}
                         </div>
@@ -146,7 +146,7 @@ const ProductsSection = ({ onApprove, onReject }) => {
                                     className="w-full h-full object-cover"
                                 />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-white">
+                                <div className="w-full h-full flex items-center justify-center text-[10px] font-bold dark:text-white text-gray-700">
                                     {getInitials(product.sellerName)}
                                 </div>
                             )}
@@ -265,7 +265,7 @@ const ProductsSection = ({ onApprove, onReject }) => {
                     <h2 className="text-2xl font-bold font-headline text-on-surface">Product Listings</h2>
                     <div className="flex items-center gap-3">
                         <div className="relative">
-                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">filter_list</span>
+                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50 text-sm">filter_list</span>
                             <select
                                 value={statusFilter}
                                 onChange={(e) => setStatusFilter(e.target.value)}
@@ -278,7 +278,7 @@ const ProductsSection = ({ onApprove, onReject }) => {
                             </select>
                         </div>
                         <div className="relative">
-                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">sort</span>
+                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50 text-sm">sort</span>
                             <select
                                 value={sortBy}
                                 onChange={(e) => setSortBy(e.target.value)}

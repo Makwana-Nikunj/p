@@ -13,7 +13,7 @@ const block = (...cls) => `${base} ${glow} rounded ${cls.join(' ')}`;
 
 // ── Product Card ──
 export const ProductCardSkeleton = () => (
-  <div className="w-full rounded-2xl overflow-hidden border border-white/5 bg-surface-container-highest">
+  <div className="w-full rounded-2xl overflow-hidden dark:border-white/5 border-gray-200 bg-surface-container-highest">
     {/* Image area */}
     <div className={`w-full h-48 ${block('')}`}></div>
     {/* Content */}
@@ -49,7 +49,7 @@ export const ProductDetailSkeleton = () => (
     <div className="flex flex-col lg:flex-row gap-8">
       {/* Image */}
       <div className="w-full lg:w-1/2">
-        <div className="aspect-[4/3] rounded-[2.5rem] bg-surface-container-high border border-white/8 overflow-hidden relative">
+        <div className="aspect-[4/3] rounded-[2.5rem] bg-surface-container-high border dark:border-white/8 border-gray-300 overflow-hidden relative">
           <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent"></div>
           <div className={`w-16 h-16 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${base}`}></div>
         </div>
@@ -65,7 +65,7 @@ export const ProductDetailSkeleton = () => (
         {/* Specs grid */}
         <div className="grid grid-cols-2 gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className={`p-5 rounded-3xl border border-white/5 ${base} bg-surface-container-high`}>
+            <div key={i} className={`p-5 rounded-3xl d ark:border-white/5 border-gray-200 ${base} bg-surface-container-high`}>
               <div className={`h-4 rounded w-16 mb-3 ${base}`}></div>
               <div className={`h-6 rounded w-24 ${base}`}></div>
             </div>
@@ -82,7 +82,7 @@ export const ProductDetailSkeleton = () => (
 
         {/* Seller card */}
         <div className="pt-6">
-          <div className={`p-8 rounded-[2.5rem] border border-white/8 shadow-2xl ${base} glass-intense`}>
+          <div className={`p-8 rounded-[2.5rem] border dark:border-white/8 border-gray-300 shadow-2xl ${base} glass-intense`}>
             <div className={`h-6 rounded w-1/3 mb-6 ${base}`}></div>
             <div className="flex items-center gap-4 mb-8">
               <div className={`w-16 h-16 rounded-2xl border-2 border-primary/20 ${base}`}></div>
@@ -102,7 +102,7 @@ export const ProductDetailSkeleton = () => (
       <div className={`h-10 rounded-2xl glass w-48 ${base}`}></div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="tilt-card rounded-2xl overflow-hidden border border-white/5 bg-surface-container-low">
+          <div key={i} className="tilt-card rounded-2xl overflow-hidden d ark:border-white/5 border-gray-200 bg-surface-container-low">
             <div className="aspect-square bg-surface-container-high flex items-center justify-center">
               <div className={`w-10 h-10 rounded-full ${base}`}></div>
             </div>
@@ -166,7 +166,7 @@ const SkeletonLine = ({ width = 'w-3/4', height = 'h-4' }) => (
 
 // ── Stat Card (for admin/dashboard) ──
 export const StatCardSkeleton = () => (
-  <div className={`p-6 rounded-2xl border border-white/5 ${base} glass`}>
+  <div className={`p-6 rounded-2xl d ark:border-white/5 border-gray-200 ${base} glass`}>
     <div className="flex items-center justify-between">
       <div className="space-y-3 flex-1">
         <div className={`h-4 rounded w-24 ${base}`}></div>
@@ -179,7 +179,7 @@ export const StatCardSkeleton = () => (
 
 // ── Table Row (for admin tables) ──
 export const TableRowSkeleton = () => (
-  <div className={`flex items-center gap-4 p-4 rounded-xl border border-white/5 ${base} bg-surface-container-high/50`}>
+  <div className={`flex items-center gap-4 p-4 rounded-xl d ark:border-white/5 border-gray-200 ${base} bg-surface-container-high/50`}>
     <div className={`w-10 h-10 rounded-lg ${base} bg-surface-container-highest`}></div>
     <div className="flex-1 space-y-2">
       <div className={`h-4 rounded w-3/4 ${base}`}></div>

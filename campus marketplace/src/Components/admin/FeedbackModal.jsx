@@ -72,7 +72,7 @@ const FeedbackModal = ({ feedback, isOpen, onClose, onUpdateStatus, onDelete }) 
               onClick={onClose}
               className="absolute top-6 right-6 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
             >
-              <span className="material-symbols-outlined text-white/70">close</span>
+              <span className="material-symbols-outlined text-on-surface-variant">close</span>
             </button>
 
             {/* Header */}

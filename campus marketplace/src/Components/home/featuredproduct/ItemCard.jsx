@@ -54,7 +54,7 @@ const ItemCard = ({ imgUrl, name, price, id, condition, category, showFavorite =
   // Fixed height card container to ensure all cards same height
   return (
     <Link to={`/product/${id}`} className="block group">
-      <div className="h-full rounded-2xl p-6 bg-white/5 backdrop-blur border border-white/10 hover:scale-105 transition-all duration-300 flex flex-col">
+      <div className="h-full rounded-2xl p-6 bg-white/5 backdrop-blur dark:border-white/10 border-gray-200 hover:scale-105 transition-all duration-300 flex flex-col">
         {/* Product Image - Centered, contained */}
         <div className="flex-1 flex items-center justify-center mb-4 min-h-[192px] relative">
           {imageLoading && !imageError && imgUrl && (
@@ -77,7 +77,7 @@ const ItemCard = ({ imgUrl, name, price, id, condition, category, showFavorite =
         </div>
 
         {/* Product Name */}
-        <h3 className="text-lg font-medium text-white/90 leading-tight mb-4 line-clamp-2">
+        <h3 className="text-lg font-medium text-text-onSurface dark:text-white/90 leading-tight mb-4 line-clamp-2">
           {name}
         </h3>
 
@@ -102,7 +102,7 @@ const ItemCard = ({ imgUrl, name, price, id, condition, category, showFavorite =
             </button>
           )}
 
-          <div className="w-full py-3 rounded-xl border border-white/20 text-sm font-medium text-white/80 hover:bg-white/10 transition-all duration-200 text-center">
+          <div className="w-full py-3 rounded-xl border border-white/20 text-sm font-medium text-text-onSurface dark:text-white/80 hover:bg-white/10 transition-all duration-200 text-center">
             View Details
           </div>
         </div>

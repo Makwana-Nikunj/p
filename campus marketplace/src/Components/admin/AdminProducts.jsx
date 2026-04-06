@@ -99,7 +99,7 @@ const AdminProducts = () => {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {products.map(product => (
-                        <div key={product.id} className="glass rounded-2xl overflow-hidden hover:shadow-lg transition-shadow border border-white/5">
+                        <div key={product.id} className="glass rounded-2xl overflow-hidden hover:shadow-lg transition-shadow dark:border-white/10 border-gray-200">
                             {/* Image */}
                             {product.image_url && (
                                 <img
@@ -112,7 +112,7 @@ const AdminProducts = () => {
 
                             {/* Content */}
                             <div className="p-4">
-                                <h3 className="font-semibold text-lg truncate dark:text-white">{product.title}</h3>
+                                <h3 className="font-semibold text-lg truncate text-gray-900 dark:text-white">{product.title}</h3>
                                 <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2">{product.description}</p>
 
                                 <div className="mt-4 flex items-center justify-between">

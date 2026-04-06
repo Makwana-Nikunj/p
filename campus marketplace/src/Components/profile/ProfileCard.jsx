@@ -41,13 +41,13 @@ const ProfileCard = ({ myProducts }) => {
         <div className="flex-1 space-y-3">
 
           <div className="flex flex-wrap items-center gap-4">
-            <h1 className="text-4xl md:text-5xl font-headline font-extrabold tracking-tight text-white">{user.name || "User"}</h1>
+            <h1 className="text-4xl md:text-5xl font-headline font-extrabold tracking-tight dark:text-white text-gray-900">{user.name || "User"}</h1>
             {user.isPro && (
               <span className="px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-bold tracking-widest uppercase">PRO SELLER</span>
             )}
           </div>
 
-          <p className="text-[#94A3B8] font-medium text-lg">
+          <p className="text-onSurfaceVariant font-medium text-lg">
             {user.education || user.role || "Campus Member"}
           </p>
 
@@ -56,14 +56,14 @@ const ProfileCard = ({ myProducts }) => {
         {/* Action Buttons */}
         <div className="flex gap-3">
           <button
-            className="flex items-center gap-2 px-6 py-2.5 rounded-xl glass font-semibold text-white hover:bg-white/10 transition-all duration-300 border border-subtle"
+            className="flex items-center gap-2 px-6 py-2.5 rounded-xl glass font-semibold text-text-onSurface dark:text-white hover:bg-white/10 transition-all duration-300 border border-subtle"
             onClick={() => navigate("/profile/edit")}
           >
             <FiEdit2 className="text-lg" />
             <span>Edit Profile</span>
           </button>
           <button
-            className="flex items-center gap-2 px-6 py-2.5 rounded-xl glass font-semibold text-white hover:bg-white/10 transition-all duration-300 border border-subtle"
+            className="flex items-center gap-2 px-6 py-2.5 rounded-xl glass font-semibold text-text-onSurface dark:text-white hover:bg-white/10 transition-all duration-300 border border-subtle"
             onClick={() => navigate("/forgot-password")}
           >
             <Key className="text-lg" />
@@ -76,18 +76,18 @@ const ProfileCard = ({ myProducts }) => {
       {/* Stats Bento Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 mb-12">
         <div className="glass-card p-6 rounded-3xl border border-subtle flex flex-col justify-between h-32 hover:translate-y-[-4px] transition-transform duration-300">
-          <span className="text-[#94A3B8] text-xs font-bold uppercase tracking-widest">Items Sold</span>
+          <span className="text-onSurfaceVariant text-xs font-bold uppercase tracking-widest">Items Sold</span>
           <span className="text-3xl font-headline font-black text-secondary">{soldCount}</span>
         </div>
 
         <div className="glass-card p-6 rounded-3xl border border-subtle flex flex-col justify-between h-32 hover:translate-y-[-4px] transition-transform duration-300">
-          <span className="text-[#94A3B8] text-xs font-bold uppercase tracking-widest">Active Listings</span>
+          <span className="text-onSurfaceVariant text-xs font-bold uppercase tracking-widest">Active Listings</span>
           <span className="text-3xl font-headline font-black text-tertiary">{activeCount}</span>
         </div>
 
         <div className="glass-card p-6 rounded-3xl border border-subtle flex flex-col justify-between h-32 hover:translate-y-[-4px] transition-transform duration-300">
-          <span className="text-[#94A3B8] text-xs font-bold uppercase tracking-widest">Member Since</span>
-          <span className="text-2xl font-headline font-black text-white">{user.joinedDate || "2024"}</span>
+          <span className="text-onSurfaceVariant text-xs font-bold uppercase tracking-widest">Member Since</span>
+          <span className="text-2xl font-headline font-black text-text-onSurface dark:text-white">{user.joinedDate || "2024"}</span>
         </div>
       </div>
     </div>

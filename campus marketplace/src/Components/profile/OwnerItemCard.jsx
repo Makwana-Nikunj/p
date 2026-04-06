@@ -21,7 +21,7 @@ const OwnerItemCard = ({ imgUrl, name, category, price, id }) => {
         <div className="aspect-[4/3] overflow-hidden relative bg-surface-container-highest">
           {imageError || !imgUrl ? (
             <div className="absolute inset-0 flex items-center justify-center">
-              <Package className="w-16 h-16 text-[#94A3B8] opacity-50" />
+              <Package className="w-16 h-16 text-text-onSurfaceVariant opacity-50" />
             </div>
           ) : (
             <img
@@ -49,17 +49,17 @@ const OwnerItemCard = ({ imgUrl, name, category, price, id }) => {
         {/* Content */}
         <div className="p-6 space-y-4 flex flex-col flex-grow">
           <div>
-            <h3 className="text-xl font-headline font-bold text-white mb-2 line-clamp-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-cyan-400 group-hover:bg-clip-text transition-all duration-300">
+            <h3 className="text-xl font-headline font-bold text-text-onSurface dark:text-white mb-2 line-clamp-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-cyan-400 transition-all duration-300">
               {name}
             </h3>
-            <p className="text-[#94A3B8] text-sm line-clamp-2">
+            <p className="text-text-onSurfaceVariant text-sm line-clamp-2">
               {category}
             </p>
           </div>
 
           {/* Actions */}
           <div className="flex items-center justify-between pt-4 mt-auto border-t border-subtle">
-            <div className="flex items-center gap-2 text-[#94A3B8] text-xs font-bold uppercase">
+            <div className="flex items-center gap-2 text-text-onSurfaceVariant text-xs font-bold uppercase">
               <FiEye className="text-sm" />
               <span>Views</span>
             </div>

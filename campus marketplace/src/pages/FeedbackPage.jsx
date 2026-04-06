@@ -70,7 +70,7 @@ const FeedbackPage = () => {
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
         {/* Back link */}
-        <Link to="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors group">
+        <Link to="/" className="inline-flex items-center gap-2 dark:text-gray-400 text-gray-600 hover:dark:text-white hover:text-gray-900 mb-8 transition-colors group">
           <span className="material-symbols-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span>
           Back to Home
         </Link>
@@ -79,7 +79,7 @@ const FeedbackPage = () => {
           <h2 className="font-headline text-3xl md:text-4xl font-extrabold mb-4 gradient-text bg-gradient-to-r from-indigo-300 via-violet-300 to-cyan-300 bg-clip-text text-transparent">
             All Student Feedback
           </h2>
-          <p className="text-gray-300/70 max-w-xl mx-auto leading-relaxed">
+          <p className="dark:text-gray-400 text-gray-600 max-w-xl mx-auto leading-relaxed">
             Every voice matters. Here's what our campus community has shared.
           </p>
         </div>
@@ -90,7 +90,7 @@ const FeedbackPage = () => {
             <button
               onClick={() => { setSortBy('newest'); setCurrentPage(1) }}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                sortBy === 'newest' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md' : 'text-gray-400 hover:text-white'
+                sortBy === 'newest' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md' : 'dark:text-gray-400 text-gray-600 hover:dark:text-white hover:text-gray-900'
               }`}
             >
               Newest First
@@ -98,7 +98,7 @@ const FeedbackPage = () => {
             <button
               onClick={() => { setSortBy('oldest'); setCurrentPage(1) }}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                sortBy === 'oldest' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md' : 'text-gray-400 hover:text-white'
+                sortBy === 'oldest' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md' : 'dark:text-gray-400 text-gray-600 hover:dark:text-white hover:text-gray-900'
               }`}
             >
               Oldest First
@@ -129,7 +129,7 @@ const FeedbackPage = () => {
         ) : feedbacks.length === 0 ? (
           <div className="text-center py-20">
             <span className="material-symbols-outlined text-6xl text-gray-600 mb-4">forum</span>
-            <p className="text-gray-400 text-lg">No feedback submitted yet.</p>
+            <p className="dark:text-gray-400 text-gray-600 text-lg">No feedback submitted yet.</p>
           </div>
         ) : (
           <>
@@ -160,7 +160,7 @@ const FeedbackPage = () => {
                     </div>
 
                     {/* Feedback text */}
-                    <p className="text-base md:text-lg leading-relaxed mb-8 text-gray-200/90 font-light">
+                    <p className="text-base md:text-lg leading-relaxed mb-8 dark:text-gray-200/90 text-gray-700 font-light">
                       "{fb.message}"
                     </p>
 
@@ -172,7 +172,7 @@ const FeedbackPage = () => {
                             {(fb.fullName || '?')[0].toUpperCase()}
                           </span>
                         </div>
-                        <div className="font-bold text-base text-gray-100">{fb.fullName}</div>
+                        <div className="font-bold text-base dark:text-gray-100 text-gray-800">{fb.fullName}</div>
                       </div>
                     </div>
                   </div>
@@ -192,7 +192,7 @@ const FeedbackPage = () => {
                 <button
                   onClick={() => handlePage(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className="w-10 h-10 rounded-full glass border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:border-indigo-400/40 transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:text-gray-400 disabled:hover:border-white/10"
+                  className="w-10 h-10 rounded-full glass border border-white/10 flex items-center justify-center dark:text-gray-400 text-gray-600 hover:dark:text-white hover:text-gray-900 hover:border-indigo-400/40 transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:text-gray-400 disabled:hover:border-white/10"
                 >
                   <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>chevron_left</span>
                 </button>
@@ -208,7 +208,7 @@ const FeedbackPage = () => {
                       className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-300 ${
                         currentPage === p
                           ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-500/30'
-                          : 'glass border border-white/10 text-gray-400 hover:text-white hover:border-indigo-400/40'
+                          : 'glass border border-white/10 dark:text-gray-400 text-gray-600 hover:dark:text-white hover:text-gray-900 hover:border-indigo-400/40'
                       }`}
                     >
                       {p}
@@ -220,7 +220,7 @@ const FeedbackPage = () => {
                 <button
                   onClick={() => handlePage(currentPage + 1)}
                   disabled={currentPage === pagination.totalPages}
-                  className="w-10 h-10 rounded-full glass border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:border-indigo-400/40 transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:text-gray-400 disabled:hover:border-white/10"
+                  className="w-10 h-10 rounded-full glass border border-white/10 flex items-center justify-center dark:text-gray-400 text-gray-600 hover:dark:text-white hover:text-gray-900 hover:border-indigo-400/40 transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:text-gray-400 disabled:hover:border-white/10"
                 >
                   <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>chevron_right</span>
                 </button>

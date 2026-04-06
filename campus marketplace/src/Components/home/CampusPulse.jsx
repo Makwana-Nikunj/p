@@ -10,7 +10,7 @@ const CampusPulse = ({ trendingProducts }) => {
         <h2 className="font-headline text-3xl md:text-4xl font-extrabold gradient-text bg-gradient-to-r from-indigo-300 via-violet-300 to-cyan-300 bg-clip-text text-transparent">
           Trending This Week
         </h2>
-        <p className="text-gray-400 text-sm md:text-base mt-2 max-w-2xl mx-auto">
+        <p className="dark:text-gray-400 text-gray-600 text-sm md:text-base mt-2 max-w-2xl mx-auto">
           Hot listings from your campus community
         </p>
       </div>

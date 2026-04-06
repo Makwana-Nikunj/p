@@ -86,7 +86,7 @@ const EditProfile = () => {
 
             {/* LEFT — Profile Photo */}
             <div className="space-y-5">
-              <label className="block text-sm font-medium text-gray-300">Profile Photo</label>
+              <label className="block text-sm font-medium dark:text-gray-300">Profile Photo</label>
               <div className="relative w-full aspect-square rounded-xl overflow-hidden glass border border-subtle">
                 <img
                   src={preview}
@@ -97,7 +97,7 @@ const EditProfile = () => {
               </div>
 
               <div className="w-full">
-                <label className="block text-sm font-medium text-gray-300 mb-2">Upload New Photo</label>
+                <label className="block text-sm font-medium dark:text-gray-300 mb-2">Upload New Photo</label>
                 <div className="upload-zone rounded-xl p-4 text-center cursor-pointer">
                   <input
                     type="file"
@@ -106,7 +106,7 @@ const EditProfile = () => {
                     onChange={handleImageChange}
                     className="w-full h-full absolute inset-0 opacity-0 cursor-pointer"
                   />
-                  <p className="text-gray-400 text-sm">Click to upload image</p>
+                  <p className="dark:text-gray-400 text-sm">Click to upload image</p>
                 </div>
               </div>
             </div>
@@ -116,7 +116,7 @@ const EditProfile = () => {
 
               {/* Name */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Display Name</label>
+                <label className="block text-sm font-medium dark:text-gray-300 mb-2">Display Name</label>
                 <input
                   placeholder="Your Name"
                   {...register("name", { required: "Name is required" })}
@@ -129,11 +129,11 @@ const EditProfile = () => {
 
               {/* Email (read-only) */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Email (cannot be changed)</label>
+                <label className="block text-sm font-medium dark:text-gray-300 mb-2">Email (cannot be changed)</label>
                 <input
                   value={user.email}
                   disabled
-                  className="w-full glass rounded-lg px-4 py-3 text-gray-400 opacity-60 cursor-not-allowed"
+                  className="w-full glass rounded-lg px-4 py-3 dark:text-gray-400 opacity-60 cursor-not-allowed"
                 />
               </div>
             </div>
