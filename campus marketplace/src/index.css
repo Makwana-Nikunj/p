@@ -398,17 +398,27 @@
   box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
 }
 
-/* Skeleton loading animation */
+/* Skeleton loading animation - Lumina dark shimmer */
 .skeleton {
-  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
 }
 
-.dark .skeleton {
-  background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+/* Pulse skeleton - gentle opacity pulse for glass surfaces */
+@keyframes pulse-skeleton {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+.animate-pulse-skeleton {
+  animation: pulse-skeleton 1.8s cubic-bezier(0.23, 1, 0.32, 1) infinite;
+}
+
+/* Shimmer gradient for skeleton fills */
+.bg-gradient-shimmer {
+  background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
   background-size: 200% 100%;
-  animation: shimmer 1.5s ease-in-out infinite;
+  animation: shimmer 2s ease-in-out infinite;
 }
 
 /* Custom scrollbar styles */

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FiBox, FiCheckCircle, FiXCircle, FiClock } from 'react-icons/fi';
+import { StatCardSkeleton } from '../SkeletonLoader';
 import apiClient from '../../lib/apiClient';
 
 const AdminStats = () => {
@@ -55,7 +56,7 @@ const AdminStats = () => {
     );
 
     if (loading) {
-        return <div className="text-center py-12 dark:text-white">Loading statistics...</div>;
+        return <div className="grid grid-cols-1 md:grid-cols-4 gap-6">{Array.from({ length: 4 }).map((_, i) => <StatCardSkeleton key={i} />)}</div>;
     }
 
     return (

@@ -5,7 +5,8 @@ import { registerBones, configureBones } from 'boneyard-js/react'
 configureBones({
   color: 'rgba(255,255,255,0.06)',
   darkColor: 'rgba(255,255,255,0.08)',
-  animate: 'pulse',
+  animate: 'shimmer',
+  borderRadius: '0.5rem',
 })
 
 registerBones({})

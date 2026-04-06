@@ -11,6 +11,7 @@ const ItemCard = ({ imgUrl, name, price, id, condition, category, showFavorite =
   const [isFavorited, setIsFavorited] = useState(false)
   const [loading, setLoading] = useState(false)
   const [imageError, setImageError] = useState(false)
+  const [imageLoading, setImageLoading] = useState(true)
 
   useEffect(() => {
     const checkFavorite = async () => {
@@ -55,7 +56,10 @@ const ItemCard = ({ imgUrl, name, price, id, condition, category, showFavorite =
     <Link to={`/product/${id}`} className="block group">
       <div className="h-full rounded-2xl p-6 bg-white/5 backdrop-blur border border-white/10 hover:scale-105 transition-all duration-300 flex flex-col">
         {/* Product Image - Centered, contained */}
-        <div className="flex-1 flex items-center justify-center mb-4 min-h-[192px]">
+        <div className="flex-1 flex items-center justify-center mb-4 min-h-[192px] relative">
+          {imageLoading && !imageError && imgUrl && (
+            <div className="absolute inset-0 rounded-xl animate-pulse-skeleton bg-white/5"></div>
+          )}
           {imageError || !imgUrl ? (
             <div className="flex items-center justify-center w-full h-full bg-white/5 rounded-xl">
               <Package className="w-10 h-10 text-gray-500" />
@@ -64,9 +68,10 @@ const ItemCard = ({ imgUrl, name, price, id, condition, category, showFavorite =
             <img
               src={imgUrl}
               alt={name}
-              className="h-48 object-contain rounded-xl"
+              className="h-48 object-contain rounded-xl transition-opacity duration-300"
               loading="lazy"
-              onError={() => setImageError(true)}
+              onLoad={() => setImageLoading(false)}
+              onError={() => { setImageError(true); setImageLoading(false); }}
             />
           )}
         </div>

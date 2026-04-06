@@ -11,6 +11,7 @@ import productService from '../services/productService';
 import { fetchProducts, fetchProductById, fetchMyProducts } from '../store/productSlice';
 import { useEffect, useState } from "react";
 import AtmosphericBlooms from '../Components/AtmosphericBlooms';
+import { ProductDetailSkeleton } from '../Components/SkeletonLoader';
 
 const OwnerProductDetail = () => {
   const { id } = useParams();
@@ -42,12 +43,10 @@ const OwnerProductDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen w-full flex items-center justify-center bg-[#060E20]">
-        <div className="text-center space-y-4">
-          <div className="inline-block">
-            <div className="w-16 h-16 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
-          </div>
-          <p className="text-lg font-semibold text-white/80">Loading product...</p>
+      <div className="min-h-screen w-full bg-[#060E20] px-4 md:px-8 py-12">
+        <AtmosphericBlooms intensity="subtle" />
+        <div className="max-w-7xl mx-auto animate-fadeIn">
+          <ProductDetailSkeleton />
         </div>
       </div>
     );

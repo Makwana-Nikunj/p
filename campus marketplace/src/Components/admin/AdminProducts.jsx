@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FiCheck, FiX } from 'react-icons/fi';
+import { FiX, FiCheck } from 'react-icons/fi';
+import { FiLoader } from 'react-icons/fi';
+import { ProductCardSkeleton, TableRowSkeleton } from '../SkeletonLoader';
 import apiClient from '../../lib/apiClient';
 import { useToast } from '../Toast/ToastContainer';
 
@@ -86,27 +89,17 @@ const AdminProducts = () => {
             {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {Array.from({ length: 6 }).map((_, i) => (
-                    <div key={i} className="bg-white dark:bg-gray-900 rounded-lg shadow overflow-hidden">
-                      <div className="w-full h-48 bg-gray-300 dark:bg-gray-800 animate-pulse"></div>
-                      <div className="p-4 space-y-3">
-                        <div className="h-5 bg-gray-300 dark:bg-gray-700 rounded w-3/4 animate-pulse"></div>
-                        <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/2 animate-pulse"></div>
-                        <div className="flex items-center justify-between">
-                          <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded w-24 animate-pulse"></div>
-                          <div className="h-5 bg-gray-300 dark:bg-gray-700 rounded w-16 animate-pulse"></div>
-                        </div>
-                      </div>
-                    </div>
+                    <ProductCardSkeleton key={i} />
                   ))}
                 </div>
             ) : products.length === 0 ? (
-                <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-8 text-center">
-                    <p className="text-gray-600 dark:text-gray-400">No products found in this category</p>
+                <div className="glass rounded-2xl p-8 text-center">
+                    <p className="text-on-surface-variant">No products found in this category</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {products.map(product => (
-                        <div key={product.id} className="bg-white dark:bg-gray-900 rounded-lg shadow overflow-hidden hover:shadow-lg transition">
+                        <div key={product.id} className="glass rounded-2xl overflow-hidden hover:shadow-lg transition-shadow border border-white/5">
                             {/* Image */}
                             {product.image_url && (
                                 <img

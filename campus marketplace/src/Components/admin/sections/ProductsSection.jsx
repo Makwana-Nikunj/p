@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { TableRowSkeleton } from '../../../Components/SkeletonLoader';
 import apiClient from '../../../lib/apiClient';
 import { useToast } from '../../../Components/Toast/ToastContainer';
 
@@ -86,6 +87,111 @@ const ProductsSection = ({ onApprove, onReject }) => {
                 showToast(error.response?.data?.message || 'Failed to reject product', 'error');
             }
         }
+    };
+
+    const TableRows = () => {
+        if (loading) {
+            return Array.from({ length: 5 }).map((_, i) => (
+                <TableRowSkeleton key={i} />
+            ));
+        }
+        if (sortedProducts.length === 0) {
+            return (
+                <tr>
+                    <td colSpan={5} className="px-8 py-20">
+                        <div className="flex flex-col items-center justify-center text-on-surface-variant">
+                            <span className="material-symbols-outlined text-6xl mb-4 opacity-30">inventory_2</span>
+                            <p className="text-lg font-medium">No products in this category</p>
+                            <p className="text-sm opacity-60 mt-1">Try selecting a different filter</p>
+                        </div>
+                    </td>
+                </tr>
+            );
+        }
+        return sortedProducts.map((product) => (
+            <tr key={product.id} className="hover:bg-white/[0.02] transition-colors group">
+                <td className="px-8 py-5">
+                    <div className="flex items-center gap-4">
+                        <div className="h-12 w-12 rounded-xl bg-surface-bright p-1 shadow-inner border border-white/5">
+                            {product.image_url ? (
+                                <img
+                                    alt={product.title}
+                                    src={product.image_url}
+                                    className="w-full h-full object-cover rounded-lg"
+                                />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center">
+                                    <span className="material-symbols-outlined text-slate-500">inventory_2</span>
+                                </div>
+                            )}
+                        </div>
+                        <div>
+                            <p className="font-bold text-on-surface text-sm line-clamp-1">
+                                {product.title}
+                            </p>
+                            <p className="text-xs text-on-surface-variant mt-0.5">Category: {product.category || 'General'}</p>
+                        </div>
+                    </div>
+                </td>
+                <td className="px-6 py-5 font-headline font-semibold text-tertiary">
+                    ₹{parseFloat(product.price).toLocaleString('en-IN')}
+                </td>
+                <td className="px-6 py-5">
+                    <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-slate-700 overflow-hidden">
+                            {product.sellerImage ? (
+                                <img
+                                    alt={product.sellerName}
+                                    src={product.sellerImage}
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-white">
+                                    {getInitials(product.sellerName)}
+                                </div>
+                            )}
+                        </div>
+                        <span className="text-sm font-medium text-on-surface">
+                            {product.sellerName || 'Unknown'}
+                        </span>
+                    </div>
+                </td>
+                <td className="px-6 py-5">
+                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                        product.status === 'pending' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                        product.status === 'approved' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                        product.status === 'rejected' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
+                        'bg-gray-500/10 text-gray-400 border border-gray-500/20'
+                    }`}>
+                        {product.status || 'pending'}
+                    </span>
+                </td>
+                <td className="px-6 py-5 text-right">
+                    <div className="flex items-center justify-end gap-2">
+                        {product.status === 'pending' ? (
+                            <>
+                                <button
+                                    onClick={() => handleApprove(product.id)}
+                                    className="flex items-center gap-1 px-4 py-1.5 bg-gradient-to-br from-emerald-500 to-green-500 text-white rounded-lg text-xs font-bold shadow-lg shadow-emerald-500/20 hover:opacity-90 transition-all active:scale-95"
+                                >
+                                    <span className="material-symbols-outlined text-sm">check</span> Approve
+                                </button>
+                                <button
+                                    onClick={() => handleReject(product.id)}
+                                    className="flex items-center gap-1 px-4 py-1.5 bg-gradient-to-br from-red-500 to-orange-500 text-white rounded-lg text-xs font-bold shadow-lg shadow-red-500/20 hover:opacity-90 transition-all active:scale-95"
+                                >
+                                    <span className="material-symbols-outlined text-sm">close</span> Reject
+                                </button>
+                            </>
+                        ) : (
+                            <button className="flex items-center gap-1 px-4 py-1.5 glass hover:bg-white/10 border border-subtle text-on-surface-variant rounded-lg text-xs font-medium transition-all active:scale-95">
+                                <span className="material-symbols-outlined text-sm">visibility</span> View
+                            </button>
+                        )}
+                    </div>
+                </td>
+            </tr>
+        ));
     };
 
     return (
@@ -199,119 +305,13 @@ const ProductsSection = ({ onApprove, onReject }) => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-white/5">
-                                {loading ? (
-                                    <tr>
-                                        <td colSpan={5} className="px-8 py-20">
-                                            <div className="flex justify-center">
-                                                <div className="flex items-center gap-3 text-on-surface-variant">
-                                                    <span className="material-symbols-outlined text-2xl animate-spin">refresh</span>
-                                                    <span>Loading products...</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ) : sortedProducts.length > 0 ? (
-                                    sortedProducts.map((product) => (
-                                        <tr key={product.id} className="hover:bg-white/[0.02] transition-colors group">
-                                            <td className="px-8 py-5">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="h-12 w-12 rounded-xl bg-surface-bright p-1 shadow-inner border border-white/5">
-                                                        {product.image_url ? (
-                                                            <img
-                                                                alt={product.title}
-                                                                src={product.image_url}
-                                                                className="w-full h-full object-cover rounded-lg"
-                                                            />
-                                                        ) : (
-                                                            <div className="w-full h-full flex items-center justify-center">
-                                                                <span className="material-symbols-outlined text-slate-500">inventory_2</span>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                    <div>
-                                                        <p className="font-bold text-on-surface text-sm line-clamp-1">
-                                                            {product.title}
-                                                        </p>
-                                                        <p className="text-xs text-on-surface-variant mt-0.5">Category: {product.category || 'General'}</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-5 font-headline font-semibold text-tertiary">
-                                                ₹{parseFloat(product.price).toLocaleString('en-IN')}
-                                            </td>
-                                            <td className="px-6 py-5">
-                                                <div className="flex items-center gap-2">
-                                                    <div className="w-6 h-6 rounded-full bg-slate-700 overflow-hidden">
-                                                        {product.sellerImage ? (
-                                                            <img
-                                                                alt={product.sellerName}
-                                                                src={product.sellerImage}
-                                                                className="w-full h-full object-cover"
-                                                            />
-                                                        ) : (
-                                                            <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-white">
-                                                                {getInitials(product.sellerName)}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                    <span className="text-sm font-medium text-on-surface">
-                                                        {product.sellerName || 'Unknown'}
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-5">
-                                                <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                                                    product.status === 'pending' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                                                    product.status === 'approved' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                                                    product.status === 'rejected' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
-                                                    'bg-gray-500/10 text-gray-400 border border-gray-500/20'
-                                                }`}>
-                                                    {product.status || 'pending'}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-5 text-right">
-                                                <div className="flex items-center justify-end gap-2">
-                                                    {product.status === 'pending' ? (
-                                                        <>
-                                                            <button
-                                                                onClick={() => handleApprove(product.id)}
-                                                                className="flex items-center gap-1 px-4 py-1.5 bg-gradient-to-br from-emerald-500 to-green-500 text-white rounded-lg text-xs font-bold shadow-lg shadow-emerald-500/20 hover:opacity-90 transition-all active:scale-95"
-                                                            >
-                                                                <span className="material-symbols-outlined text-sm">check</span> Approve
-                                                            </button>
-                                                            <button
-                                                                onClick={() => handleReject(product.id)}
-                                                                className="flex items-center gap-1 px-4 py-1.5 bg-gradient-to-br from-red-500 to-orange-500 text-white rounded-lg text-xs font-bold shadow-lg shadow-red-500/20 hover:opacity-90 transition-all active:scale-95"
-                                                            >
-                                                                <span className="material-symbols-outlined text-sm">close</span> Reject
-                                                            </button>
-                                                        </>
-                                                    ) : (
-                                                        <button className="flex items-center gap-1 px-4 py-1.5 glass hover:bg-white/10 border border-subtle text-on-surface-variant rounded-lg text-xs font-medium transition-all active:scale-95">
-                                                            <span className="material-symbols-outlined text-sm">visibility</span> View
-                                                        </button>
-                                                    )}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan={5} className="px-8 py-20">
-                                            <div className="flex flex-col items-center justify-center text-on-surface-variant">
-                                                <span className="material-symbols-outlined text-6xl mb-4 opacity-30">inventory_2</span>
-                                                <p className="text-lg font-medium">No products in this category</p>
-                                                <p className="text-sm opacity-60 mt-1">Try selecting a different filter</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )}
+                                {TableRows()}
                             </tbody>
                         </table>
                     </div>
 
                     {/* Pagination */}
-                    {sortedProducts.length > 0 && (
+                    {!loading && sortedProducts.length > 0 && (
                         <div className="p-6 flex justify-between items-center text-sm text-on-surface-variant font-medium border-t border-white/5">
                             <span>Showing 1-{sortedProducts.length} of {sortedProducts.length} products</span>
                             <div className="flex gap-2">
