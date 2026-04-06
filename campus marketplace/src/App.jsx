@@ -32,6 +32,7 @@ const Terms = lazy(() => import("./pages/TermsPage.jsx"));
 const PrivacyPolicy = lazy(() => import("./pages/DataPrivacyPolicy.jsx"));
 const CheckInbox = lazy(() => import("./pages/CheckInboxPage.jsx"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmailPage.jsx"));
+const ReportPage = lazy(() => import("./pages/ReportPage.jsx"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPasswordPage.jsx"));
 
 // Base layout wrapping routes
@@ -134,6 +135,7 @@ function App() {
           <Route path="/forgot-password" element={<Layout><ForgotPassword /></Layout>} />
 
           <Route path="/product/:id" element={<Layout><ProductDetailPage /></Layout>} />
+          <Route path="/report/:productId" element={<ProtectedRoute><Layout><ReportPage /></Layout></ProtectedRoute>} />
           <Route path="/profile/product/:id" element={<ProtectedRoute><Layout><OwnerProductDetail /></Layout></ProtectedRoute>} />
           <Route path="/profile/edit" element={<ProtectedRoute><Layout><EditProfile /></Layout></ProtectedRoute>} />
           <Route path="/edit-product/:id" element={<ProtectedRoute><Layout><EditProduct /></Layout></ProtectedRoute>} />

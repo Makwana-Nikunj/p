@@ -162,6 +162,21 @@ const connectToDatabase = async () => {
             // Columns might already exist, ignore
         }
 
+        // ===============================
+        // REPORTS TABLE
+        // ===============================
+        await sql`
+        CREATE TABLE IF NOT EXISTS reports (
+            id SERIAL PRIMARY KEY,
+            product_id INTEGER REFERENCES products(id) ON DELETE CASCADE,
+            reporter_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+            reason VARCHAR(50) NOT NULL,
+            message TEXT,
+            status VARCHAR(50) NOT NULL DEFAULT 'pending',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        `;
+
         console.log("✅ Successfully connected to the database.");
     } catch (error) {
         console.error("❌ Error connecting to the database:", error);

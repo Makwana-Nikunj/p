@@ -30,15 +30,62 @@ const ProductDetailPage = () => {
   const products = useSelector((state) => state.products.products);
   const user = useSelector((state) => state.auth.userData);
 
+  const [product, setProduct] = useState(null);
   const [isLoadingChat, setIsLoadingChat] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Simulate loading check on mount
+  // Fetch product from API if not in Redux
   useEffect(() => {
-    setTimeout(() => setIsLoading(false), 300);
-  }, [id]);
+    let cancelled = false;
+    const loadProduct = async () => {
+      setIsLoading(true);
+      const fromRedux = products.find((p) => p.$id === id);
+      if (fromRedux) {
+        if (!cancelled) {
+          setProduct(fromRedux);
+          setIsLoading(false);
+        }
+        return;
+      }
+      try {
+        const data = await productService.getProduct(id);
+        if (!cancelled && data) {
+          setProduct(data);
+        }
+      } catch {
+        // swallow, product stays null
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
+    };
+    loadProduct();
+    return () => { cancelled = true; };
+  }, [id, products]);
 
-  const product = products.find((p) => p.$id === id);
+  // Loading state
+  if (isLoading || !product) {
+    return (
+      <div className="w-full min-h-screen flex flex-col items-center justify-center bg-background py-6 relative">
+        <AtmosphericBlooms intensity="medium" />
+        <div className="w-full max-w-7xl px-4 md:px-8 animate-pulse">
+          <div className="h-6 bg-surface-bright/30 rounded w-64 mx-auto mb-8"></div>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
+            <div className="md:col-span-7">
+              <div className="aspect-[4/3] rounded-[2.5rem] bg-surface-bright/20"></div>
+            </div>
+            <div className="md:col-span-5 space-y-6">
+              <div className="h-12 bg-surface-bright/30 rounded-2xl w-full"></div>
+              <div className="h-8 bg-surface-bright/20 rounded-xl w-40"></div>
+              <div className="h-4 bg-surface-bright/20 rounded w-full"></div>
+              <div className="h-4 bg-surface-bright/20 rounded w-3/4"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Show error state if product not found (early return is fine for 404)
   if (!product && !isLoading) {
@@ -58,9 +105,11 @@ const ProductDetailPage = () => {
   }
 
   // Related products - show only approved AND active products
-  const relatedProducts = products.filter(
-    (p) => p.category === product.category && p.$id !== product.$id && p.status === 'approved' && p.listing_status === 'active'
-  ).slice(0, 4);
+  const relatedProducts = product
+    ? products.filter(
+        (p) => p.category === product.category && p.$id !== product.$id && p.status === 'approved' && p.listing_status === 'active'
+      ).slice(0, 4)
+    : [];
 
   const handleMessageSeller = async () => {
     try {
@@ -234,7 +283,17 @@ const ProductDetailPage = () => {
                     <> <MessageSquare className="w-5 h-5" /> Contact Seller</>
                   )}
                 </button>
-                <button className="w-full py-3 rounded-xl border border-error/10 text-error/80 font-medium hover:bg-error/5 hover:border-error/20 transition-all flex items-center justify-center gap-2 text-sm mt-2 hover:opacity-100">
+                <button
+                  onClick={() => {
+                    if (!user) {
+                      showToast('Please log in to report a listing', 'info', 3000);
+                      navigate("/login");
+                      return;
+                    }
+                    navigate(`/report/${product.$id}`, { state: { productName: product.title } });
+                  }}
+                  className="w-full py-3 rounded-xl border border-error/10 text-error/80 font-medium hover:bg-error/5 hover:border-error/20 transition-all flex items-center justify-center gap-2 text-sm mt-2 hover:opacity-100"
+                >
                   <span className="material-symbols-outlined text-sm">flag</span>
                   Report Listing
                 </button>
