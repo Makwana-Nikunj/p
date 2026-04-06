@@ -120,7 +120,7 @@ const EditProfile = () => {
                 <input
                   placeholder="Your Name"
                   {...register("name", { required: "Name is required" })}
-                  className="w-full glass rounded-lg px-4 py-3 outline-none focus-glow-indigo transition-all duration-300 text-white placeholder-gray-500"
+                  className="w-full glass rounded-lg px-4 py-3 outline-none focus-glow-indigo transition-all duration-300 text-on-surface placeholder:text-outline"
                 />
                 {errors.name && (
                   <p className="text-sm text-red-400 mt-1">{errors.name.message}</p>

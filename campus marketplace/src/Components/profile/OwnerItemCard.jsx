@@ -18,7 +18,7 @@ const OwnerItemCard = ({ imgUrl, name, category, price, id }) => {
       <div className="relative bg-surface-container-low rounded-[2rem] overflow-hidden hover:shadow-[0_20px_50px_rgba(0,0,0,0.4)] transition-all duration-500 border border-subtle flex flex-col h-full">
 
         {/* Image */}
-        <div className="aspect-[4/3] overflow-hidden relative bg-[#0C0C0C]">
+        <div className="aspect-[4/3] overflow-hidden relative bg-surface-container-highest">
           {imageError || !imgUrl ? (
             <div className="absolute inset-0 flex items-center justify-center">
               <Package className="w-16 h-16 text-[#94A3B8] opacity-50" />

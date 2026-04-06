@@ -1,10 +1,46 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ===========================================
+   SEMANTIC COLOR TOKENS (Light / Dark)
+   =========================================== */
+:root {
+  /* Light mode (defaults) */
+  --bg-surface: #FAFAFA;
+  --bg-surface-dim: #F5F5F5;
+  --bg-surface-bright: #FFFFFF;
+  --bg-surface-container-lowest: #FFFFFF;
+  --bg-surface-container-low: #F0F0F0;
+  --bg-surface-container: #EAEAEA;
+  --bg-surface-container-high: #E0E0E0;
+  --bg-surface-container-highest: #D8D8D8;
+  --bg-surface-variant: #F2F2F5;
+
+  --text-on-surface: #1A1A2E;
+  --text-on-surface-variant: #4A5568;
+  --text-outline: #7A8599;
+}
+
+.dark {
+  --bg-surface: #060E20;
+  --bg-surface-dim: #060E20;
+  --bg-surface-bright: #1F2B49;
+  --bg-surface-container-lowest: #000000;
+  --bg-surface-container-low: #091328;
+  --bg-surface-container: #0F1930;
+  --bg-surface-container-high: #141F38;
+  --bg-surface-container-highest: #0C0C0C;
+  --bg-surface-variant: #192540;
+
+  --text-on-surface: rgba(255, 255, 255, 0.87);
+  --text-on-surface-variant: #A3AAC4;
+  --text-outline: #6D758C;
+}
+
 @layer base {
   body {
-    background-color: #060E20 !important;
-    color: rgba(255, 255, 255, 0.9);
+    background-color: var(--bg-surface) !important;
+    color: var(--text-on-surface);
     font-family: 'Plus Jakarta Sans', sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
@@ -421,6 +457,11 @@
   animation: shimmer 2s ease-in-out infinite;
 }
 
+.light .bg-gradient-shimmer {
+  background: linear-gradient(90deg, rgba(0,0,0,0.03) 25%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0.03) 75%);
+  background-size: 200% 100%;
+}
+
 /* Custom scrollbar styles */
 .scrollbar-thin::-webkit-scrollbar {
   width: 12px;
@@ -539,12 +580,24 @@
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
 }
 
+.light .glass {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+}
+
 .glass-intense {
   background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.light .glass-intense {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
 /* Gradient Text - Indigo to Cyan */
@@ -723,6 +776,10 @@
   margin: 1.5rem 0;
 }
 
+.light .divider {
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
 /* Typography scale per Lumina spec */
 .font-hero {
   font-family: 'Plus Jakarta Sans', sans-serif;
@@ -762,6 +819,10 @@
 /* Ensure consistent borders */
 .border-subtle {
   border-color: rgba(255, 255, 255, 0.08);
+}
+
+.light .border-subtle {
+  border-color: rgba(0, 0, 0, 0.08);
 }
 
 @keyframes borderGlow {
@@ -820,7 +881,7 @@
 }
 
 .text-on-surface {
-  color: rgba(255, 255, 255, 0.87);
+  color: var(--text-on-surface);
 }
 
 /* Shine border for cards (top edge accent) */
@@ -876,10 +937,14 @@
   color: #94A3B8;
 }
 
+.light .step-indicator-inactive {
+  color: #64748B;
+}
+
 /* Upload zone dashed border */
 .upload-zone {
   border: 2px dashed #6366F1;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(99, 102, 241, 0.03);
   transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -960,6 +1025,12 @@
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
+.light .glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.08);
+}
+
 /* Glass Card color variants - Lumina palette */
 .glass-card-indigo {
   background: rgba(99, 102, 241, 0.03);
@@ -968,6 +1039,13 @@
   border: 1px solid rgba(99, 102, 241, 0.15);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37),
               0 0 40px -5px rgba(99, 102, 241, 0.2);
+}
+
+.light .glass-card-indigo {
+  background: rgba(99, 102, 241, 0.03);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.08),
+              0 0 20px -5px rgba(99, 102, 241, 0.15);
 }
 
 .glass-card-cyan {
@@ -979,6 +1057,13 @@
               0 0 40px -5px rgba(34, 211, 238, 0.2);
 }
 
+.light .glass-card-cyan {
+  background: rgba(34, 211, 238, 0.03);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.08),
+              0 0 20px -5px rgba(34, 211, 238, 0.15);
+}
+
 .glass-card-violet {
   background: rgba(139, 92, 246, 0.03);
   backdrop-filter: blur(20px);
@@ -986,6 +1071,13 @@
   border: 1px solid rgba(139, 92, 246, 0.15);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37),
               0 0 40px -5px rgba(139, 92, 246, 0.2);
+}
+
+.light .glass-card-violet {
+  background: rgba(139, 92, 246, 0.03);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.08),
+              0 0 20px -5px rgba(139, 92, 246, 0.15);
 }
 
 /* Tab underline indicator */
@@ -1094,10 +1186,19 @@
   font-family: 'Manrope', sans-serif;
 }
 
+/* Shine border for cards (top edge accent) */
+.shine-border {
+  border-top: 1px solid rgba(99, 102, 241, 0.15);
+}
+
 /* New listing card dashed border */
 .new-listing-card {
   border: 2px dashed rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
+}
+
+.light .new-listing-card {
+  border-color: rgba(99, 102, 241, 0.25);
 }
 
 .new-listing-card:hover {
@@ -1161,16 +1262,28 @@ select.lumina-input option {
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
+.light .glass-panel {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.12);
+}
+
 /* Text color utilities */
 .text-on-surface-variant {
-  color: #A3AAC4;
+  color: var(--text-on-surface-variant);
 }
 
 .text-outline {
-  color: #6D758C;
+  color: var(--text-outline);
 }
 
 .text-primary-fixed {
+  color: #6366F1;
+}
+
+.dark .text-primary-fixed {
   color: #AE8DFF;
 }
 
@@ -1178,26 +1291,30 @@ select.lumina-input option {
   color: #000311;
 }
 
-/* Background surface colors */
+/* Background surface colors — CSS vars for light/dark toggle */
 .bg-surface-bright {
-  background-color: #0C0C0C;
+  background-color: var(--bg-surface-bright);
 }
 
 .bg-surface-container-highest {
-  background-color: #0C0C0C;
+  background-color: var(--bg-surface-container-highest);
 }
 
 .bg-surface-container {
-  background-color: #0F1930;
+  background-color: var(--bg-surface-container);
 }
 
 .bg-surface-dim {
-  background-color: #060E20;
+  background-color: var(--bg-surface-dim);
 }
 
 /* Border colors */
 .border-outline-variant {
   border-color: rgba(255, 255, 255, 0.08);
+}
+
+.light .border-outline-variant {
+  border-color: rgba(0, 0, 0, 0.06);
 }
 
 /* Gradient CTA button (Indigo → Violet → Cyan) */

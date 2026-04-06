@@ -41,8 +41,8 @@ const CampusPulse = ({ trendingProducts }) => {
               key={index}
               className="w-full sm:w-[calc(50%-0.75rem)] md:w-[calc(33.333%-1rem)] lg:w-[calc(25%-0.75rem)]"
             >
-              <div className="rounded-3xl overflow-hidden relative border border-indigo-500/10 shadow-[0_0_20px_-5px_rgba(99,102,241,0.3),0_8px_32px_-8px_rgba(0,0,0,0.4)] bg-[#0C0C0C] backdrop-blur-xl">
-                <div className="aspect-[4/3] bg-[#0C0C0C] animate-pulse flex items-center justify-center rounded-t-3xl">
+              <div className="rounded-3xl overflow-hidden relative border border-indigo-500/10 shadow-[0_0_20px_-5px_rgba(99,102,241,0.3),0_8px_32px_-8px_rgba(0,0,0,0.4)] bg-surface-container-highest backdrop-blur-xl">
+                <div className="aspect-[4/3] bg-surface-container-highest animate-pulse flex items-center justify-center rounded-t-3xl">
                   {/* Placeholder skeleton image */}
                   <div className="w-12 h-12 bg-gray-700 rounded-full animate-pulse"></div>
                 </div>

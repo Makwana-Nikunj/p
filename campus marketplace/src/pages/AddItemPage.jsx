@@ -88,19 +88,19 @@ const AddItem = () => {
       <AtmosphericBlooms intensity="vibrant" />
 
       {/* Top Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-[#060e20]/80 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
+      <nav className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
         <div className="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
           <div className="text-2xl font-black bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent font-headline tracking-tight">
             Lumina Campus
           </div>
           <div className="hidden md:flex items-center gap-8">
-            <a className="text-slate-400 font-medium hover:text-white transition-colors font-headline" href="#">Marketplace</a>
-            <a className="text-slate-400 font-medium hover:text-white transition-colors font-headline" href="#">My Listings</a>
+            <a className="text-on-surface-variant font-medium hover:text-on-surface transition-colors font-headline" href="#">Marketplace</a>
+            <a className="text-on-surface-variant font-medium hover:text-on-surface transition-colors font-headline" href="#">My Listings</a>
             <a className="text-indigo-400 font-bold border-b-2 border-indigo-500 pb-1 font-headline" href="#">Sell</a>
           </div>
           <div className="flex items-center gap-4">
-            <span className="material-symbols-outlined text-slate-400 hover:text-white cursor-pointer transition-colors" data-icon="notifications">notifications</span>
-            <span className="material-symbols-outlined text-slate-400 hover:text-white cursor-pointer transition-colors" data-icon="shopping_cart">shopping_cart</span>
+            <span className="material-symbols-outlined text-on-surface-variant hover:text-on-surface cursor-pointer transition-colors" data-icon="notifications">notifications</span>
+            <span className="material-symbols-outlined text-on-surface-variant hover:text-on-surface cursor-pointer transition-colors" data-icon="shopping_cart">shopping_cart</span>
             <div className="w-10 h-10 rounded-full border-2 border-indigo-500/20 p-0.5">
               <img className="w-full h-full rounded-full object-cover" data-alt="User avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAYTs990lm0QG4iRfJEUOFDINzOEAEnqJ_OdZ4icBJ_EnpPm0YmHSEPXjrvI2tx0Y87Rd7NiXiEpArsj4lx8N_hiwcsWZokYX297XF5cSbMV2vNwGEd6uPuwfOiUVE1DZy_oeIKvXas3ueuJ02adlV862aXJJSaMk59NaBDDDRmfZhS55crwgubjLO-kJaT9VSeHok4__O1BjpRd72BiFyPIhWuMvHA20GnfaDs9puvyUBtDSgATqWucaMUGulyRpV5_ejGQtww0EZ" />
             </div>
@@ -138,16 +138,16 @@ const AddItem = () => {
               {/* Step 2 */}
               <div className="flex flex-col items-start">
                 <div className="flex items-center gap-4 group cursor-default">
-                  <div className="w-10 h-10 rounded-xl bg-slate-800/50 text-slate-400 flex items-center justify-center font-bold border border-slate-700 z-10">2</div>
-                  <span className="font-headline font-semibold text-slate-400">Details</span>
+                  <div className="w-10 h-10 rounded-xl bg-surface-container-highest/50 text-on-surface-variant flex items-center justify-center font-bold border border-outline-variant z-10">2</div>
+                  <span className="font-headline font-semibold text-on-surface-variant">Details</span>
                 </div>
-                <div className="w-[2px] h-[550px] bg-slate-700/50 ml-[19px] -my-1"></div>
+                <div className="w-[2px] h-[550px] bg-outline-variant/50 ml-[19px] -my-1"></div>
               </div>
               {/* Step 3 */}
               <div className="flex flex-col items-start">
                 <div className="flex items-center gap-4 group cursor-default">
-                  <div className="w-10 h-10 rounded-xl bg-slate-800/50 text-slate-400 flex items-center justify-center font-bold border border-slate-700 z-10">3</div>
-                  <span className="font-headline font-semibold text-slate-400">Pricing</span>
+                  <div className="w-10 h-10 rounded-xl bg-surface-container-highest/50 text-on-surface-variant flex items-center justify-center font-bold border border-outline-variant z-10">3</div>
+                  <span className="font-headline font-semibold text-on-surface-variant">Pricing</span>
                 </div>
               </div>
             </div>
@@ -156,15 +156,15 @@ const AddItem = () => {
           {/* Form Content */}
           <section className="lg:col-span-9 space-y-8">
             {/* Section 1: Photo Upload */}
-            <div className="bg-slate-900/30 backdrop-blur-xl rounded-3xl p-8 border border-slate-700/50 shadow-2xl transition-all duration-500 hover:shadow-indigo-500/10">
+            <div className="bg-surface-container/30 backdrop-blur-xl rounded-3xl p-8 border border-outline-variant/50 shadow-2xl transition-all duration-500 hover:shadow-indigo-500/10">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <span className="material-symbols-outlined text-indigo-400 text-3xl" data-icon="add_a_photo">add_a_photo</span>
-                  <h2 className="text-2xl font-bold font-headline text-white">Product Image</h2>
+                  <h2 className="text-2xl font-bold font-headline text-on-surface">Product Image</h2>
                 </div>
                 <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">Mandatory</span>
               </div>
-              <div className="relative group h-64 w-full rounded-2xl border-2 border-dashed border-slate-600 hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all overflow-hidden cursor-pointer">
+              <div className="relative group h-64 w-full rounded-2xl border-2 border-dashed border-outline-variant hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all overflow-hidden cursor-pointer">
                 {imagePreview ? (
                   // Image Preview State
                   <div className="relative inset-0">
@@ -176,7 +176,7 @@ const AddItem = () => {
                         setValue("image", null);
                         if (fileInputRef.current) fileInputRef.current.value = '';
                       }}
-                      className="absolute top-4 right-4 w-10 h-10 rounded-full bg-red-500/80 hover:bg-red-500 text-white flex items-center justify-center transition-all"
+                      className="absolute top-4 right-4 w-10 h-10 rounded-full bg-red-500/80 hover:bg-red-500 text-on-surface flex items-center justify-center transition-all"
                     >
                       <span className="material-symbols-outlined text-lg" data-icon="close">close</span>
                     </button>
@@ -184,12 +184,12 @@ const AddItem = () => {
                 ) : (
                   // Placeholder State
                   <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-                    <div className="w-16 h-16 rounded-2xl bg-slate-800/50 flex items-center justify-center transition-transform group-hover:scale-110 duration-300 border border-slate-600">
+                    <div className="w-16 h-16 rounded-2xl bg-surface-container-highest/50 flex items-center justify-center transition-transform group-hover:scale-110 duration-300 border border-outline-variant">
                       <span className="material-symbols-outlined text-3xl text-indigo-400" data-icon="upload_file">upload_file</span>
                     </div>
                     <div className="text-center">
-                      <p className="font-bold text-white">Upload Product Image</p>
-                      <p className="text-sm text-slate-400">PNG, JPG or WebP up to 10MB</p>
+                      <p className="font-bold text-on-surface">Upload Product Image</p>
+                      <p className="text-sm text-on-surface-variant">PNG, JPG or WebP up to 10MB</p>
                     </div>
                     <button
                       type="button"
@@ -222,10 +222,10 @@ const AddItem = () => {
             </div>
 
             {/* Section 2: Item Details */}
-            <div className="bg-slate-900/30 backdrop-blur-xl rounded-3xl p-8 border border-slate-700/50">
+            <div className="bg-surface-container/30 backdrop-blur-xl rounded-3xl p-8 border border-outline-variant/50">
               <div className="flex items-center gap-3 mb-8">
                 <span className="material-symbols-outlined text-pink-400 text-3xl" data-icon="description">description</span>
-                <h2 className="text-2xl font-bold font-headline text-white">Tell the Story</h2>
+                <h2 className="text-2xl font-bold font-headline text-on-surface">Tell the Story</h2>
               </div>
               <div className="space-y-6">
                 {/* Title */}
@@ -234,7 +234,7 @@ const AddItem = () => {
                   <input
                     placeholder="e.g. MacBook Pro M2 - Space Gray"
                     {...register("title", { required: "Product name is required" })}
-                    className="w-full bg-slate-800/50 border-0 border-b-2 border-slate-600 focus:ring-0 focus:border-indigo-500 transition-all rounded-t-xl px-4 py-4 text-white placeholder:text-slate-500"
+                    className="w-full bg-surface-container-highest/50 border-0 border-b-2 border-outline-variant focus:ring-0 focus:border-indigo-500 transition-all rounded-t-xl px-4 py-4 text-on-surface placeholder:text-slate-500"
                   />
                   {errors.title && (
                     <p className="text-sm text-red-400 mt-1">
@@ -249,7 +249,7 @@ const AddItem = () => {
                     <label className="text-sm font-bold text-slate-300 ml-1">Category</label>
                     <select
                       {...register("category", { required: "Category is required" })}
-                      className="w-full bg-slate-800/50 border-0 border-b-2 border-slate-600 focus:ring-0 focus:border-indigo-500 transition-all rounded-t-xl px-4 py-4 text-white appearance-none"
+                      className="w-full bg-surface-container-highest/50 border-0 border-b-2 border-outline-variant focus:ring-0 focus:border-indigo-500 transition-all rounded-t-xl px-4 py-4 text-on-surface appearance-none"
                     >
                       <option value="" className="text-gray-900">Select category</option>
                       <option value="electronics" className="text-gray-900">Electronics</option>
@@ -270,7 +270,7 @@ const AddItem = () => {
                     <input
                       placeholder="Optional"
                       {...register("brand")}
-                      className="w-full bg-slate-800/50 border-0 border-b-2 border-slate-600 focus:ring-0 focus:border-indigo-500 transition-all rounded-t-xl px-4 py-4 text-white placeholder:text-slate-500"
+                      className="w-full bg-surface-container-highest/50 border-0 border-b-2 border-outline-variant focus:ring-0 focus:border-indigo-500 transition-all rounded-t-xl px-4 py-4 text-on-surface placeholder:text-slate-500"
                     />
                   </div>
                 </div>
@@ -283,7 +283,7 @@ const AddItem = () => {
                     <input
                       placeholder="e.g. Student Union, Library, or North Campus"
                       {...register("location")}
-                      className="w-full bg-slate-800/50 border-0 border-b-2 border-slate-600 focus:ring-0 focus:border-indigo-500 transition-all rounded-t-xl pl-12 pr-4 py-4 text-white placeholder:text-slate-500"
+                      className="w-full bg-surface-container-highest/50 border-0 border-b-2 border-outline-variant focus:ring-0 focus:border-indigo-500 transition-all rounded-t-xl pl-12 pr-4 py-4 text-on-surface placeholder:text-slate-500"
                     />
                   </div>
                 </div>
@@ -295,7 +295,7 @@ const AddItem = () => {
                     placeholder="Describe the specs, usage history, and any minor flaws..."
                     rows="4"
                     {...register("description", { required: "Description is required" })}
-                    className="w-full bg-slate-800/50 border-0 border-b-2 border-slate-600 focus:ring-0 focus:border-indigo-500 transition-all rounded-t-xl px-4 py-4 text-white placeholder:text-slate-500 resize-none"
+                    className="w-full bg-surface-container-highest/50 border-0 border-b-2 border-outline-variant focus:ring-0 focus:border-indigo-500 transition-all rounded-t-xl px-4 py-4 text-on-surface placeholder:text-slate-500 resize-none"
                   />
                   {errors.description && (
                     <p className="text-sm text-red-400 mt-1">
@@ -307,10 +307,10 @@ const AddItem = () => {
             </div>
 
             {/* Section 3: Pricing & Condition */}
-            <div className="bg-slate-900/30 backdrop-blur-xl rounded-3xl p-8 border border-slate-700/50">
+            <div className="bg-surface-container/30 backdrop-blur-xl rounded-3xl p-8 border border-outline-variant/50">
               <div className="flex items-center gap-3 mb-8">
                 <span className="material-symbols-outlined text-cyan-400 text-3xl" data-icon="payments">payments</span>
-                <h2 className="text-2xl font-bold font-headline text-white">Value & Quality</h2>
+                <h2 className="text-2xl font-bold font-headline text-on-surface">Value & Quality</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                 {/* Price */}
@@ -326,7 +326,7 @@ const AddItem = () => {
                           required: "Price is required",
                           min: { value: 1, message: "Price must be greater than 0" },
                         })}
-                        className="w-full bg-slate-800/50 border-0 border-b-2 border-slate-600 focus:ring-0 focus:border-indigo-500 transition-all rounded-t-xl pl-8 pr-4 py-4 text-2xl font-bold font-headline text-white"
+                        className="w-full bg-surface-container-highest/50 border-0 border-b-2 border-outline-variant focus:ring-0 focus:border-indigo-500 transition-all rounded-t-xl pl-8 pr-4 py-4 text-2xl font-bold font-headline text-on-surface"
                       />
                     </div>
                     {errors.price && (
@@ -350,7 +350,7 @@ const AddItem = () => {
                         className={`px-5 py-2 rounded-full font-bold text-sm border transition-all ${
                           selectedCondition === cond
                             ? 'bg-pink-500/20 text-pink-300 border-pink-500/30 hover:scale-105'
-                            : 'bg-slate-800/50 text-slate-300 border-slate-600 hover:border-pink-500/50'
+                            : 'bg-surface-container-highest/50 text-slate-300 border-outline-variant hover:border-pink-500/50'
                         }`}
                       >
                         {cond}
@@ -369,13 +369,13 @@ const AddItem = () => {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-8">
-              <button type="button" className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors group">
+              <button type="button" className="flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition-colors group">
                 <span className="material-symbols-outlined transition-transform group-hover:-translate-x-1" data-icon="arrow_back">arrow_back</span>
                 <span className="font-bold">Save as Draft</span>
               </button>
               <button
                 type="submit"
-                className="w-full sm:w-auto px-12 py-4 rounded-2xl bg-gradient-to-r from-indigo-500 to-cyan-400 text-white font-black text-lg shadow-xl shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 border border-indigo-400/20"
+                className="w-full sm:w-auto px-12 py-4 rounded-2xl bg-gradient-to-r from-indigo-500 to-cyan-400 text-on-surface font-black text-lg shadow-xl shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 border border-indigo-400/20"
               >
                 Publish Listing
               </button>
@@ -385,7 +385,7 @@ const AddItem = () => {
       </main>
 
       {/* Bottom Navigation (Mobile) */}
-      <nav className="lg:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe bg-[#060e20]/70 backdrop-blur-lg rounded-t-3xl border-t border-white/10 z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+      <nav className="lg:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe bg-surface/70 backdrop-blur-lg rounded-t-3xl border-t border-white/10 z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
         <a className="flex flex-col items-center justify-center text-slate-500 hover:text-indigo-300 transition-transform" href="#">
           <span className="material-symbols-outlined" data-icon="explore">explore</span>
           <span className="font-['Manrope'] text-[10px] uppercase tracking-widest mt-1">Explore</span>

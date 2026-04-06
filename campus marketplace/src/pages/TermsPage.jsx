@@ -10,7 +10,7 @@ const TermsPage = () => {
   }
 
   return (
-    <section className="bg-[#060e20] py-20 md:py-24 relative overflow-hidden min-h-screen">
+    <section className="py-20 md:py-24 relative overflow-hidden min-h-screen">
       {/* Atmospheric background blooms */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/8 blur-[100px] rounded-full"></div>
@@ -22,7 +22,7 @@ const TermsPage = () => {
         {/* Back link */}
         <button
           onClick={handleBack}
-          className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 md:mb-12 transition-colors group bg-transparent border-none cursor-pointer"
+          className="inline-flex items-center gap-2 text-on-surface-variant hover:text-on-surface mb-8 md:mb-12 transition-colors group bg-transparent border-none cursor-pointer"
           type="button"
         >
           <span className="material-symbols-outlined group-hover:-translate-x-1 transition-transform">
@@ -36,10 +36,10 @@ const TermsPage = () => {
           <h1 className="font-headline text-4xl md:text-5xl font-extrabold mb-4 gradient-text bg-gradient-to-r from-indigo-300 via-violet-300 to-cyan-300 bg-clip-text text-transparent">
             Terms & Conditions
           </h1>
-          <p className="text-gray-300/70 max-w-2xl mx-auto leading-relaxed text-lg">
+          <p className="text-on-surface-variant/70 max-w-2xl mx-auto leading-relaxed text-lg">
             Please read these terms carefully before using Campus Marketplace. By accessing or using our platform, you agree to be bound by these terms.
           </p>
-          <p className="text-gray-400 text-sm mt-4">
+          <p className="text-on-surface-variant text-sm mt-4">
             Last updated: {lastUpdated}
           </p>
         </div>
@@ -48,8 +48,8 @@ const TermsPage = () => {
         <div className="space-y-8 md:space-y-12">
           {/* Section 1: Acceptance */}
           <div className="glass-card p-6 md:p-8 rounded-3xl relative">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">1. Acceptance of Terms</h2>
-            <div className="text-gray-300/90 space-y-4 leading-relaxed">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-on-surface">1. Acceptance of Terms</h2>
+            <div className="text-on-surface-variant/90 space-y-4 leading-relaxed">
               <p>
                 Welcome to Campus Marketplace ("we", "our", or "us"). These Terms and Conditions ("Terms") govern your use of our campus marketplace platform, including all content, features, and services offered through our website and mobile application.
               </p>
@@ -61,8 +61,8 @@ const TermsPage = () => {
 
           {/* Section 2: User Responsibilities */}
           <div className="glass-card p-6 md:p-8 rounded-3xl relative">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">2. User Responsibilities</h2>
-            <div className="text-gray-300/90 space-y-4 leading-relaxed">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-on-surface">2. User Responsibilities</h2>
+            <div className="text-on-surface-variant/90 space-y-4 leading-relaxed">
               <p>As a user of Campus Marketplace, you agree to:</p>
               <ul className="list-disc list-inside space-y-3 ml-4">
                 <li>Provide accurate, current, and complete information when creating an account</li>
@@ -77,8 +77,8 @@ const TermsPage = () => {
 
           {/* Section 3: Product Listings */}
           <div className="glass-card p-6 md:p-8 rounded-3xl relative">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">3. Product Listings</h2>
-            <div className="text-gray-300/90 space-y-4 leading-relaxed">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-on-surface">3. Product Listings</h2>
+            <div className="text-on-surface-variant/90 space-y-4 leading-relaxed">
               <p>When creating product listings, you agree to:</p>
               <ul className="list-disc list-inside space-y-3 ml-4">
                 <li>Accurately describe the condition, price, and details of items</li>
@@ -87,7 +87,7 @@ const TermsPage = () => {
                 <li>Not list prohibited items (see Section 4)</li>
                 <li>Update listings promptly when items are no longer available</li>
               </ul>
-              <p className="text-sm text-gray-400 mt-4">
+              <p className="text-sm text-on-surface-variant mt-4">
                 We reserve the right to remove any listings that violate these Terms or our community guidelines.
               </p>
             </div>
@@ -95,8 +95,8 @@ const TermsPage = () => {
 
           {/* Section 4: Prohibited Items */}
           <div className="glass-card p-6 md:p-8 rounded-3xl relative">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">4. Prohibited Items</h2>
-            <div className="text-gray-300/90 space-y-4 leading-relaxed">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-on-surface">4. Prohibited Items</h2>
+            <div className="text-on-surface-variant/90 space-y-4 leading-relaxed">
               <p>The following items are strictly prohibited on Campus Marketplace:</p>
               <ul className="list-disc list-inside space-y-3 ml-4">
                 <li>Illegal substances, drugs, or drug paraphernalia</li>
@@ -117,8 +117,8 @@ const TermsPage = () => {
 
           {/* Section 5: Transactions */}
           <div className="glass-card p-6 md:p-8 rounded-3xl relative">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">5. Transactions & Payments</h2>
-            <div className="text-gray-300/90 space-y-4 leading-relaxed">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-on-surface">5. Transactions & Payments</h2>
+            <div className="text-on-surface-variant/90 space-y-4 leading-relaxed">
               <p>Campus Marketplace facilitates connections between buyers and sellers. Users are responsible for:</p>
               <ul className="list-disc list-inside space-y-3 ml-4">
                 <li>Arranging payment methods directly with the other party</li>
@@ -134,8 +134,8 @@ const TermsPage = () => {
 
           {/* Section 6: Privacy */}
           <div className="glass-card p-6 md:p-8 rounded-3xl relative">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">6. Privacy Policy</h2>
-            <div className="text-gray-300/90 space-y-4 leading-relaxed">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-on-surface">6. Privacy Policy</h2>
+            <div className="text-on-surface-variant/90 space-y-4 leading-relaxed">
               <p>
                 Your privacy is important to us. Our collection and use of personal information is governed by our Privacy Policy. By using Campus Marketplace, you consent to our data practices as described in the Privacy Policy.
               </p>
@@ -149,12 +149,12 @@ const TermsPage = () => {
 
           {/* Section 7: Modifications */}
           <div className="glass-card p-6 md:p-8 rounded-3xl relative">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">7. Modifications to Terms</h2>
-            <div className="text-gray-300/90 space-y-4 leading-relaxed">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-on-surface">7. Modifications to Terms</h2>
+            <div className="text-on-surface-variant/90 space-y-4 leading-relaxed">
               <p>
                 We reserve the right to update or modify these Terms at any time without prior notice. The most current version will be posted on this page with an updated revision date. Your continued use of Campus Marketplace after any changes constitutes your acceptance of the new Terms.
               </p>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-on-surface-variant">
                 We encourage you to review these Terms periodically for any changes.
               </p>
             </div>
@@ -162,8 +162,8 @@ const TermsPage = () => {
 
           {/* Section 8: Termination */}
           <div className="glass-card p-6 md:p-8 rounded-3xl relative">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">8. Account Termination</h2>
-            <div className="text-gray-300/90 space-y-4 leading-relaxed">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-on-surface">8. Account Termination</h2>
+            <div className="text-on-surface-variant/90 space-y-4 leading-relaxed">
               <p>We may suspend or terminate your account at our sole discretion if you:</p>
               <ul className="list-disc list-inside space-y-3 ml-4">
                 <li>Violate any provision of these Terms</li>
@@ -180,8 +180,8 @@ const TermsPage = () => {
 
           {/* Section 9: Disclaimer */}
           <div className="glass-card p-6 md:p-8 rounded-3xl relative">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">9. Disclaimer of Warranties</h2>
-            <div className="text-gray-300/90 space-y-4 leading-relaxed">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-on-surface">9. Disclaimer of Warranties</h2>
+            <div className="text-on-surface-variant/90 space-y-4 leading-relaxed">
               <p>
                 Campus Marketplace is provided on an "as is" and "as available" basis without warranties of any kind, either express or implied. We do not guarantee that:
               </p>
@@ -197,8 +197,8 @@ const TermsPage = () => {
 
           {/* Section 10: Limitation of Liability */}
           <div className="glass-card p-6 md:p-8 rounded-3xl relative">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">10. Limitation of Liability</h2>
-            <div className="text-gray-300/90 space-y-4 leading-relaxed">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-on-surface">10. Limitation of Liability</h2>
+            <div className="text-on-surface-variant/90 space-y-4 leading-relaxed">
               <p>
                 To the fullest extent permitted by law, Campus Marketplace and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of the platform, including but not limited to:
               </p>
@@ -213,8 +213,8 @@ const TermsPage = () => {
 
           {/* Section 11: Contact */}
           <div className="glass-card p-6 md:p-8 rounded-3xl relative">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">11. Contact Us</h2>
-            <div className="text-gray-300/90 space-y-4 leading-relaxed">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-on-surface">11. Contact Us</h2>
+            <div className="text-on-surface-variant/90 space-y-4 leading-relaxed">
               <p>If you have any questions or concerns about these Terms & Conditions, please contact us:</p>
               <div className="bg-white/5 rounded-xl p-4 space-y-2">
                 <p className="flex items-center gap-3">
@@ -229,7 +229,7 @@ const TermsPage = () => {
                   <span> [Your institution name] </span>
                 </p>
               </div>
-              <p className="text-sm text-gray-400 mt-4">
+              <p className="text-sm text-on-surface-variant mt-4">
                 We typically respond to inquiries within 24-48 business hours.
               </p>
             </div>

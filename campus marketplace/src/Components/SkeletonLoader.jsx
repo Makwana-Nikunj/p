@@ -13,7 +13,7 @@ const block = (...cls) => `${base} ${glow} rounded ${cls.join(' ')}`;
 
 // ── Product Card ──
 export const ProductCardSkeleton = () => (
-  <div className="w-full rounded-2xl overflow-hidden border border-white/5 bg-[#0C0C0C]">
+  <div className="w-full rounded-2xl overflow-hidden border border-white/5 bg-surface-container-highest">
     {/* Image area */}
     <div className={`w-full h-48 ${block('')}`}></div>
     {/* Content */}

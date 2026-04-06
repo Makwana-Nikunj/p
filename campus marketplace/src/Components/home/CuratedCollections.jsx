@@ -72,7 +72,7 @@ const CuratedCollections = () => {
             <div className={`
               tilt-card glass-card rounded-3xl p-6 md:p-8 flex flex-col items-center justify-center text-center cursor-pointer
               relative overflow-hidden transition-all duration-500
-              bg-gradient-to-br from-[#0C0C0C]/80 to-[#0F1930]/80
+              bg-gradient-to-br from-surface-container-highest/80 to-surface-container/80
               border ${collection.border}
               shadow-lg ${collection.glow}
               group-hover:shadow-xl group-hover:${collection.hoverGlow}

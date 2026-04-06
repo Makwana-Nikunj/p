@@ -15,7 +15,7 @@ const HeaderActions = () => {
             `
             flex items-center justify-center gap-2 h-10 px-4 rounded-lg font-semibold
             transition-all
-            ${isActive ? "bg-white text-black" : "bg-white text-black hover:bg-gray-200"}
+            ${isActive ? "bg-surface-container-highest text-on-surface" : "bg-surface-container-highest text-on-surface hover:bg-surface-container"}
             `
           }
         >

@@ -33,7 +33,7 @@ const Logout = () => {
                  duration-300 
                  ease-in-out
                  hover:bg-black 
-                 hover:text-white 
+                 hover:text-on-surface
                  cursor-pointer
                  active:scale-95"
     >

@@ -75,14 +75,15 @@ export default {
           900: "#164E63",
         },
         surface: {
-          DEFAULT: "#060E20",
-          bright: "#1F2B49",
-          container: "#0F1930",
-          containerHigh: "#141F38",
-          containerHighest: "#0C0C0C",
-          containerLow: "#091328",
-          containerLowest: "#000000",
-          variant: "#192540",
+          DEFAULT: "var(--bg-surface)",
+          dim: "var(--bg-surface-dim)",
+          bright: "var(--bg-surface-bright)",
+          container: "var(--bg-surface-container)",
+          containerHigh: "var(--bg-surface-container-high)",
+          containerHighest: "var(--bg-surface-container-highest)",
+          containerLow: "var(--bg-surface-container-low)",
+          containerLowest: "var(--bg-surface-container-lowest)",
+          variant: "var(--bg-surface-variant)",
           tint: "#BA9EFF",
         },
         onSurface: {
@@ -111,8 +112,13 @@ export default {
           DEFAULT: "#000311",
         },
         outline: {
-          DEFAULT: "#6D758C",
+          DEFAULT: "var(--text-outline)",
           variant: "#40485D",
+        },
+        text: {
+          onSurface: "var(--text-on-surface)",
+          onSurfaceVariant: "var(--text-on-surface-variant)",
+          outline: "var(--text-outline)",
         },
         error: {
           DEFAULT: "#FF6E84",

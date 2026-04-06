@@ -18,7 +18,7 @@ const HomePage = () => {
   }, [activeProducts])
 
   return (
-    <div className='w-full flex flex-col items-center relative bg-[#060E20]'>
+    <div className='w-full flex flex-col items-center relative'>
       {/* Hero Section (includes feature strip) */}
       <Hero />
 

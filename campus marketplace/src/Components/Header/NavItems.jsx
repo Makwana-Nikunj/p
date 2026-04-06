@@ -36,7 +36,7 @@ const NavItems = ({ mobile = false }) => {
               className={({ isActive }) =>
                 `
                 flex items-center gap-2 h-10 px-4 rounded-lg transition-all duration-300
-                ${isActive ? "glass text-white border-indigo-500/50" : "text-gray-400 hover:text-white hover:glass hover:scale-105"}
+                ${isActive ? "glass text-on-surface border-indigo-500/50" : "text-outline hover:text-on-surface hover:glass hover:scale-105"}
                 `
               }
             >

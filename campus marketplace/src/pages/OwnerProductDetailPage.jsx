@@ -43,7 +43,7 @@ const OwnerProductDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen w-full bg-[#060E20] px-4 md:px-8 py-12">
+      <div className="min-h-screen w-full bg-surface px-4 md:px-8 py-12">
         <AtmosphericBlooms intensity="subtle" />
         <div className="max-w-7xl mx-auto animate-fadeIn">
           <ProductDetailSkeleton />
@@ -54,10 +54,10 @@ const OwnerProductDetail = () => {
 
   if (!product) {
     return (
-      <div className="min-h-screen w-full flex items-center justify-center bg-[#060E20]">
+      <div className="min-h-screen w-full flex items-center justify-center bg-surface">
         <div className="text-center space-y-4">
           <div className="text-6xl opacity-50">🔍</div>
-          <p className="text-xl font-semibold text-white">Product not found!</p>
+          <p className="text-xl font-semibold text-on-surface">Product not found!</p>
           <button
             onClick={() => navigate("/profile")}
             className="px-6 py-2 btn-gradient-primary rounded-lg shadow-lg"
@@ -93,7 +93,7 @@ const OwnerProductDetail = () => {
             className="flex items-center gap-2 px-5 py-2.5 glass rounded-lg hover:bg-white/10 transition-all duration-300 border border-subtle group"
           >
             <ChevronLeft className="w-5 h-5 text-indigo-400 group-hover:-translate-x-1 transition-transform" />
-            <span className="text-white font-semibold">Back to Profile</span>
+            <span className="text-on-surface font-semibold">Back to Profile</span>
           </button>
         </div>
 
@@ -104,12 +104,12 @@ const OwnerProductDetail = () => {
 
             {/* LEFT: PRODUCT IMAGE */}
             <div className="w-full lg:w-1/2 flex justify-center items-center">
-              <div className="relative w-full aspect-square max-h-[600px] rounded-2xl overflow-hidden bg-[#0C0C0C] border border-subtle">
+              <div className="relative w-full aspect-square max-h-[600px] rounded-2xl overflow-hidden bg-surface-container-highest border border-subtle">
                 {product.imageId ? (
                   <img
                     src={productService.getFileView(product.imageId)}
                     alt={product.title}
-                    className="w-full h-full object-contain bg-[#0C0C0C]"
+                    className="w-full h-full object-contain bg-surface-container-highest"
                     loading="lazy"
                   />
                 ) : (
@@ -140,18 +140,18 @@ const OwnerProductDetail = () => {
                 {/* Title & Category */}
                 <div>
                   <div className="flex flex-wrap items-center gap-3 mb-4">
-                    <span className="px-4 py-2 rounded-full glass border border-subtle text-sm font-semibold text-white uppercase tracking-wide">
+                    <span className="px-4 py-2 rounded-full glass border border-subtle text-sm font-semibold text-on-surface uppercase tracking-wide">
                       {product.category || "Uncategorized"}
                     </span>
                   </div>
 
-                  <h1 className="font-headline font-extrabold text-3xl md:text-4xl text-white mb-4 leading-tight">
+                  <h1 className="font-headline font-extrabold text-3xl md:text-4xl text-on-surface mb-4 leading-tight">
                     {product.title}
                   </h1>
 
                   {/* Price */}
                   <div className="inline-block">
-                    <span className="px-8 py-4 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-500 text-white text-3xl md:text-4xl font-black shadow-lg shadow-indigo-500/30">
+                    <span className="px-8 py-4 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-500 text-on-surface text-3xl md:text-4xl font-black shadow-lg shadow-indigo-500/30">
                       ₹{parseFloat(product.price).toLocaleString('en-IN')}
                     </span>
                   </div>
@@ -165,7 +165,7 @@ const OwnerProductDetail = () => {
                     </div>
                     <div>
                       <p className="text-xs text-[#94A3B8] uppercase tracking-wider">Condition</p>
-                      <p className="text-sm font-semibold text-white">{product.condition || "Not provided"}</p>
+                      <p className="text-sm font-semibold text-on-surface">{product.condition || "Not provided"}</p>
                     </div>
                   </div>
 
@@ -175,7 +175,7 @@ const OwnerProductDetail = () => {
                     </div>
                     <div>
                       <p className="text-xs text-[#94A3B8] uppercase tracking-wider">Location</p>
-                      <p className="text-sm font-semibold text-white">{product.location || "Not specified"}</p>
+                      <p className="text-sm font-semibold text-on-surface">{product.location || "Not specified"}</p>
                     </div>
                   </div>
 
@@ -185,7 +185,7 @@ const OwnerProductDetail = () => {
                     </div>
                     <div>
                       <p className="text-xs text-[#94A3B8] uppercase tracking-wider">Posted</p>
-                      <p className="text-sm font-semibold text-white">
+                      <p className="text-sm font-semibold text-on-surface">
                         {new Date(product.$createdAt).toLocaleDateString('en-US', {
                           month: 'short',
                           day: 'numeric',
@@ -198,7 +198,7 @@ const OwnerProductDetail = () => {
 
                 {/* Description */}
                 <div className="space-y-3">
-                  <h3 className="font-headline font-bold text-xl text-white">Description</h3>
+                  <h3 className="font-headline font-bold text-xl text-on-surface">Description</h3>
                   <div className="p-6 glass rounded-xl border border-subtle">
                     <p className="text-[#94A3B8] leading-relaxed whitespace-pre-wrap">
                       {product.description || "No description provided."}
@@ -225,8 +225,8 @@ const OwnerProductDetail = () => {
                   onClick={handleMoveStatus}
                   className={`w-full py-4 rounded-xl font-bold transition-all duration-300 transform-gpu hover:-translate-y-0.5 ${
                     product.listing_status === 'active'
-                      ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg hover:shadow-green-500/40'
-                      : 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg hover:shadow-blue-500/40'
+                      ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-on-surface shadow-lg hover:shadow-green-500/40'
+                      : 'bg-gradient-to-r from-blue-500 to-indigo-600 text-on-surface shadow-lg hover:shadow-blue-500/40'
                   }`}
                 >
                   {product.listing_status === "active"

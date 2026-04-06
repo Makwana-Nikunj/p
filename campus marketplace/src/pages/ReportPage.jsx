@@ -59,7 +59,7 @@ const ReportPage = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center justify-center bg-[#060E20] py-10 px-4 relative">
+    <div className="w-full min-h-screen flex flex-col items-center justify-center py-10 px-4 relative">
       <AtmosphericBlooms intensity="vibrant" />
 
       <div className="relative z-10 w-full max-w-2xl animate-fadeIn">

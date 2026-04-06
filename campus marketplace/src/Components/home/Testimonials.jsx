@@ -19,7 +19,7 @@ const Testimonials = () => {
   const accentColors = ['text-indigo-400', 'text-cyan-400', 'text-violet-400']
 
   return (
-    <section className="bg-[#060E20] py-20 md:py-24 relative overflow-hidden">
+    <section className="py-20 md:py-24 relative overflow-hidden">
       {/* Atmospheric background blooms */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/8 blur-[100px] rounded-full"></div>

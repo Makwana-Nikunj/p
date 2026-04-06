@@ -30,7 +30,7 @@ const Profile = () => {
           <div className="inline-block">
             <div className="w-16 h-16 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
           </div>
-          <p className="text-lg font-semibold text-white/80">Loading profile...</p>
+          <p className="text-lg font-semibold text-on-surface/80">Loading profile...</p>
         </div>
       </div>
     );
@@ -53,7 +53,7 @@ const Profile = () => {
                 className={`pb-4 text-lg font-headline font-bold transition-all duration-300 px-2 tab-indicator ${
                   activeTab === "my-listings"
                     ? "text-indigo-300 border-b-2 border-indigo-500"
-                    : "text-[#94A3B8] hover:text-white"
+                    : "text-on-surface-variant hover:text-on-surface"
                 }`}
               >
                 My Listings
@@ -64,7 +64,7 @@ const Profile = () => {
                 className={`pb-4 text-lg font-headline font-medium transition-all duration-300 px-2 tab-indicator ${
                   activeTab === "sold"
                     ? "text-indigo-300 border-b-2 border-indigo-500"
-                    : "text-[#94A3B8] hover:text-white"
+                    : "text-on-surface-variant hover:text-on-surface"
                 }`}
               >
                 Sold Items

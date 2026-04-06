@@ -100,7 +100,7 @@ const ClubsPage = () => {
   }
 
   return (
-    <div className='w-full flex flex-col items-center relative bg-[#060E20]'>
+    <div className='w-full flex flex-col items-center relative'>
       {/* Hero Section */}
       <Hero />
 
@@ -160,7 +160,7 @@ const ClubsPage = () => {
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#060E20] via-transparent to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent"></div>
 
                     {/* Category Badge */}
                     <div className="absolute top-4 left-4">
@@ -171,7 +171,7 @@ const ClubsPage = () => {
 
                     {/* Members Badge */}
                     <div className="absolute top-4 right-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm bg-[#0C0C0C]/80 border border-white/10`}>
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm bg-surface-container-highest/80 border border-white/10`}>
                         {club.members} members
                       </span>
                     </div>

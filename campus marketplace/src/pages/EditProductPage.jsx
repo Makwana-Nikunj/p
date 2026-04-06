@@ -40,7 +40,7 @@ const EditProduct = () => {
     }
   }, [product, setValue]);
 
-  if (!product) return <div className="min-h-screen flex items-center justify-center text-white">Loading...</div>;
+  if (!product) return <div className="min-h-screen flex items-center justify-center text-on-surface">Loading...</div>;
 
   // ---------------------------
   // SUBMIT EDITED PRODUCT
@@ -99,7 +99,7 @@ const EditProduct = () => {
       <main className="max-w-6xl mx-auto px-4 pt-8 pb-10">
         {/* Header */}
         <header className="mb-12 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight text-white mb-2">
+          <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight text-on-surface mb-2">
             Refine Your Listing
           </h1>
           <p className="text-gray-400 text-lg">
@@ -119,7 +119,7 @@ const EditProduct = () => {
                   src={previewImage}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
-                  <label className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-5 py-2.5 rounded-full text-sm font-bold text-white hover:bg-white/20 transition-all border border-white/10 cursor-pointer">
+                  <label className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-5 py-2.5 rounded-full text-sm font-bold text-on-surface hover:bg-white/20 transition-all border border-white/10 cursor-pointer">
                     <span className="material-symbols-outlined text-sm">photo_camera</span>
                     Change Cover Photo
                     <input
@@ -142,15 +142,15 @@ const EditProduct = () => {
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-4 rounded-2xl bg-black/30 border border-white/5">
                   <span className="text-xs text-gray-400 font-label uppercase tracking-widest">Views</span>
-                  <span className="font-bold text-white text-lg">1,248</span>
+                  <span className="font-bold text-on-surface text-lg">1,248</span>
                 </div>
                 <div className="flex justify-between items-center p-4 rounded-2xl bg-black/30 border border-white/5">
                   <span className="text-xs text-gray-400 font-label uppercase tracking-widest">Inquiries</span>
-                  <span className="font-bold text-white text-lg">14</span>
+                  <span className="font-bold text-on-surface text-lg">14</span>
                 </div>
                 <div className="flex justify-between items-center p-4 rounded-2xl bg-black/30 border border-white/5">
                   <span className="text-xs text-gray-400 font-label uppercase tracking-widest">Listed Since</span>
-                  <span className="font-bold text-white">Oct 12, 2023</span>
+                  <span className="font-bold text-on-surface">Oct 12, 2023</span>
                 </div>
               </div>
             </div>
@@ -168,7 +168,7 @@ const EditProduct = () => {
                   <input
                     {...register("title", { required: "Product name is required" })}
                     defaultValue={product.title}
-                    className="w-full lumina-input rounded-2xl px-6 py-4 text-white font-headline font-bold focus:ring-0 shadow-inner transition-all"
+                    className="w-full lumina-input rounded-2xl px-6 py-4 text-on-surface font-headline font-bold focus:ring-0 shadow-inner transition-all"
                   />
                   {errors.title && (
                     <p className="text-sm text-red-400 mt-1">{errors.title.message}</p>
@@ -185,7 +185,7 @@ const EditProduct = () => {
                       <select
                         {...register("category", { required: "Category is required" })}
                         defaultValue={product.category}
-                        className="w-full lumina-input rounded-2xl px-6 py-4 text-white font-bold focus:ring-0 shadow-inner appearance-none transition-all"
+                        className="w-full lumina-input rounded-2xl px-6 py-4 text-on-surface font-bold focus:ring-0 shadow-inner appearance-none transition-all"
                       >
                         <option value="electronics">Electronics</option>
                         <option value="books">Books</option>
@@ -208,7 +208,7 @@ const EditProduct = () => {
                     <input
                       {...register("brand")}
                       placeholder="e.g. Apple, Samsung, etc."
-                      className="w-full lumina-input rounded-2xl px-6 py-4 text-white font-bold focus:ring-0 shadow-inner transition-all"
+                      className="w-full lumina-input rounded-2xl px-6 py-4 text-on-surface font-bold focus:ring-0 shadow-inner transition-all"
                     />
                   </div>
                 </div>
@@ -229,7 +229,7 @@ const EditProduct = () => {
                           min: { value: 1, message: "Price must be greater than 0" },
                         })}
                         defaultValue={product.price}
-                        className="w-full lumina-input rounded-2xl pl-10 pr-6 py-4 text-white font-bold focus:ring-0 shadow-inner transition-all"
+                        className="w-full lumina-input rounded-2xl pl-10 pr-6 py-4 text-on-surface font-bold focus:ring-0 shadow-inner transition-all"
                       />
                       {errors.price && (
                         <p className="text-sm text-red-400 mt-1">{errors.price.message}</p>
@@ -246,7 +246,7 @@ const EditProduct = () => {
                       <select
                         {...register("condition")}
                         defaultValue={product.condition}
-                        className="w-full lumina-input rounded-2xl px-6 py-4 text-white font-bold focus:ring-0 shadow-inner appearance-none transition-all"
+                        className="w-full lumina-input rounded-2xl px-6 py-4 text-on-surface font-bold focus:ring-0 shadow-inner appearance-none transition-all"
                       >
                         <option value="brand-new">Brand New</option>
                         <option value="like-new">Like New</option>
@@ -273,7 +273,7 @@ const EditProduct = () => {
                       {...register("location")}
                       defaultValue={product.location}
                       placeholder="e.g. Student Union, Library, or North Campus"
-                      className="w-full lumina-input rounded-2xl pl-14 pr-6 py-4 text-white font-medium focus:ring-0 shadow-inner transition-all"
+                      className="w-full lumina-input rounded-2xl pl-14 pr-6 py-4 text-on-surface font-medium focus:ring-0 shadow-inner transition-all"
                     />
                   </div>
                 </div>
@@ -290,7 +290,7 @@ const EditProduct = () => {
                     defaultValue={product.description}
                     rows={6}
                     placeholder="Describe the specs, usage history, and any minor flaws..."
-                    className="w-full lumina-input rounded-3xl px-6 py-4 text-white text-sm leading-relaxed focus:ring-0 shadow-inner transition-all resize-none"
+                    className="w-full lumina-input rounded-3xl px-6 py-4 text-on-surface text-sm leading-relaxed focus:ring-0 shadow-inner transition-all resize-none"
                   />
                   {errors.description && (
                     <p className="text-sm text-red-400 mt-1">{errors.description.message}</p>
@@ -302,7 +302,7 @@ const EditProduct = () => {
                   <div className="flex items-center gap-3">
                     <span className="material-symbols-outlined text-indigo-400">visibility</span>
                     <div>
-                      <p className="font-bold text-sm text-white">Active Listing</p>
+                      <p className="font-bold text-sm text-on-surface">Active Listing</p>
                       <p className="text-xs text-gray-400">Visible to all verified students</p>
                     </div>
                   </div>
@@ -316,7 +316,7 @@ const EditProduct = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1 bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-headline font-extrabold py-5 rounded-2xl shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 bg-gradient-to-r from-indigo-500 to-cyan-500 text-on-surface font-headline font-extrabold py-5 rounded-2xl shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? "Saving…" : "Update Listing"}
                   </button>
@@ -346,7 +346,7 @@ const EditProduct = () => {
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 w-full bg-[#060e20]/70 backdrop-blur-lg rounded-t-3xl border-t border-white/10 z-50 flex justify-around items-center px-4 py-3 pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+      <nav className="lg:hidden fixed bottom-0 left-0 w-full bg-surface/70 backdrop-blur-lg rounded-t-3xl border-t border-white/10 z-50 flex justify-around items-center px-4 py-3 pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
         <div className="flex flex-col items-center justify-center text-gray-500 hover:text-indigo-300 transition-transform">
           <span className="material-symbols-outlined">explore</span>
           <span className="font-manrope text-[10px] uppercase tracking-widest mt-1">Explore</span>

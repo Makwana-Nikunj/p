@@ -296,7 +296,7 @@ const ProductsSection = ({ onApprove, onReject }) => {
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse min-w-[800px]">
                             <thead>
-                                <tr className="bg-[#0C0C0C] border-b border-white/5">
+                                <tr className="bg-surface-container-highest border-b border-white/5">
                                     <th className="px-8 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant">Product Details</th>
                                     <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant">Price</th>
                                     <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant">Seller</th>

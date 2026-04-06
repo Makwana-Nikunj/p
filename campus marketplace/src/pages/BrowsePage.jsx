@@ -232,9 +232,9 @@ const Browse = () => {
 
 
   return (
-    <div className="min-h-screen bg-[#060e20]">
+    <div className="min-h-screen bg-surface">
       {/* Sticky Search Bar */}
-      <div className="sticky top-0 z-50 bg-[#060e20]/95 backdrop-blur-sm border-b border-white/5 pb-4">
+      <div className="sticky top-0 z-50 bg-surface/95 backdrop-blur-sm border-b border-white/5 pb-4">
         <div className="max-w-screen-2xl mx-auto px-4 md:px-8 pt-4">
           <SearchBar
             search={search}
@@ -247,7 +247,7 @@ const Browse = () => {
 
       <div className="max-w-screen-2xl mx-auto px-4 md:px-8">
         {/* Sticky Categories */}
-        <div className="sticky top-[72px] z-40 bg-[#060e20]/95 backdrop-blur-sm border-b border-white/5 py-4">
+        <div className="sticky top-[72px] z-40 bg-surface/95 backdrop-blur-sm border-b border-white/5 py-4">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-sm font-black uppercase tracking-widest text-on-surface-variant/70 font-plus-jakarta">
               Curated Categories
@@ -353,7 +353,7 @@ const Browse = () => {
                   </div>
                   {/* Thumbs */}
                   <div
-                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-2 border-[#0C0C0C] shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer active:cursor-grabbing"
+                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-2 border-surface-container-highest shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer active:cursor-grabbing"
                     style={{ left: `${minPercent}%` }}
                     onMouseDown={handleSliderMouseDown('min')}
                     onTouchStart={(e) => {
@@ -362,7 +362,7 @@ const Browse = () => {
                     }}
                   ></div>
                   <div
-                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-2 border-[#0C0C0C] shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer active:cursor-grabbing"
+                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-2 border-surface-container-highest shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer active:cursor-grabbing"
                     style={{ left: `${maxPercent}%` }}
                     onMouseDown={handleSliderMouseDown('max')}
                     onTouchStart={(e) => {
@@ -537,8 +537,8 @@ const Browse = () => {
           ></div>
 
           {/* Filter Panel */}
-          <div className="absolute right-0 top-0 h-full w-full max-w-sm bg-[#0C0C0C] shadow-2xl overflow-y-auto">
-            <div className="sticky top-0 bg-[#0C0C0C] border-b border-white/10 p-4 flex items-center justify-between">
+          <div className="absolute right-0 top-0 h-full w-full max-w-sm bg-surface-container-highest shadow-2xl overflow-y-auto">
+            <div className="sticky top-0 bg-surface-container-highest border-b border-white/10 p-4 flex items-center justify-between">
               <h3 className="text-lg font-extrabold font-plus-jakarta text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">filter_list</span>
                 Filters
@@ -614,7 +614,7 @@ const Browse = () => {
                   </div>
                   {/* Thumbs */}
                   <div
-                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-2 border-[#0C0C0C] shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer active:cursor-grabbing"
+                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-2 border-surface-container-highest shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer active:cursor-grabbing"
                     style={{ left: `${minPercent}%` }}
                     onMouseDown={handleSliderMouseDown('min')}
                     onTouchStart={(e) => {
@@ -623,7 +623,7 @@ const Browse = () => {
                     }}
                   ></div>
                   <div
-                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-2 border-[#0C0C0C] shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer active:cursor-grabbing"
+                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-2 border-surface-container-highest shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer active:cursor-grabbing"
                     style={{ left: `${maxPercent}%` }}
                     onMouseDown={handleSliderMouseDown('max')}
                     onTouchStart={(e) => {

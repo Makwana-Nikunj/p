@@ -16,8 +16,8 @@ const HeaderActionsMobile = () => {
               `
               flex items-center justify-center gap-2 w-32 h-10 rounded-lg font-semibold
               transition-all border border-gray-300 dark:border-gray-700
-              ${isActive ? "bg-black text-white dark:bg-white dark:text-black" : "bg-white text-black dark:bg-gray-800 dark:text-white"}
-              hover:bg-black hover:text-white dark:hover:bg-gray-700
+              ${isActive ? "bg-surface-bright text-on-surface" : "bg-surface-bright text-on-surface hover:bg-surface-container"}
+              hover:text-on-surface
               active:scale-95
               `
             }

@@ -60,7 +60,7 @@ const FeedbackPage = () => {
   }
 
   return (
-    <section className="bg-[#060e20] py-20 md:py-24 relative overflow-hidden min-h-screen">
+    <section className="py-20 md:py-24 relative overflow-hidden min-h-screen">
       {/* Atmospheric background blooms */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/8 blur-[100px] rounded-full"></div>

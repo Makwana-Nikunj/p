@@ -307,7 +307,7 @@ const Chat = () => {
                         {avatarUrl ? (
                           <img className="w-12 h-12 rounded-xl object-cover border border-white/10 bg-surface-container-highest" src={avatarUrl} alt={otherName} />
                         ) : (
-                          <div className="w-12 h-12 rounded-xl flex items-center justify-center text-sm font-semibold text-white shrink-0 border border-white/10 overflow-hidden glass">
+                          <div className="w-12 h-12 rounded-xl flex items-center justify-center text-sm font-semibold text-on-surface shrink-0 border border-white/10 overflow-hidden glass">
                             {getInitials(otherName)}
                           </div>
                         )}
@@ -373,7 +373,7 @@ const Chat = () => {
                         {getOtherParticipantAvatar(activeConversation) ? (
                           <img className="w-10 h-10 rounded-full object-cover border border-primary/30 bg-surface-container-highest" src={getOtherParticipantAvatar(activeConversation)} alt={getOtherParticipantName(activeConversation)} />
                         ) : (
-                          <div className="w-10 h-10 rounded-full overflow-hidden border border-primary/30 bg-surface-container-highest flex items-center justify-center text-xs font-semibold text-white">
+                          <div className="w-10 h-10 rounded-full overflow-hidden border border-primary/30 bg-surface-container-highest flex items-center justify-center text-xs font-semibold text-on-surface">
                             {getInitials(getOtherParticipantName(activeConversation))}
                           </div>
                         )}

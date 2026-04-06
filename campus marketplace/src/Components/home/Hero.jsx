@@ -80,7 +80,7 @@ const Hero = () => {
 
   return (
     <>
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#060E20]">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-surface">
         {/* Floating Marketplace Items - z-[1] so they sit behind hero content */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-[1]">
           {floatingItems.map(({ key, item, x, y, scale, blur, opacity, duration, delay, driftX, driftY, rotation }) => (
@@ -91,13 +91,13 @@ const Hero = () => {
                     <span className={`material-symbols-outlined text-6xl md:text-7xl text-${item.color}-400/40`}>{item.icon}</span>
                   </div>
                   <div className="absolute top-2 left-2 px-2 py-1 rounded-md bg-indigo-500/20 backdrop-blur-sm border border-indigo-500/30">
-                    <span className="text-[10px] font-bold text-indigo-300">{item.condition}</span>
+                    <span className="text-[10px] font-bold text-primary">{item.condition}</span>
                   </div>
                 </div>
                 <div className="p-3">
-                  <h4 className="font-headline font-bold text-white text-sm mb-1 line-clamp-2 leading-tight">{item.title}</h4>
+                  <h4 className="font-headline font-bold text-on-surface text-sm mb-1 line-clamp-2 leading-tight">{item.title}</h4>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-400">{item.category}</span>
+                    <span className="text-xs text-on-surface-variant">{item.category}</span>
                     <div className="text-sm font-extrabold gradient-text">{item.price}</div>
                   </div>
                 </div>
@@ -116,7 +116,7 @@ const Hero = () => {
           {/* Welcome Badge */}
           {userData && (
             <motion.div variants={fadeInUp(0)} className="mb-8">
-              <span className="inline-flex items-center px-5 py-2.5 rounded-full bg-indigo-500/15 border border-indigo-400/25 text-gray-200 text-sm font-medium backdrop-blur-md">
+              <span className="inline-flex items-center px-5 py-2.5 rounded-full bg-indigo-500/15 border border-indigo-400/25 text-on-surface text-sm font-medium backdrop-blur-md">
                 <span className="material-symbols-outlined text-indigo-400 mr-2 text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>wave</span>
                 Welcome back, {userData.name || userData.email?.split('@')[0]}!
               </span>
@@ -138,13 +138,13 @@ const Hero = () => {
             className="font-headline relative z-10"
           >
             {/* Line 1 — medium weight, large size */}
-            <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-7xl font-medium tracking-tight text-white/90 leading-[1.15] sm:leading-[1.1] leading-tight">
+            <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-7xl font-medium tracking-tight text-on-surface leading-[1.15] sm:leading-[1.1] leading-tight">
               Buy, Sell &amp; Connect
             </span>
 
             {/* Line 2 — bold gradient on key phrase, extra large */}
             <span
-              className="block text-5xl sm:text-6xl md:text-7xl lg:text-7xl font-extrabold tracking-tight mt-1 sm:mt-2 text-white"
+              className="block text-5xl sm:text-6xl md:text-7xl lg:text-7xl font-extrabold tracking-tight mt-1 sm:mt-2 text-on-surface"
             >
               Inside Your Campus
             </span>
@@ -153,10 +153,10 @@ const Hero = () => {
           {/* Subtext — muted, max-width constrained, generous spacing */}
           <motion.p
             variants={fadeInUp(3)}
-            className="relative font-body text-lg sm:text-xl md:text-2xl text-white/95 mt-8 sm:mt-10 mb-10 sm:mb-14 max-w-3xl mx-auto leading-relaxed"
+            className="relative font-body text-lg sm:text-xl md:text-2xl text-outline mt-8 sm:mt-10 mb-10 sm:mb-14 max-w-3xl mx-auto leading-relaxed"
           >
             The trusted marketplace built exclusively for students.
-            <span className="text-cyan-400 font-semibold"> Verified users, zero fees, and campus-safe transactions.</span>
+            <span className="font-semibold dark:text-cyan-400 text-tertiary"> Verified users, zero fees, and campus-safe transactions.</span>
           </motion.p>
 
           {/* CTA Buttons */}
@@ -179,7 +179,7 @@ const Hero = () => {
             {/* Secondary — glass outline */}
             <Link
               to="/browse"
-              className="px-10 py-4 sm:px-12 sm:py-4.5 rounded-full border border-white/20 text-gray-200 font-medium text-base sm:text-lg hover:bg-white/5 hover:border-indigo-400/40 hover:shadow-[0_0_25px_-10px_rgba(99,102,241,0.3)] transition-all duration-300 backdrop-blur-sm active:scale-[0.97] cursor-pointer w-full sm:w-auto text-center"
+              className="px-10 py-4 sm:px-12 sm:py-4.5 rounded-full border border-white/20 text-on-surface font-medium text-base sm:text-lg hover:bg-black/5 hover:border-indigo-400/40 active:scale-[0.97] cursor-pointer w-full sm:w-auto text-center"
             >
               <span className="flex items-center justify-center gap-2.5">
                 <span className="material-symbols-outlined group-hover:scale-110 transition-transform duration-300" style={{ fontVariationSettings: "'FILL' 1" }}>explore</span>
@@ -206,7 +206,7 @@ const Hero = () => {
               ].map((feature, idx) => (
                 <div key={`m1-${idx}`} className="flex items-center space-x-3 px-7 md:px-10 whitespace-nowrap min-w-max">
                   <span className={`material-symbols-outlined text-2xl ${feature.color}`} style={{ fontVariationSettings: "'FILL' 1" }}>{feature.icon}</span>
-                  <span className="font-headline font-bold text-sm md:text-base tracking-tight text-gray-300">
+                  <span className="font-headline font-bold text-sm md:text-base tracking-tight text-on-surface-variant">
                     {feature.text}
                   </span>
                 </div>
@@ -217,7 +217,7 @@ const Hero = () => {
                 return (
                   <div key={`m2-${idx}`} className="flex items-center space-x-3 px-7 md:px-10 whitespace-nowrap min-w-max">
                     <span className={`material-symbols-outlined text-2xl ${feature.color}`} style={{ fontVariationSettings: "'FILL' 1" }}>{feature.icon}</span>
-                    <span className="font-headline font-bold text-sm md:text-base tracking-tight text-gray-300">{feature.text}</span>
+                    <span className="font-headline font-bold text-sm md:text-base tracking-tight text-on-surface-variant">{feature.text}</span>
                   </div>
                 );
               })}

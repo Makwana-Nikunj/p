@@ -38,7 +38,7 @@ const ForgotPassword = lazy(() => import("./pages/ForgotPasswordPage.jsx"));
 // Base layout wrapping routes
 function Layout({ children }) {
   return (
-    <div className="min-h-screen w-full flex flex-col justify-between bg-[#060E20] text-white relative">
+    <div className="min-h-screen w-full flex flex-col justify-between bg-surface text-on-surface relative">
       <AtmosphericBlooms intensity="medium" />
       <Header />
       <main className="grow pt-16 md:pt-16 relative z-10">
@@ -76,7 +76,7 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#060E20]">
+      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-surface">
         <AtmosphericBlooms intensity="subtle" />
         <div className="w-full max-w-7xl px-4 md:px-8 relative z-10">
           {/* Hero skeleton */}
@@ -107,7 +107,7 @@ function App() {
   return (
     <BrowserRouter>
       <Suspense fallback={
-        <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#060E20]">
+        <div className="min-h-screen w-full flex flex-col items-center justify-center bg-surface">
           <div className="w-full max-w-7xl px-4 md:px-8 animate-fadeIn">
             <div className="text-center mb-12 animate-pulse">
               <div className="h-12 bg-surface-bright/30 rounded-2xl w-96 max-w-full mx-auto mb-4"></div>
@@ -150,11 +150,11 @@ function App() {
           <Route path="*" element={
             <div className="min-h-[70vh] flex items-center justify-center">
               <div className="text-center">
-                <h1 className="text-6xl font-bold text-gray-300 mb-4">404</h1>
-                <p className="text-xl text-gray-600 mb-6">Page not found</p>
+                <h1 className="text-6xl font-bold text-outline mb-4">404</h1>
+                <p className="text-xl text-on-surface-variant mb-6">Page not found</p>
                 <button
                   onClick={() => window.location.href = "/"}
-                  className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+                  className="bg-primary text-white px-6 py-2 rounded-lg hover:brightness-110 transition-all shadow-glow-indigo"
                 >
                   Go Home
                 </button>

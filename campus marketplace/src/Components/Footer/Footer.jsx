@@ -11,19 +11,19 @@ const Footer = () => {
         <div className="flex flex-col items-center sm:items-start animate-fadeIn">
           <Link
             to="/"
-            className="text-2xl font-bold tracking-wide text-white transition-all duration-300 hover:scale-105"
+            className="text-2xl font-bold tracking-wide text-on-surface transition-all duration-300 hover:scale-105"
           >
             Campus Marketplace
           </Link>
-          <p className="mt-3 text-sm text-gray-400 max-w-xs leading-relaxed">
+          <p className="mt-3 text-sm text-on-surface-variant max-w-xs leading-relaxed">
             Buy & sell within your campus community. Safe, local, and convenient.
           </p>
         </div>
 
         {/* Navigation */}
         <div className="flex flex-col items-center sm:items-start animate-fadeIn" style={{ animationDelay: '0.1s' }}>
-          <h3 className="text-lg font-semibold mb-4 text-white">Marketplace</h3>
-          <ul className="space-y-3 text-sm text-gray-400">
+          <h3 className="text-lg font-semibold mb-4 text-on-surface">Marketplace</h3>
+          <ul className="space-y-3 text-sm text-on-surface-variant">
             <li>
               <Link
                 to="/browse"
@@ -53,8 +53,8 @@ const Footer = () => {
 
         {/* Legal */}
         <div className="flex flex-col items-center sm:items-start animate-fadeIn" style={{ animationDelay: '0.2s' }}>
-          <h3 className="text-lg font-semibold mb-4 text-white">Legal</h3>
-          <ul className="space-y-3 text-sm text-gray-400">
+          <h3 className="text-lg font-semibold mb-4 text-on-surface">Legal</h3>
+          <ul className="space-y-3 text-sm text-on-surface-variant">
             <li>
               <Link
                 to="/terms"
@@ -76,13 +76,13 @@ const Footer = () => {
 
         {/* Social */}
         <div className="flex flex-col items-center sm:items-start animate-fadeIn" style={{ animationDelay: '0.3s' }}>
-          <h3 className="text-lg font-semibold mb-4 text-white">Connect</h3>
+          <h3 className="text-lg font-semibold mb-4 text-on-surface">Connect</h3>
           <div className="flex gap-3">
             <a
               href="https://github.com/yourusername"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-lg glass text-gray-400 hover:text-cyan-400 hover:scale-110 transition-all duration-300 border border-subtle"
+              className="p-2.5 rounded-lg glass text-on-surface-variant hover:text-cyan-400 hover:scale-110 transition-all duration-300 border border-subtle"
               aria-label="GitHub"
             >
               <Github size={20} />
@@ -91,7 +91,7 @@ const Footer = () => {
               href="https://linkedin.com/in/yourusername"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-lg glass text-gray-400 hover:text-cyan-400 hover:scale-110 transition-all duration-300 border border-subtle"
+              className="p-2.5 rounded-lg glass text-on-surface-variant hover:text-cyan-400 hover:scale-110 transition-all duration-300 border border-subtle"
               aria-label="LinkedIn"
             >
               <Linkedin size={20} />
@@ -100,7 +100,7 @@ const Footer = () => {
               href="https://twitter.com/yourusername"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-lg glass text-gray-400 hover:text-cyan-400 hover:scale-110 transition-all duration-300 border border-subtle"
+              className="p-2.5 rounded-lg glass text-on-surface-variant hover:text-cyan-400 hover:scale-110 transition-all duration-300 border border-subtle"
               aria-label="Twitter"
             >
               <Twitter size={20} />
@@ -110,7 +110,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom */}
-      <div className="py-4 px-4 text-center text-sm text-gray-400 border-t border-subtle">
+      <div className="py-4 px-4 text-center text-sm text-on-surface-variant border-t border-subtle">
         <p className="animate-fadeIn">
           © {new Date().getFullYear()} Campus Marketplace. All rights reserved.
         </p>

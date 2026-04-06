@@ -56,7 +56,7 @@ const ProfileDropdown = () => {
       <div className="flex items-center gap-2">
         <NavLink
           to="/login"
-          className="h-10 px-4 rounded-lg font-medium text-white border border-gray-600 hover:bg-gray-800 transition-colors flex items-center"
+          className="h-10 px-4 rounded-lg font-medium text-on-surface border border-outline hover:bg-surface-container transition-colors flex items-center"
         >
           Log in
         </NavLink>
@@ -100,10 +100,10 @@ const ProfileDropdown = () => {
       >
         <div className="py-1">
           <div className="px-4 py-2 border-b border-gray-800">
-            <p className="text-sm font-medium text-white truncate">
+            <p className="text-sm font-medium text-on-surface truncate">
               {user?.name || user?.username || "Campus Member"}
             </p>
-            <p className="text-xs text-gray-400 truncate">
+            <p className="text-xs text-on-surface-variant truncate">
               {user?.email}
             </p>
           </div>
