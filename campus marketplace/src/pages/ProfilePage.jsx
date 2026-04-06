@@ -46,7 +46,7 @@ const Profile = () => {
 
         {/* Tabs Interface - Underline style */}
         <section className="mb-16">
-          <div className="border-b border-white/10 mb-8">
+          <div className="border-b dark:border-white/10 border-gray-200 mb-8">
             <nav className="flex items-center gap-8 overflow-x-auto scrollbar-hide">
               <button
                 onClick={() => setActiveTab("my-listings")}

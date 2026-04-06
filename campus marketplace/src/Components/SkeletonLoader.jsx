@@ -65,7 +65,7 @@ export const ProductDetailSkeleton = () => (
         {/* Specs grid */}
         <div className="grid grid-cols-2 gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className={`p-5 rounded-3xl d ark:border-white/5 border-gray-200 ${base} bg-surface-container-high`}>
+            <div key={i} className={`p-5 rounded-3xl dark:border-white/5 border-gray-200 ${base} bg-surface-container-high`}>
               <div className={`h-4 rounded w-16 mb-3 ${base}`}></div>
               <div className={`h-6 rounded w-24 ${base}`}></div>
             </div>
@@ -102,7 +102,7 @@ export const ProductDetailSkeleton = () => (
       <div className={`h-10 rounded-2xl glass w-48 ${base}`}></div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="tilt-card rounded-2xl overflow-hidden d ark:border-white/5 border-gray-200 bg-surface-container-low">
+          <div key={i} className="tilt-card rounded-2xl overflow-hidden dark:border-white/5 border-gray-200 bg-surface-container-low">
             <div className="aspect-square bg-surface-container-high flex items-center justify-center">
               <div className={`w-10 h-10 rounded-full ${base}`}></div>
             </div>
@@ -166,7 +166,7 @@ const SkeletonLine = ({ width = 'w-3/4', height = 'h-4' }) => (
 
 // ── Stat Card (for admin/dashboard) ──
 export const StatCardSkeleton = () => (
-  <div className={`p-6 rounded-2xl d ark:border-white/5 border-gray-200 ${base} glass`}>
+  <div className={`p-6 rounded-2xl dark:border-white/5 border-gray-200 ${base} glass`}>
     <div className="flex items-center justify-between">
       <div className="space-y-3 flex-1">
         <div className={`h-4 rounded w-24 ${base}`}></div>
@@ -179,7 +179,7 @@ export const StatCardSkeleton = () => (
 
 // ── Table Row (for admin tables) ──
 export const TableRowSkeleton = () => (
-  <div className={`flex items-center gap-4 p-4 rounded-xl d ark:border-white/5 border-gray-200 ${base} bg-surface-container-high/50`}>
+  <div className={`flex items-center gap-4 p-4 rounded-xl dark:border-white/5 border-gray-200 ${base} bg-surface-container-high/50`}>
     <div className={`w-10 h-10 rounded-lg ${base} bg-surface-container-highest`}></div>
     <div className="flex-1 space-y-2">
       <div className={`h-4 rounded w-3/4 ${base}`}></div>

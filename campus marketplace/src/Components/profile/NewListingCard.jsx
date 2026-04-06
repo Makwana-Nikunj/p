@@ -6,7 +6,7 @@ const NewListingCard = () => {
   return (
     <Link to="/add-item" className="block group">
 
-      <div className="relative flex flex-col items-center justify-center p-16 rounded-[2rem] border-2 border-dashed border-white/10 hover:border-primary/50 hover:bg-primary/5 transition-all duration-500 h-full min-h-[400px]">
+      <div className="relative flex flex-col items-center justify-center p-16 rounded-[2rem] border-2 border-dashed dark:border-white/10 border-gray-300 hover:border-primary/50 hover:bg-primary/5 transition-all duration-500 h-full min-h-[400px]">
 
         <div className="w-20 h-20 rounded-full bg-surface-container-highest flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform duration-300">
           <FiPlus className="text-4xl" />

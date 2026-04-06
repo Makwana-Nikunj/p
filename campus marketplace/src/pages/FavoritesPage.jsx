@@ -72,7 +72,7 @@ const Favorites = () => {
               <div className="h-5 glass rounded w-64 mb-6"></div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {Array.from({ length: 8 }).map((_, i) => (
-                  <div key={i} className="w-full rounded-2xl overflow-hidden bg-surface-container-low border border-white/5">
+                  <div key={i} className="w-full rounded-2xl overflow-hidden bg-surface-container-low dark:border-white/5 border-gray-200">
                     <div className="aspect-square bg-surface-container-high"></div>
                     <div className="p-4 space-y-3">
                       <div className="h-3 bg-surface-bright/30 rounded w-16"></div>

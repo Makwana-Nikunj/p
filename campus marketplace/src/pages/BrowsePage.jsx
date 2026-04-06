@@ -502,7 +502,7 @@ const Browse = () => {
                       <Skeleton name="browse-product-grid" loading={true}>
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                           {Array.from({ length: 6 }).map((_, i) => (
-                            <div key={i} className="w-full rounded-2xl overflow-hidden bg-surface-container-low border border-white/5">
+                            <div key={i} className="w-full rounded-2xl overflow-hidden bg-surface-container-low dark:border-white/5 border-gray-200">
                               <div className="aspect-square bg-surface-container-high"></div>
                               <div className="p-4 space-y-3">
                                 <div className="h-3 bg-surface-bright/30 rounded w-16"></div>
