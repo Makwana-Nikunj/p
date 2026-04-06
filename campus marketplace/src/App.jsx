@@ -1,6 +1,5 @@
 import Header from "./Components/Header/Header"
 import Footer from "./Components/Footer/Footer"
-import { ProductGridSkeleton } from "./Components/SkeletonLoader"
 import AtmosphericBlooms from "./Components/AtmosphericBlooms"
 
 import { useEffect, useState, Suspense, lazy } from "react";
@@ -76,10 +75,29 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-950">
-        <div className="w-[90%] max-w-7xl animate-fadeIn">
-          <div className="h-16 bg-gray-300 dark:bg-gray-800 rounded animate-pulse mb-8 w-64 mx-auto"></div>
-          <ProductGridSkeleton count={12} />
+      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#060E20]">
+        <AtmosphericBlooms intensity="subtle" />
+        <div className="w-full max-w-7xl px-4 md:px-8 relative z-10">
+          {/* Hero skeleton */}
+          <div className="text-center mb-12 animate-pulse">
+            <div className="inline-flex items-center px-5 py-2.5 rounded-full bg-surface-container-high/50 border border-white/10 mb-8">
+              <div className="w-5 h-5 bg-surface-bright/30 rounded mr-2"></div>
+              <div className="w-32 h-4 bg-surface-bright/30 rounded"></div>
+            </div>
+            <div className="h-14 bg-surface-bright/30 rounded-2xl w-96 max-w-full mx-auto mb-4"></div>
+            <div className="h-14 bg-surface-bright/30 rounded-2xl w-80 max-w-full mx-auto mb-6"></div>
+            <div className="h-6 bg-surface-bright/20 rounded w-[500px] max-w-full mx-auto mb-8"></div>
+            <div className="flex items-center justify-center gap-4">
+              <div className="h-12 bg-surface-bright/30 rounded-full w-40"></div>
+              <div className="h-12 bg-surface-bright/20 rounded-full w-40 border border-white/10"></div>
+            </div>
+          </div>
+          {/* Marquee skeleton */}
+          <div className="h-12 bg-surface-bright/10 rounded-2xl border border-white/5 animate-pulse flex items-center px-8 gap-8">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-4 bg-surface-bright/20 rounded w-36"></div>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -88,10 +106,16 @@ function App() {
   return (
     <BrowserRouter>
       <Suspense fallback={
-        <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-950">
-          <div className="w-[90%] max-w-7xl animate-fadeIn">
-            <div className="h-16 bg-gray-300 dark:bg-gray-800 rounded animate-pulse mb-8 w-64 mx-auto"></div>
-            <ProductGridSkeleton count={12} />
+        <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#060E20]">
+          <div className="w-full max-w-7xl px-4 md:px-8 animate-fadeIn">
+            <div className="text-center mb-12 animate-pulse">
+              <div className="h-12 bg-surface-bright/30 rounded-2xl w-96 max-w-full mx-auto mb-4"></div>
+              <div className="h-12 bg-surface-bright/30 rounded-2xl w-80 max-w-full mx-auto mb-6"></div>
+            </div>
+            <div className="flex items-center justify-center gap-4 animate-pulse">
+              <div className="h-12 bg-surface-bright/30 rounded-full w-40"></div>
+              <div className="h-12 bg-surface-bright/20 rounded-full w-40 border border-white/10"></div>
+            </div>
           </div>
         </div>
       }>

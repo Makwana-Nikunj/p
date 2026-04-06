@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { FiCheck, FiX } from 'react-icons/fi';
 import apiClient from '../../lib/apiClient';
 import { useToast } from '../Toast/ToastContainer';
-import { ProductGridSkeleton } from '../../Components/SkeletonLoader';
 
 const AdminProducts = () => {
     const [products, setProducts] = useState([]);

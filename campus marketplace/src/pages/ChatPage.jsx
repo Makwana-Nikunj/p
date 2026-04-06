@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import chatService from '../services/chatService';
 import MessageBubble from '../Components/chat/MessageBubble';
 import AtmosphericBlooms from '../Components/Theme/AtmosphericBlooms';
+import { Skeleton } from "boneyard-js/react";
 
 const Chat = () => {
   const user = useSelector((state) => state.auth.userData);
@@ -266,19 +267,21 @@ const Chat = () => {
             {/* Conversation List */}
             <div className="flex-1 overflow-y-auto custom-scrollbar px-3 py-3 space-y-2">
               {loading ? (
-                <div className="space-y-3 p-3">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <div key={i} className="p-4 rounded-2xl glass animate-pulse">
-                      <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-gray-800 shrink-0"></div>
-                        <div className="flex-1 space-y-2">
-                          <div className="h-4 bg-gray-700 rounded w-3/4"></div>
-                          <div className="h-3 bg-gray-800 rounded w-1/2"></div>
+                <Skeleton name="conversations-list" loading={true}>
+                  <div className="space-y-3 p-3">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <div key={i} className="p-4 rounded-2xl glass">
+                        <div className="flex items-start gap-4">
+                          <div className="w-12 h-12 rounded-xl bg-surface-container-highest shrink-0"></div>
+                          <div className="flex-1 space-y-2">
+                            <div className="h-4 bg-surface-bright/30 rounded w-3/4"></div>
+                            <div className="h-3 bg-surface-container-highest rounded w-1/2"></div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                </Skeleton>
               ) : filteredConversations.length > 0 ? (
                 filteredConversations.map((conv) => {
                   const isActive = activeConversation?.$id === conv.$id;
@@ -432,13 +435,15 @@ const Chat = () => {
                   <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-tertiary/5 rounded-full blur-[120px] pointer-events-none" />
 
                   {loadingMessages ? (
-                    <div className="space-y-4">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <div key={i} className={`flex ${i % 2 === 0 ? 'justify-start' : 'justify-end'}`}>
-                          <div className={`h-12 ${i % 2 === 0 ? 'w-1/2' : 'w-1/3'} glass rounded-2xl animate-pulse`}></div>
-                        </div>
-                      ))}
-                    </div>
+                    <Skeleton name="messages" loading={true}>
+                      <div className="space-y-4">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <div key={i} className={`flex ${i % 2 === 0 ? 'justify-start' : 'justify-end'}`}>
+                            <div className={`h-12 ${i % 2 === 0 ? 'w-1/2' : 'w-1/3'} glass rounded-2xl`}></div>
+                          </div>
+                        ))}
+                      </div>
+                    </Skeleton>
                   ) : messages.length > 0 ? (
                     <>
                       {/* Date separator */}

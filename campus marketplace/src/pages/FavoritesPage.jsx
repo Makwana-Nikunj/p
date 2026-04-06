@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import favoriteService from '../services/favoriteService';
 import productService from '../services/productService';
-import { ProductGridSkeleton } from '../Components/SkeletonLoader';
+import { Skeleton } from "boneyard-js/react";
 import Cart from '../Components/home/featuredproduct/ItemCard';
 import { FaHeart } from 'react-icons/fa';
 import AtmosphericBlooms from '../Components/AtmosphericBlooms';
@@ -61,35 +61,49 @@ const Favorites = () => {
     <div className="min-h-screen w-full flex flex-col items-center gap-6 relative py-10">
       <AtmosphericBlooms intensity="subtle" />
 
-      {loading && (
+      {loading ? (
         <div className="w-[90%] max-w-7xl animate-fadeIn">
-          <div className="flex items-center justify-between mb-2">
-            <div className="h-8 glass rounded w-48 animate-pulse"></div>
-            <div className="h-10 glass rounded w-32 animate-pulse"></div>
+          <Skeleton name="favorites-grid" loading={true}>
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="h-8 glass rounded w-48"></div>
+                <div className="h-10 glass rounded w-32"></div>
+              </div>
+              <div className="h-5 glass rounded w-64 mb-6"></div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div key={i} className="w-full rounded-2xl overflow-hidden bg-surface-container-low border border-white/5">
+                    <div className="aspect-square bg-surface-container-high"></div>
+                    <div className="p-4 space-y-3">
+                      <div className="h-3 bg-surface-bright/30 rounded w-16"></div>
+                      <div className="h-5 bg-surface-bright/30 rounded w-3/4"></div>
+                      <div className="h-6 bg-surface-bright/30 rounded w-20"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Skeleton>
+        </div>
+      ) : (
+        <div className="w-[90%] max-w-7xl section-spacing">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-2">
+            <h1 className="font-section-headline gradient-text">My Favorites ❤️</h1>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-4 py-2 glass rounded-lg text-sm border border-subtle focus-glow-indigo transition-all duration-300 text-white"
+            >
+              <option value="recent" className="text-gray-900">Recently saved</option>
+              <option value="price-low" className="text-gray-900">Price: Low to High</option>
+              <option value="price-high" className="text-gray-900">Price: High to Low</option>
+            </select>
           </div>
-          <div className="h-5 glass rounded w-64 animate-pulse mb-6"></div>
-          <ProductGridSkeleton count={8} />
+          <p className="text-gray-400">
+            {favoriteProducts.length} {favoriteProducts.length === 1 ? 'item' : 'items'} saved
+          </p>
         </div>
       )}
-
-      <div className="w-[90%] max-w-7xl section-spacing">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-2">
-          <h1 className="font-section-headline gradient-text">My Favorites ❤️</h1>
-          {/* Sort Dropdown */}
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="px-4 py-2 glass rounded-lg text-sm border border-subtle focus-glow-indigo transition-all duration-300 text-white"
-          >
-            <option value="recent" className="text-gray-900">Recently saved</option>
-            <option value="price-low" className="text-gray-900">Price: Low to High</option>
-            <option value="price-high" className="text-gray-900">Price: High to Low</option>
-          </select>
-        </div>
-        <p className="text-gray-400">
-          {favoriteProducts.length} {favoriteProducts.length === 1 ? 'item' : 'items'} saved
-        </p>
-      </div>
 
       <div className="w-full flex justify-center">
         {sortedFavorites.length > 0 ? (

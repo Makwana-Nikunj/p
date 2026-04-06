@@ -8,7 +8,8 @@ import {
     resendVerification,
     forgotPassword,
     verifyOtp,
-    resetPassword
+    resetPassword,
+    oauthLogin
 } from "../controllers/auth.controllers.js";
 import { verifyJwt } from "../middlewares/auth.middleware.js";
 
@@ -30,5 +31,8 @@ router.route("/resend-verification").post(resendVerification);
 router.route("/forgot-password").post(forgotPassword);
 router.route("/verify-otp").post(verifyOtp);
 router.route("/reset-password").post(resetPassword);
+
+// OAuth login
+router.route("/oauth").post(oauthLogin);
 
 export default router;

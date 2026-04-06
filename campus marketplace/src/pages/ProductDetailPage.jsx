@@ -14,7 +14,6 @@ import productService from '../services/productService';
 import Cart from '../Components/home/featuredproduct/ItemCard';
 import chatService from '../services/chatService';
 import profileService from '../services/profileService';
-import { ProductDetailSkeleton, ProductGridSkeleton } from '../Components/SkeletonLoader';
 import { useToast } from '../Components/Toast/ToastContainer';
 import AtmosphericBlooms from '../Components/AtmosphericBlooms';
 
@@ -41,20 +40,8 @@ const ProductDetailPage = () => {
 
   const product = products.find((p) => p.$id === id);
 
-  // Show loading skeleton while product data loads
-  if (isLoading) {
-    return (
-      <div className="w-full min-h-screen flex flex-col items-center bg-background py-6 relative">
-        <AtmosphericBlooms intensity="medium" />
-        <div className="w-[90%] lg:w-[82%] relative z-10">
-          <div className="h-10 bg-surface-bright/30 rounded-2xl animate-pulse mb-4 w-32"></div>
-          <ProductDetailSkeleton />
-        </div>
-      </div>
-    );
-  }
-
-  if (!product) {
+  // Show error state if product not found (early return is fine for 404)
+  if (!product && !isLoading) {
     return (
       <div className="w-full min-h-screen flex flex-col items-center justify-center bg-background py-6 px-4 relative">
         <AtmosphericBlooms intensity="medium" />

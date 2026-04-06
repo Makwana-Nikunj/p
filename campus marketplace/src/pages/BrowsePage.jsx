@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts, fetchMoreProducts } from "../store/productSlice";
 import SearchBar from "../Components/browse/SearchBar";
 import ItemCard from "../Components/home/featuredproduct/ItemCard";
-import { ProductGridSkeleton } from "../Components/SkeletonLoader";
+import { Skeleton } from "boneyard-js/react";
 import { useToast } from "../Components/Toast/ToastContainer";
 import { Package, SearchX } from "lucide-react";
 
@@ -499,7 +499,20 @@ const Browse = () => {
 
                   {isLoadingMore && (
                     <div className="w-full py-8">
-                      <ProductGridSkeleton count={8} />
+                      <Skeleton name="browse-product-grid" loading={true}>
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                          {Array.from({ length: 6 }).map((_, i) => (
+                            <div key={i} className="w-full rounded-2xl overflow-hidden bg-surface-container-low border border-white/5">
+                              <div className="aspect-square bg-surface-container-high"></div>
+                              <div className="p-4 space-y-3">
+                                <div className="h-3 bg-surface-bright/30 rounded w-16"></div>
+                                <div className="h-5 bg-surface-bright/30 rounded w-3/4"></div>
+                                <div className="h-6 bg-surface-bright/30 rounded w-20"></div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </Skeleton>
                     </div>
                   )}
 

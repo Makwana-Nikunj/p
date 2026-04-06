@@ -5,6 +5,8 @@ import { sql } from "../db/index.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { sendVerificationEmail, sendOtpEmail } from "../utils/email.util.js";
 import { generateOTP } from "../utils/otp.util.js";
+import { verifyGoogleToken } from "../utils/oauth.util.js";
+import { generateUniqueUsername } from "../utils/username.util.js";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
@@ -493,6 +495,142 @@ const resetPassword = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, {}, "Password reset successfully. Please login."));
 });
 
+const oauthLogin = asyncHandler(async (req, res) => {
+    const { code, codeVerifier, redirectUri, provider } = req.body || {};
+
+    if (!code?.trim() || !codeVerifier?.trim() || !redirectUri?.trim()) {
+        throw new ApiError(400, "code, codeVerifier, and redirectUri are required");
+    }
+
+    if (provider !== "google") {
+        throw new ApiError(400, "Only Google OAuth is supported");
+    }
+
+    // Validate redirect URI against allowed origins
+    const allowedOrigins = [
+        "http://localhost:5173",
+        "http://localhost:5174",
+        process.env.FRONTEND_URL,
+    ].filter(Boolean);
+    const isAllowed = allowedOrigins.some(
+        (origin) => redirectUri.startsWith(origin + "/")
+    );
+    if (!isAllowed) {
+        throw new ApiError(400, "Invalid redirect URI");
+    }
+
+    // Verify OAuth token with Google
+    const { providerId, email, name, picture } = await verifyGoogleToken({
+        code,
+        codeVerifier,
+        redirectUri,
+    });
+
+    // 1. Lookup by provider_id + auth_provider
+    let users = await sql`
+        SELECT id, username, email, avatar, role, is_verified, auth_provider, created_at
+        FROM users
+        WHERE provider_id = ${providerId} AND auth_provider = 'google'
+    `;
+
+    if (users.length > 0) {
+        const user = users[0];
+        const { accessToken, refreshToken } = await generateAndSaveTokens(user.id);
+
+        const { refresh_token, ...userWithoutSensitiveData } = { ...user, password: undefined };
+
+        return res
+            .status(200)
+            .cookie("accessToken", accessToken, accessCookieOptions)
+            .cookie("refreshToken", refreshToken, refreshCookieOptions)
+            .json(new ApiResponse(200, userWithoutSensitiveData, "Login successful"));
+    }
+
+    // 2. Lookup by email
+    users = await sql`
+        SELECT id, username, email, password, avatar, role, is_verified, auth_provider, created_at
+        FROM users WHERE email = ${email}
+    `;
+
+    if (users.length > 0) {
+        const existingUser = users[0];
+
+        // Link Google to local account
+        if (existingUser.auth_provider === "local") {
+            const updateFields = {
+                provider_id: providerId,
+                auth_provider: "google",
+                is_verified: true,
+            };
+
+            if (picture && !existingUser.avatar) {
+                updateFields.avatar = picture;
+            }
+
+            await sql`
+                UPDATE users
+                SET ${sql(updateFields)}, updated_at = NOW()
+                WHERE id = ${existingUser.id}
+            `;
+        }
+
+        const { accessToken, refreshToken } = await generateAndSaveTokens(existingUser.id);
+
+        const userWithoutSensitiveData = {
+            id: existingUser.id,
+            username: existingUser.username,
+            email: existingUser.email,
+            avatar: existingUser.avatar,
+            role: existingUser.role,
+            is_verified: true,
+            auth_provider: "google",
+            created_at: existingUser.created_at,
+        };
+
+        return res
+            .status(200)
+            .cookie("accessToken", accessToken, accessCookieOptions)
+            .cookie("refreshToken", refreshToken, refreshCookieOptions)
+            .json(new ApiResponse(200, userWithoutSensitiveData, "Login successful"));
+    }
+
+    // 3. New user — create account
+    const uniqueUsername = await generateUniqueUsername(name, sql);
+    const randomPassword = await bcrypt.hash(
+        Math.random().toString(36) + Date.now().toString(), 10
+    );
+
+    const newUser = await sql`
+        INSERT INTO users (username, email, password, provider_id, auth_provider, is_verified, avatar)
+        VALUES (${uniqueUsername}, ${email}, ${randomPassword}, ${providerId}, 'google', true, ${picture || null})
+        RETURNING id, username, email, avatar, role, is_verified, auth_provider, created_at
+    `;
+
+    if (!newUser || newUser.length === 0) {
+        throw new ApiError(500, "Failed to create user");
+    }
+
+    const user = newUser[0];
+    const { accessToken, refreshToken } = await generateAndSaveTokens(user.id);
+
+    const userWithoutSensitiveData = {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        avatar: user.avatar,
+        role: user.role,
+        is_verified: user.is_verified,
+        auth_provider: user.auth_provider,
+        created_at: user.created_at,
+    };
+
+    return res
+        .status(201)
+        .cookie("accessToken", accessToken, accessCookieOptions)
+        .cookie("refreshToken", refreshToken, refreshCookieOptions)
+        .json(new ApiResponse(201, userWithoutSensitiveData, "Account created and login successful"));
+});
+
 export {
     registerUser,
     loginUser,
@@ -502,5 +640,9 @@ export {
     resendVerification,
     forgotPassword,
     verifyOtp,
-    resetPassword
+    resetPassword,
+    oauthLogin
 };
+
+// Exported for internal use (e.g., OAuth controller)
+export { generateAndSaveTokens, accessCookieOptions, refreshCookieOptions };

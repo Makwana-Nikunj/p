@@ -46,6 +46,7 @@ app.use('/api/', apiLimiter);
 // Apply stricter limits to auth endpoints
 app.use('/api/users/login', authLimiter);
 app.use('/api/users/register', authLimiter);
+app.use('/api/auth/oauth', authLimiter);
 
 // Apply security headers
 app.use(securityHeaders);

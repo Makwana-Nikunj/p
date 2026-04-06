@@ -1,5 +1,6 @@
 import React from "react";
 import { FiEdit2 } from "react-icons/fi";
+import { Key } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -60,6 +61,13 @@ const ProfileCard = ({ myProducts }) => {
           >
             <FiEdit2 className="text-lg" />
             <span>Edit Profile</span>
+          </button>
+          <button
+            className="flex items-center gap-2 px-6 py-2.5 rounded-xl glass font-semibold text-white hover:bg-white/10 transition-all duration-300 border border-subtle"
+            onClick={() => navigate("/forgot-password")}
+          >
+            <Key className="text-lg" />
+            <span>Change Password</span>
           </button>
         </div>
 

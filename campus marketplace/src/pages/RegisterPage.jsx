@@ -9,12 +9,14 @@ import { User, Mail, Lock, AlertCircle, CheckCircle2, BadgeCheck, ShoppingBag, S
 import { useToast } from '../Components/Toast/ToastContainer';
 import AtmosphericBlooms from '../Components/AtmosphericBlooms';
 import { Link } from "react-router-dom";
+import useGoogleOAuth from '../hooks/useGoogleOAuth';
 
 const RegisterForm = () => {
   const navigate = useNavigate()
   const { showToast } = useToast();
   const [error, setError] = useState("")
   const dispatch = useDispatch()
+  const { handleGoogleLogin, isGoogleLoading } = useGoogleOAuth({});
   const {
     register,
     handleSubmit,
@@ -322,7 +324,9 @@ const RegisterForm = () => {
 
                   <button
                     type="button"
-                    className="w-full flex items-center justify-center gap-2.5 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-primary/30 transition-all py-3 rounded-xl font-headline font-semibold text-on-surface text-sm"
+                    onClick={handleGoogleLogin}
+                    disabled={isGoogleLoading}
+                    className="w-full flex items-center justify-center gap-2.5 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-primary/30 transition-all py-3 rounded-xl font-headline font-semibold text-on-surface text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <svg className="w-4 h-4" viewBox="0 0 24 24">
                       <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>

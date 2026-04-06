@@ -34,6 +34,15 @@ const connectToDatabase = async () => {
             ADD COLUMN IF NOT EXISTS verification_token_expiry TIMESTAMP
         `;
 
+        // ===============================
+        // GOOGLE OAUTH COLUMNS
+        // ===============================
+        await sql`
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS provider_id VARCHAR(255),
+            ADD COLUMN IF NOT EXISTS auth_provider VARCHAR(50) DEFAULT 'local'
+        `;
+
         // Mark existing users as verified so they aren't locked out
         await sql`UPDATE users SET is_verified = true WHERE is_verified = false`;
 
