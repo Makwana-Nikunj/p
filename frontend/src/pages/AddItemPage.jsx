@@ -154,7 +154,7 @@ const AddItem = () => {
           </aside>
 
           {/* Form Content */}
-          <section className="lg:col-span-9 space-y-8">
+          <form onSubmit={handleSubmit(onSubmit)} className="lg:col-span-9 space-y-8">
             {/* Section 1: Photo Upload */}
             <div className="bg-surface-container/30 backdrop-blur-xl rounded-3xl p-8 border border-outline-variant/50 shadow-2xl transition-all duration-500 hover:shadow-indigo-500/10">
               <div className="flex items-center justify-between mb-6">
@@ -380,7 +380,7 @@ const AddItem = () => {
                 Publish Listing
               </button>
             </div>
-          </section>
+          </form>
         </div>
       </main>
 
