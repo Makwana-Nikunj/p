@@ -261,7 +261,7 @@ const ProductsSection = ({ onApprove, onReject }) => {
 
             {/* Product Table Section */}
             <div className="mt-8 mb-12">
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
                     <h2 className="text-2xl font-bold font-headline text-on-surface">Product Listings</h2>
                     <div className="flex items-center gap-3">
                         <div className="relative">

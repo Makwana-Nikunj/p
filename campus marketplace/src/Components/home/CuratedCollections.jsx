@@ -97,14 +97,14 @@ const CuratedCollections = () => {
               </div>
 
               {/* Title */}
-              <span className="font-headline font-bold text-xl md:text-2xl text-text-onSurface dark:text-white mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition-colors duration-300">
+              <span className="font-headline font-bold text-xl md:text-2xl text-on-surface mb-2 group-hover:text-primary transition-colors duration-300">
                 {collection.title}
               </span>
 
               {/* Count badge */}
               <span className={`
                 text-xs md:text-sm font-medium px-3 py-1 rounded-full
-                ${collection.bg} border ${collection.border} text-text-onSurfaceVariant dark:text-gray-300 group-hover:text-white group-hover:bg-gradient-to-r group-hover:from-indigo-500/20 group-hover:to-violet-500/20
+                ${collection.bg} border ${collection.border} text-on-surface-variant group-hover:text-on-surface group-hover:bg-gradient-to-r group-hover:from-indigo-500/20 group-hover:to-violet-500/20
                 transition-all duration-300
               `}>
                 {collection.count}

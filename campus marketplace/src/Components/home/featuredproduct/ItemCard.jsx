@@ -54,7 +54,7 @@ const ItemCard = ({ imgUrl, name, price, id, condition, category, showFavorite =
   // Fixed height card container to ensure all cards same height
   return (
     <Link to={`/product/${id}`} className="block group">
-      <div className="h-full rounded-2xl p-6 bg-white/5 backdrop-blur dark:border-white/10 border-gray-200 hover:scale-105 transition-all duration-300 flex flex-col">
+      <div className="h-full relative rounded-2xl p-6 bg-white/5 backdrop-blur dark:border-white/10 border-gray-200 hover:scale-105 transition-all duration-300 flex flex-col">
         {/* Product Image - Centered, contained */}
         <div className="flex-1 flex items-center justify-center mb-4 min-h-[192px] relative">
           {imageLoading && !imageError && imgUrl && (

@@ -32,13 +32,13 @@ const Testimonials = () => {
           <h2 className="font-headline text-3xl md:text-4xl font-extrabold mb-4 gradient-text bg-gradient-to-r from-indigo-300 via-violet-300 to-cyan-300 bg-clip-text text-transparent">
             Student Voices
           </h2>
-          <p className="dark:text-gray-300 text-gray-600 max-w-xl mx-auto leading-relaxed">
+          <p className="text-on-surface-variant max-w-xl mx-auto leading-relaxed">
             Real experiences from students who've transformed their campus journey through Lumina.
           </p>
         </div>
 
         {loading ? (
-          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
             {[1,2,3].map(i => (
               <div key={i} className="glass-card p-6 md:p-8 rounded-3xl animate-pulse">
                 <div className="h-4 w-20 bg-white/10 rounded mb-6"></div>
@@ -53,8 +53,8 @@ const Testimonials = () => {
           </div>
         ) : testimonials.length === 0 ? (
           <div className="text-center py-12">
-            <span className="material-symbols-outlined text-6xl text-gray-600 mb-4">forum</span>
-            <p className="dark:text-gray-400 text-gray-600 text-lg mb-4">No feedback submitted yet. Be the first!</p>
+            <span className="material-symbols-outlined text-6xl text-on-surface-variant/30 mb-4">forum</span>
+            <p className="text-on-surface-variant text-lg mb-4">No feedback submitted yet. Be the first!</p>
             <Link
               to="/"
               onClick={() => {
@@ -69,7 +69,7 @@ const Testimonials = () => {
             </Link>
           </div>
         ) : (
-          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
             {testimonials.map((t, index) => (
               <motion.div
                 key={t.id || index}
@@ -98,18 +98,18 @@ const Testimonials = () => {
                   </div>
 
                   {/* Quote */}
-                  <p className="text-base md:text-lg leading-relaxed mb-8 dark:text-gray-200 text-gray-700 font-light">
+                  <p className="text-base md:text-lg leading-relaxed mb-8 text-on-surface font-light">
                     "{t.message}"
                   </p>
 
                   {/* Author */}
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-indigo-500/20 to-cyan-500/20 flex items-center justify-center border border-indigo-500/40">
-                      <span className="text-xl md:text-2xl dark:text-gray-300 text-gray-600 font-headline font-bold">
+                      <span className="text-xl md:text-2xl text-on-surface font-headline font-bold">
                         {(t.fullName || '?')[0].toUpperCase()}
                       </span>
                     </div>
-                    <div className="font-bold text-base dark:text-gray-100 text-gray-800">{t.fullName}</div>
+                    <div className="font-bold text-base text-on-surface">{t.fullName}</div>
                   </div>
 
                   {/* Subtle accent line bottom */}
@@ -131,7 +131,7 @@ const Testimonials = () => {
           >
             <Link
               to="/feedback"
-              className="group px-10 md:px-12 py-4 md:py-5 rounded-full glass border border-white/10 dark:text-gray-200 text-gray-700 font-semibold text-base md:text-lg relative overflow-hidden hover:border-indigo-400/40 no-underline transition-all duration-300 hover:scale-105 hover:-translate-y-0.5 inline-flex items-center gap-3"
+              className="group px-10 md:px-12 py-4 md:py-5 rounded-full glass border border-white/10 text-on-surface font-semibold text-base md:text-lg relative overflow-hidden hover:border-indigo-400/40 no-underline transition-all duration-300 hover:scale-105 hover:-translate-y-0.5 inline-flex items-center gap-3"
             >
               {/* Hover glow effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 to-violet-500/20 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-300"></div>

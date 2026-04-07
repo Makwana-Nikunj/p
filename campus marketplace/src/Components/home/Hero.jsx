@@ -162,12 +162,12 @@ const Hero = () => {
           {/* CTA Buttons */}
           <motion.div
             variants={fadeInUp(5)}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 w-full sm:w-auto"
+            className="grid grid-cols-2 gap-3 sm:flex sm:grid-cols-none flex-wrap sm:justify-center sm:gap-5"
           >
             {/* Primary — gradient glow */}
             <Link
               to={userData ? "/add-item" : "/register"}
-              className="group relative px-10 py-4 sm:px-12 sm:py-4.5 rounded-full text-white font-semibold text-base sm:text-lg transition-all duration-300 hover:scale-[1.04] active:scale-[0.97] cursor-pointer w-full sm:w-auto text-center"
+              className="group relative px-8 py-3.5 sm:px-12 sm:py-4.5 rounded-full text-white font-semibold text-sm sm:text-lg transition-all duration-300 hover:scale-[1.04] active:scale-[0.97] cursor-pointer sm:w-auto text-center"
               style={{ background: 'linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)' }}
             >
               <span className="relative z-10 flex items-center justify-center gap-2.5">
@@ -179,7 +179,7 @@ const Hero = () => {
             {/* Secondary — glass outline */}
             <Link
               to="/browse"
-              className="px-10 py-4 sm:px-12 sm:py-4.5 rounded-full border border-white/20 text-on-surface font-medium text-base sm:text-lg hover:bg-black/5 hover:border-indigo-400/40 active:scale-[0.97] cursor-pointer w-full sm:w-auto text-center"
+              className="px-8 py-3.5 sm:px-12 sm:py-4.5 rounded-full border border-white/20 text-on-surface font-medium text-sm sm:text-lg hover:bg-black/5 hover:border-indigo-400/40 active:scale-[0.97] cursor-pointer sm:w-auto text-center"
             >
               <span className="flex items-center justify-center gap-2.5">
                 <span className="material-symbols-outlined group-hover:scale-110 transition-transform duration-300" style={{ fontVariationSettings: "'FILL' 1" }}>explore</span>

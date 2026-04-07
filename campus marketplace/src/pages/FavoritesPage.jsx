@@ -49,7 +49,7 @@ const Favorites = () => {
   if (!user) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center">
-        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Please login to view your favorites</h2>
+        <h2 className="text-2xl font-bold mb-4 text-on-surface">Please login to view your favorites</h2>
         <Link to="/" className="px-6 py-2 bg-black text-white dark:bg-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200">
           Go to Home
         </Link>
@@ -99,7 +99,7 @@ const Favorites = () => {
               <option value="price-high" className="text-gray-900">Price: High to Low</option>
             </select>
           </div>
-          <p className="dark:text-gray-400 text-gray-600">
+          <p className="text-on-surface-variant">
             {favoriteProducts.length} {favoriteProducts.length === 1 ? 'item' : 'items'} saved
           </p>
         </div>
@@ -126,7 +126,7 @@ const Favorites = () => {
         ) : (
           <div className="flex flex-col items-center justify-center py-16 section-spacing w-[90%] max-w-7xl">
             <div className="glass rounded-full p-8 mb-6 border border-subtle">
-              <FaHeart className="w-24 h-24 text-gray-500" />
+              <FaHeart className="w-24 h-24 text-on-surface-variant/50" />
             </div>
             <h3 className="font-section-headline gradient-text mb-2">No favorites yet</h3>
             <p className="text-gray-600 dark:text-gray-400 text-center max-w-md mb-6">

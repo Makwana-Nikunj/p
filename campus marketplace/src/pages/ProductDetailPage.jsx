@@ -182,7 +182,7 @@ const ProductDetailPage = () => {
           {/* LEFT COLUMN: Immersive Hero & Gallery */}
           <div className="md:col-span-7">
             {/* Main Product Card with 3D Tilt */}
-            <div className="relative group aspect-[4/3] rounded-[2.5rem] overflow-hidden bg-surface-container-high shadow-2xl flex items-center justify-center p-8 transition-all duration-700 border border-white/10 tilt-card mt-4 md:mt-8">
+            <div className="relative group aspect-[4/3] rounded-[2.5rem] overflow-hidden bg-surface-container-high shadow-2xl flex items-center justify-center p-4 md:p-8 transition-all duration-700 border border-white/10 tilt-card mt-4 md:mt-8">
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent"></div>
               <img
                 src={productService.getFileView(product.imageId)}
@@ -220,21 +220,21 @@ const ProductDetailPage = () => {
               </p>
 
               {/* Specs Grid - Clean glass cards */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-5 rounded-3xl bg-surface-container-high glass-shine">
-                  <div className="text-on-surface-variant text-sm uppercase font-bold tracking-widest mb-1.5 opacity-60">Condition</div>
+              <div className="grid grid-cols-2 gap-3 md:gap-4">
+                <div className="p-4 md:p-5 rounded-3xl bg-surface-container-high glass-shine">
+                  <div className="text-on-surface-variant text-xs md:text-sm uppercase font-bold tracking-widest mb-1.5 opacity-60">Condition</div>
                   <div className="text-on-surface font-plus-jakarta font-bold text-lg">{product.condition || "Not specified"}</div>
                 </div>
-                <div className="p-5 rounded-3xl bg-surface-container-high glass-shine">
-                  <div className="text-on-surface-variant text-sm uppercase font-bold tracking-widest mb-1.5 opacity-60">Location</div>
+                <div className="p-4 md:p-5 rounded-3xl bg-surface-container-high glass-shine">
+                  <div className="text-on-surface-variant text-xs md:text-sm uppercase font-bold tracking-widest mb-1.5 opacity-60">Location</div>
                   <div className="text-on-surface font-plus-jakarta font-bold text-lg">{product.location || "Not specified"}</div>
                 </div>
-                <div className="p-5 rounded-3xl bg-surface-container-high glass-shine">
-                  <div className="text-on-surface-variant text-sm uppercase font-bold tracking-widest mb-1.5 opacity-60">Posted</div>
+                <div className="p-4 md:p-5 rounded-3xl bg-surface-container-high glass-shine">
+                  <div className="text-on-surface-variant text-xs md:text-sm uppercase font-bold tracking-widest mb-1.5 opacity-60">Posted</div>
                   <div className="text-on-surface font-plus-jakarta font-bold text-lg">{formatDate(product.$createdAt)}</div>
                 </div>
-                <div className="p-5 rounded-3xl bg-surface-container-high glass-shine">
-                  <div className="text-on-surface-variant text-sm uppercase font-bold tracking-widest mb-1.5 opacity-60">Category</div>
+                <div className="p-4 md:p-5 rounded-3xl bg-surface-container-high glass-shine">
+                  <div className="text-on-surface-variant text-xs md:text-sm uppercase font-bold tracking-widest mb-1.5 opacity-60">Category</div>
                   <div className="text-on-surface font-plus-jakarta font-bold text-lg">{product.category}</div>
                 </div>
               </div>
@@ -305,7 +305,7 @@ const ProductDetailPage = () => {
 
       {/* Related Items Section - Sideways layout with section spacing */}
       {relatedProducts.length > 0 && (
-        <section className="w-[90%] lg:w-[82%] mt-32 relative z-10">
+        <section className="w-[90%] lg:w-[82%] mt-16 md:mt-32 relative z-10">
           <div className="flex items-center justify-between mb-10">
             <h2 className="text-3xl font-plus-jakarta font-extrabold tracking-tight gradient-text">Similar Products</h2>
             <a className="text-primary font-bold flex items-center gap-1 hover:underline" href="#">

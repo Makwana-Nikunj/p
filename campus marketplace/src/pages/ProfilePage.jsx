@@ -39,7 +39,7 @@ const Profile = () => {
   return (
     <div className="min-h-screen w-full relative">
 
-      <div className="w-[95%] max-w-7xl mx-auto section-spacing">
+      <div className="w-[95%] max-w-7xl mx-auto px-2 md:px-0 py-8 section-spacing">
 
         {/* Profile Card with glass effect */}
         <ProfileCard myProducts={myProducts} />
