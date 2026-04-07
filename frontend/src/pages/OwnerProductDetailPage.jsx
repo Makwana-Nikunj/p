@@ -87,10 +87,10 @@ const OwnerProductDetail = () => {
       <div className="w-[95%] max-w-7xl mx-auto section-spacing">
 
         {/* Back Button */}
-        <div className="mb-8">
+        <div className="mb-4 md:mb-8">
           <button
             onClick={() => navigate("/profile")}
-            className="flex items-center gap-2 px-5 py-2.5 glass rounded-lg hover:bg-white/10 transition-all duration-300 border border-subtle group"
+            className="flex items-center gap-2 px-3 md:px-5 py-2 md:py-2.5 text-sm md:text-base glass rounded-lg hover:bg-white/10 transition-all duration-300 border border-subtle group"
           >
             <ChevronLeft className="w-5 h-5 text-indigo-400 group-hover:-translate-x-1 transition-transform" />
             <span className="text-on-surface font-semibold">Back to Profile</span>
@@ -98,13 +98,13 @@ const OwnerProductDetail = () => {
         </div>
 
         {/* Main Container - Glass Card */}
-        <div className="tilt-card glass glass-intense rounded-3xl p-6 md:p-10 border border-subtle shadow-2xl transition-all duration-500">
+        <div className="tilt-card glass glass-intense rounded-2xl md:rounded-3xl p-3 md:p-10 border border-subtle shadow-2xl transition-all duration-500">
 
-          <div className="flex flex-col lg:flex-row gap-10">
+          <div className="flex flex-col lg:flex-row gap-4 md:gap-10">
 
             {/* LEFT: PRODUCT IMAGE */}
             <div className="w-full lg:w-1/2 flex justify-center items-center">
-              <div className="relative w-full aspect-square max-h-[600px] rounded-2xl overflow-hidden bg-surface-container-highest border border-subtle">
+              <div className="relative w-full aspect-[4/3] md:aspect-square max-h-[600px] rounded-xl md:rounded-2xl overflow-hidden bg-surface-container-highest border border-subtle">
                 {product.imageId ? (
                   <img
                     src={productService.getFileView(product.imageId)}
@@ -119,7 +119,7 @@ const OwnerProductDetail = () => {
                 )}
 
                 {/* Status Badge */}
-                <div className={`absolute top-4 right-4 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider ${
+                <div className={`absolute top-2 right-2 md:top-4 md:right-4 md:px-4 md:py-2 px-2 py-1 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider ${
                   product.listing_status === 'active'
                     ? 'bg-green-500/20 text-green-400 border border-green-500/30'
                     : product.listing_status === 'sold'
@@ -135,57 +135,55 @@ const OwnerProductDetail = () => {
             <div className="w-full lg:w-1/2 flex flex-col justify-between">
 
               {/* Product Info */}
-              <div className="space-y-6">
+              <div className="space-y-4 md:space-y-6">
 
-                {/* Title & Category */}
+                {/* Title & Price */}
                 <div>
-                  <div className="flex flex-wrap items-center gap-3 mb-4">
-                    <span className="px-4 py-2 rounded-full glass border border-subtle text-sm font-semibold text-on-surface uppercase tracking-wide">
+                  <div className="flex flex-wrap items-center gap-3 mb-2 md:mb-4">
+                    <span className="px-3 py-1.5 md:px-4 md:py-2 rounded-full glass border border-subtle text-xs md:text-sm font-semibold text-on-surface uppercase tracking-wide">
                       {product.category || "Uncategorized"}
                     </span>
                   </div>
 
-                  <h1 className="font-headline font-extrabold text-3xl md:text-4xl text-on-surface mb-4 leading-tight">
-                    {product.title}
-                  </h1>
-
-                  {/* Price */}
-                  <div className="inline-block">
-                    <span className="px-8 py-4 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-500 text-on-surface text-3xl md:text-4xl font-black shadow-lg shadow-indigo-500/30">
+                  <div className="flex items-center justify-between gap-3 mb-2 md:mb-4">
+                    <h1 className="font-headline font-extrabold text-2xl md:text-4xl text-on-surface leading-tight flex-1 min-w-0 truncate">
+                      {product.title}
+                    </h1>
+                    <span className="px-4 py-2 md:px-8 md:py-4 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-500 text-on-surface text-xl md:text-3xl md:text-4xl font-bold md:font-black shadow-lg shadow-indigo-500/30 whitespace-nowrap flex-shrink-0">
                       ₹{parseFloat(product.price).toLocaleString('en-IN')}
                     </span>
                   </div>
                 </div>
 
                 {/* Specs Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 glass rounded-xl border border-subtle">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-indigo-500/20">
-                      <Package className="w-5 h-5 text-indigo-400" />
+                <div className="grid grid-cols-3 md:grid-cols-3 gap-2 md:gap-4 p-2 md:p-4 glass rounded-xl border border-subtle">
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <div className="md:p-2 p-1 rounded-lg bg-indigo-500/20">
+                      <Package className="w-3 h-3 md:w-5 md:h-5 text-indigo-400" />
                     </div>
-                    <div>
-                      <p className="text-xs dark:text-gray-400 text-gray-500 uppercase tracking-wider">Condition</p>
-                      <p className="text-sm font-semibold text-on-surface">{product.condition || "Not provided"}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-cyan-500/20">
-                      <MapPin className="w-5 h-5 text-cyan-400" />
-                    </div>
-                    <div>
-                      <p className="text-xs dark:text-gray-400 text-gray-500 uppercase tracking-wider">Location</p>
-                      <p className="text-sm font-semibold text-on-surface">{product.location || "Not specified"}</p>
+                    <div className="min-w-0">
+                      <p className="text-[10px] md:text-xs dark:text-gray-400 text-gray-500 uppercase tracking-wider">Condition</p>
+                      <p className="text-xs md:text-sm font-semibold text-on-surface truncate">{product.condition || "Not provided"}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-pink-500/20">
-                      <Calendar className="w-5 h-5 text-pink-400" />
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <div className="md:p-2 p-1 rounded-lg bg-cyan-500/20">
+                      <MapPin className="w-3 h-3 md:w-5 md:h-5 text-cyan-400" />
                     </div>
-                    <div>
-                      <p className="text-xs dark:text-gray-400 text-gray-500 uppercase tracking-wider">Posted</p>
-                      <p className="text-sm font-semibold text-on-surface">
+                    <div className="min-w-0">
+                      <p className="text-[10px] md:text-xs dark:text-gray-400 text-gray-500 uppercase tracking-wider">Location</p>
+                      <p className="text-xs md:text-sm font-semibold text-on-surface truncate">{product.location || "Not specified"}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <div className="md:p-2 p-1 rounded-lg bg-pink-500/20">
+                      <Calendar className="w-3 h-3 md:w-5 md:h-5 text-pink-400" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-[10px] md:text-xs dark:text-gray-400 text-gray-500 uppercase tracking-wider">Posted</p>
+                      <p className="text-xs md:text-sm font-semibold text-on-surface truncate">
                         {new Date(product.$createdAt).toLocaleDateString('en-US', {
                           month: 'short',
                           day: 'numeric',

@@ -24,7 +24,7 @@ const ProfileCard = ({ myProducts }) => {
       }}></div>
 
       {/* Profile Header */}
-      <header className="flex flex-col md:flex-row gap-8 items-start md:items-end relative">
+      <header className="flex flex-wrap items-center gap-6 relative">
 
         {/* Avatar with gradient border glow */}
         <div className="relative group">
@@ -32,62 +32,60 @@ const ProfileCard = ({ myProducts }) => {
           <img
             src={profilePhoto || user?.avatar || "https://img.freepik.com/free-icon/user_318-159711.jpg"}
             alt={user.name || "Profile"}
-            className="relative w-32 h-32 md:w-40 md:h-40 rounded-[1.8rem] object-cover border-2 border-white/10 transition-all duration-500"
+            className="relative w-32 h-32 md:w-40 md:h-40 rounded-[1.5rem] md:rounded-[1.8rem] object-cover border-2 border-white/10 transition-all duration-500 flex-shrink-0"
             loading="lazy"
           />
         </div>
 
         {/* Info Section */}
-        <div className="flex-1 space-y-3">
+        <div className="flex-1 space-y-1 min-w-0">
 
-          <div className="flex flex-wrap items-center gap-4">
-            <h1 className="text-4xl md:text-5xl font-headline font-extrabold tracking-tight dark:text-white text-gray-900">{user.name || "User"}</h1>
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="text-2xl md:text-5xl font-headline font-extrabold tracking-tight dark:text-white text-gray-900 truncate">{user.name || "User"}</h1>
             {user.isPro && (
               <span className="px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-bold tracking-widest uppercase">PRO SELLER</span>
             )}
           </div>
 
-          <p className="text-onSurfaceVariant font-medium text-lg">
+          <p className="text-onSurfaceVariant font-medium text-sm md:text-lg">
             {user.education || user.role || "Campus Member"}
           </p>
 
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3 w-full md:w-auto">
           <button
-            className="flex items-center gap-2 px-6 py-2.5 rounded-xl glass font-semibold text-text-onSurface dark:text-white hover:bg-white/10 transition-all duration-300 border border-subtle"
+            className="flex-1 md:flex-none flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-6 py-1.5 md:py-2.5 rounded-lg md:rounded-xl glass font-medium md:font-semibold text-sm md:text-base text-text-onSurface dark:text-white hover:bg-white/10 transition-all duration-300 border border-subtle"
             onClick={() => navigate("/profile/edit")}
           >
-            <FiEdit2 className="text-lg" />
-            <span>Edit Profile</span>
+            <FiEdit2 className="text-sm md:text-lg" />
+            <span className="md:hidden">Edit</span><span className="hidden md:inline">Edit Profile</span>
           </button>
           <button
-            className="flex items-center gap-2 px-6 py-2.5 rounded-xl glass font-semibold text-text-onSurface dark:text-white hover:bg-white/10 transition-all duration-300 border border-subtle"
+            className="flex-1 md:flex-none flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-6 py-1.5 md:py-2.5 rounded-lg md:rounded-xl glass font-medium md:font-semibold text-sm md:text-base text-text-onSurface dark:text-white hover:bg-white/10 transition-all duration-300 border border-subtle"
             onClick={() => navigate("/forgot-password")}
           >
-            <Key className="text-lg" />
-            <span>Change Password</span>
+            <Key className="text-sm md:text-lg" />
+            <span className="md:hidden">Password</span><span className="hidden md:inline">Change Password</span>
           </button>
         </div>
 
       </header>
 
-      {/* Stats Bento Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 mb-12">
-        <div className="glass-card p-6 rounded-3xl border border-subtle flex flex-col justify-between h-32 hover:translate-y-[-4px] transition-transform duration-300">
-          <span className="text-onSurfaceVariant text-xs font-bold uppercase tracking-widest">Items Sold</span>
-          <span className="text-3xl font-headline font-black text-secondary">{soldCount}</span>
+      {/* Stats Row */}
+      <div className="grid grid-cols-3 gap-4 mt-4 mb-8 text-center">
+        <div>
+          <span className="text-onSurfaceVariant text-xs font-bold uppercase tracking-wider block">Items Sold</span>
+          <span className="font-headline font-black text-secondary text-lg block mt-1">{soldCount}</span>
         </div>
-
-        <div className="glass-card p-6 rounded-3xl border border-subtle flex flex-col justify-between h-32 hover:translate-y-[-4px] transition-transform duration-300">
-          <span className="text-onSurfaceVariant text-xs font-bold uppercase tracking-widest">Active Listings</span>
-          <span className="text-3xl font-headline font-black text-tertiary">{activeCount}</span>
+        <div className="border-l border-r border-white/10">
+          <span className="text-onSurfaceVariant text-xs font-bold uppercase tracking-wider block">Active Listings</span>
+          <span className="font-headline font-black text-tertiary text-lg block mt-1">{activeCount}</span>
         </div>
-
-        <div className="glass-card p-6 rounded-3xl border border-subtle flex flex-col justify-between h-32 hover:translate-y-[-4px] transition-transform duration-300">
-          <span className="text-onSurfaceVariant text-xs font-bold uppercase tracking-widest">Member Since</span>
-          <span className="text-2xl font-headline font-black text-text-onSurface dark:text-white">{user.joinedDate || "2024"}</span>
+        <div>
+          <span className="text-onSurfaceVariant text-xs font-bold uppercase tracking-wider block">Member Since</span>
+          <span className="font-headline font-bold text-text-onSurface dark:text-white text-lg block mt-1">{user.joinedDate || "2024"}</span>
         </div>
       </div>
     </div>
