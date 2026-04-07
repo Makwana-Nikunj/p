@@ -171,9 +171,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-package-lock.json
-package-lock.json
-package.json
 .env
 
 
