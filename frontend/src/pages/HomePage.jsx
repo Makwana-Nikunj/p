@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import usePageTitle from '../hooks/usePageTitle'
 import { useSelector } from 'react-redux'
 import Hero from '../Components/home/Hero'
 import CuratedCollections from '../Components/home/CuratedCollections'
@@ -7,6 +8,7 @@ import Testimonials from '../Components/home/Testimonials'
 import FeedbackForm from '../Components/home/FeedbackForm'
 
 const HomePage = () => {
+  usePageTitle('Home');
   const products = useSelector((state) => state.products.products)
   const activeProducts = products.filter(p => p.status === "approved" || p.status === "active")
 

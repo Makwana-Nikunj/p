@@ -1,14 +1,16 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import usePageTitle from '../hooks/usePageTitle';
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import chatService from '../services/chatService';
 import MessageBubble from '../Components/chat/MessageBubble';
 import AtmosphericBlooms from '../Components/Theme/AtmosphericBlooms';
-import { Skeleton } from "boneyard-js/react";
+import { ConversationItemSkeleton, ChatMessageSkeleton } from '../Components/SkeletonLoader';
 
 const Chat = () => {
   const user = useSelector((state) => state.auth.userData);
   const products = useSelector((state) => state.products.products);
+  usePageTitle('Messages');
   const navigate = useNavigate();
 
   const [conversations, setConversations] = useState([]);
@@ -18,7 +20,7 @@ const Chat = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadingMessages, setLoadingMessages] = useState(false);
-  const [sendingMessage, setSendingMessage] = useState(false);
+  const [sendingMessage] = useState(false);
   const [typingUser, setTypingUser] = useState(null);
 
   const messagesEndRef = useRef(null);
@@ -26,11 +28,10 @@ const Chat = () => {
   const containerRef = useRef(null);
 
   // Safe string comparison for user IDs (Postgres int vs Redux string)
-  const isCurrentUser = (id) => {
+  const isCurrentUser = useCallback((id) => {
     if (!user || !id) return false;
-    // user.$id is String(u.id) from authService; user.id is the raw int
     return String(id) === String(user.id);
-  };
+  }, [user]);
 
   const getInitials = (name) => {
     if (!name) return "?";
@@ -171,7 +172,7 @@ const Chat = () => {
     } catch (error) {
       console.error("Failed to subscribe to messages:", error);
     }
-  }, [activeConversation, user]);
+  }, [activeConversation, user, isCurrentUser]);
 
   // Scroll effect — fires when messages change or conversation switches
   useEffect(() => {
@@ -267,21 +268,11 @@ const Chat = () => {
             {/* Conversation List */}
             <div className="flex-1 overflow-y-auto custom-scrollbar px-3 py-3 space-y-2">
               {loading ? (
-                <Skeleton name="conversations-list" loading={true}>
-                  <div className="space-y-3 p-3">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <div key={i} className="p-4 rounded-2xl glass">
-                        <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 rounded-xl bg-surface-container-highest shrink-0"></div>
-                          <div className="flex-1 space-y-2">
-                            <div className="h-4 bg-surface-bright/30 rounded w-3/4"></div>
-                            <div className="h-3 bg-surface-container-highest rounded w-1/2"></div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </Skeleton>
+                <div className="space-y-3 p-3">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <ConversationItemSkeleton key={i} />
+                  ))}
+                </div>
               ) : filteredConversations.length > 0 ? (
                 filteredConversations.map((conv) => {
                   const isActive = activeConversation?.$id === conv.$id;
@@ -435,15 +426,7 @@ const Chat = () => {
                   <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-tertiary/5 rounded-full blur-[120px] pointer-events-none" />
 
                   {loadingMessages ? (
-                    <Skeleton name="messages" loading={true}>
-                      <div className="space-y-4">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <div key={i} className={`flex ${i % 2 === 0 ? 'justify-start' : 'justify-end'}`}>
-                            <div className={`h-12 ${i % 2 === 0 ? 'w-1/2' : 'w-1/3'} glass rounded-2xl`}></div>
-                          </div>
-                        ))}
-                      </div>
-                    </Skeleton>
+                    <ChatMessageSkeleton />
                   ) : messages.length > 0 ? (
                     <>
                       {/* Date separator */}
@@ -456,8 +439,6 @@ const Chat = () => {
                       {messages.map((msg, i) => {
                         if (!msg) return null;
                         const isOwn = isCurrentUser(msg.senderId);
-                        const prevMsg = i > 0 ? messages[i - 1] : null;
-                        const showLabel = !isOwn && (!prevMsg || String(prevMsg.senderId) !== String(msg.senderId));
 
                         return (
                           <MessageBubble

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import usePageTitle from '../hooks/usePageTitle';
 import ProfileCard from '../Components/profile/ProfileCard';
 import OwnerProduct from '../Components/profile/OwnerProduct';
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMyProducts } from '../store/productSlice';
 
 const Profile = () => {
+  usePageTitle('My Profile');
   const [activeTab, setActiveTab] = useState("my-listings");
 
   const dispatch = useDispatch();

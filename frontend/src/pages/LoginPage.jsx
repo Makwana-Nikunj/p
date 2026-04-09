@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import usePageTitle from '../hooks/usePageTitle';
 import { useLocation, useNavigate } from "react-router-dom";
 import authService from '../services/authService'
 import chatService from '../services/chatService'
@@ -11,6 +12,7 @@ import AtmosphericBlooms from '../Components/AtmosphericBlooms';
 import useGoogleOAuth from '../hooks/useGoogleOAuth';
 
 const LoginForm = () => {
+  usePageTitle('Sign In');
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();

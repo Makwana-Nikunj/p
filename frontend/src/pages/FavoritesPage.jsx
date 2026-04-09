@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import usePageTitle from '../hooks/usePageTitle';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import favoriteService from '../services/favoriteService';
 import productService from '../services/productService';
-import { Skeleton } from "boneyard-js/react";
+import { ProductGridSkeleton } from '../Components/SkeletonLoader';
 import Cart from '../Components/home/featuredproduct/ItemCard';
 import { FaHeart } from 'react-icons/fa';
 import AtmosphericBlooms from '../Components/AtmosphericBlooms';
 
 const Favorites = () => {
+  usePageTitle('My Favorites');
   const user = useSelector((state) => state.auth.userData);
   const products = useSelector((state) => state.products.products);
 
@@ -63,27 +65,12 @@ const Favorites = () => {
 
       {loading ? (
         <div className="w-[90%] max-w-7xl animate-fadeIn">
-          <Skeleton name="favorites-grid" loading={true}>
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <div className="h-8 glass rounded w-48"></div>
-                <div className="h-10 glass rounded w-32"></div>
-              </div>
-              <div className="h-5 glass rounded w-64 mb-6"></div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <div key={i} className="w-full rounded-2xl overflow-hidden bg-surface-container-low dark:border-white/5 border-gray-200">
-                    <div className="aspect-square bg-surface-container-high"></div>
-                    <div className="p-4 space-y-3">
-                      <div className="h-3 bg-surface-bright/30 rounded w-16"></div>
-                      <div className="h-5 bg-surface-bright/30 rounded w-3/4"></div>
-                      <div className="h-6 bg-surface-bright/30 rounded w-20"></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Skeleton>
+          <div className="flex items-center justify-between mb-2">
+            <div className="h-8 glass rounded w-48 animate-pulse-skeleton"></div>
+            <div className="h-10 glass rounded w-32 animate-pulse-skeleton"></div>
+          </div>
+          <div className="h-5 glass rounded w-64 mb-6 animate-pulse-skeleton"></div>
+          <ProductGridSkeleton count={8} />
         </div>
       ) : (
         <div className="w-[90%] max-w-7xl section-spacing">

@@ -1,9 +1,7 @@
 import { useForm } from "react-hook-form";
+import usePageTitle from '../hooks/usePageTitle';
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux'
-import { login } from '../store/authSlice'
 import authService from '../services/authService'
-import chatService from '../services/chatService'
 import { useState } from "react";
 import { User, Mail, Lock, AlertCircle, CheckCircle2, BadgeCheck, ShoppingBag, Sparkles } from "lucide-react";
 import { useToast } from '../Components/Toast/ToastContainer';
@@ -12,10 +10,11 @@ import { Link } from "react-router-dom";
 import useGoogleOAuth from '../hooks/useGoogleOAuth';
 
 const RegisterForm = () => {
+  usePageTitle('Create Account');
   const navigate = useNavigate()
   const { showToast } = useToast();
   const [error, setError] = useState("")
-  const dispatch = useDispatch()
+
   const { handleGoogleLogin, isGoogleLoading } = useGoogleOAuth({});
   const {
     register,

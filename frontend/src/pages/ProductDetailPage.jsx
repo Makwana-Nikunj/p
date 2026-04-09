@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
+import usePageTitle from '../hooks/usePageTitle';
 import {
   MessageSquare,
   MapPin,
@@ -33,6 +34,7 @@ const ProductDetailPage = () => {
   const [product, setProduct] = useState(null);
   const [isLoadingChat, setIsLoadingChat] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  usePageTitle(product?.title || 'Product Details');
 
   // Fetch product from API if not in Redux
   useEffect(() => {
