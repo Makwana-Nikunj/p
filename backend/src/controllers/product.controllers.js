@@ -83,9 +83,10 @@ const getProducts = asyncHandler(async (req, res) => {
     const limit = parseInt(req.query.limit) || 20;
     const offset = (page - 1) * limit;
 
-    // Fetch approved and active products with pagination
-    const products = await sql`
-        SELECT p.*, u.username as "sellerName", u.avatar as "sellerAvatar"
+    // Single query: fetch products + total count via window function
+    const rows = await sql`
+        SELECT p.*, u.username as "sellerName", u.avatar as "sellerAvatar",
+               COUNT(*) OVER() AS total_count
         FROM products p
         LEFT JOIN users u ON p.user_id = u.id
         WHERE p.status = 'approved' AND p.listing_status = 'active'
@@ -93,9 +94,9 @@ const getProducts = asyncHandler(async (req, res) => {
         LIMIT ${limit} OFFSET ${offset}
     `;
 
-    // Get total count for pagination metadata
-    const countResult = await sql`SELECT COUNT(*) as total FROM products WHERE status = 'approved' AND listing_status = 'active'`;
-    const total = parseInt(countResult[0].total);
+    const total = rows.length > 0 ? parseInt(rows[0].total_count) : 0;
+    // Strip the total_count field from each row
+    const products = rows.map(({ total_count, ...rest }) => rest);
 
     return res.status(200).json(new ApiResponse(200, {
         documents: products,

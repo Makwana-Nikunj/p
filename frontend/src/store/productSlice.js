@@ -67,8 +67,7 @@ export const fetchMyProducts = createAsyncThunk(
   "products/fetchMyProducts",
   async (_, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.token;
-      const res = await productService.getMyProducts(); // Need to implement in service
+      const res = await productService.getMyProducts();
       return {
         products: res?.documents || [],
         pagination: { page: 1, hasMore: false, totalPages: 1, total: res?.documents?.length || 0 }
@@ -85,6 +84,7 @@ const productSlice = createSlice({
     products: [],
     myProducts: [], // separate list for profile page (all user's products)
     selectedProduct: null,
+    loading: false,      // initial fetch loading
     error: null,
     filters: {
       search: '',
@@ -120,13 +120,19 @@ const productSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // all products (initial load)
+      .addCase(fetchProducts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.products = action.payload.products;
         state.pagination = action.payload.pagination;
+        state.loading = false;
         state.isLoadingMore = false;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.error = action.payload;
+        state.loading = false;
         state.isLoadingMore = false;
       })
 
@@ -159,5 +165,5 @@ const productSlice = createSlice({
   },
 });
 
-export const { clearSelectedProduct } = productSlice.actions;
+export const { clearSelectedProduct, setFilters, resetProducts } = productSlice.actions;
 export default productSlice.reducer;

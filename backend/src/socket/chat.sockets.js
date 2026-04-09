@@ -5,6 +5,21 @@ import { getUserChats, createMessage, editMessage, deleteMessage } from "../cont
 
 let ioInstance = null;
 
+// Per-socket rate limiting for messages (max 10/sec)
+const messageCooldowns = new Map();
+const MAX_MESSAGES_PER_SEC = 10;
+
+function isRateLimited(socketId) {
+    const now = Date.now();
+    const history = messageCooldowns.get(socketId) || [];
+    // Remove entries older than 1 second
+    const recent = history.filter(t => now - t < 1000);
+    if (recent.length >= MAX_MESSAGES_PER_SEC) return true;
+    recent.push(now);
+    messageCooldowns.set(socketId, recent);
+    return false;
+}
+
 const getIO = () => ioInstance;
 
 const initChatSocket = (io) => {
@@ -56,7 +71,10 @@ const initChatSocket = (io) => {
             socket.on("send_message", async ({ chatId, content }) => {
                 try {
                     if (!chatId || !content?.trim()) return;
-                    const message = await createMessage(userId, chatId, content);
+                    if (isRateLimited(socket.id)) return; // silently drop
+                    // Sanitize: trim and truncate
+                    const sanitized = content.trim().slice(0, 5000);
+                    const message = await createMessage(userId, chatId, sanitized);
                     if (message) io.to(String(chatId)).emit("receive_message", message);
                 } catch (err) {
                     console.error("Error sending message:", err);
@@ -90,7 +108,7 @@ const initChatSocket = (io) => {
 
             // DISCONNECT
             socket.on("disconnect", () => {
-                console.log(`User ${userId} disconnected`);
+                messageCooldowns.delete(socket.id);
             });
 
         } catch (error) {

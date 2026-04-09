@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import compression from "compression";
 import cookieParser from "cookie-parser";
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
@@ -8,6 +9,16 @@ import { apiLimiter, authLimiter } from "./middlewares/rateLimit.middleware.js";
 import { securityHeaders } from "./middlewares/security.middleware.js";
 import { requestLogger } from "./middlewares/requestLogger.middleware.js";
 
+// Route imports (top-level for clarity)
+import userRouter from "./routes/user.routes.js";
+import productRouter from "./routes/product.routes.js";
+import favoriteRouter from "./routes/favorite.routes.js";
+import chatRouter from "./routes/chats.routes.js";
+import messageRouter from "./routes/messages.routes.js";
+import feedbackRouter from "./routes/feedback.routes.js";
+import authRouter from "./routes/auth.routes.js";
+import reportRouter from "./routes/report.routes.js";
+import { keepAlive } from "./utils/keepAlive.js";
 
 const app = express();
 const server = createServer(app);
@@ -37,6 +48,9 @@ app.use(
     })
 );
 
+// Compress all responses (gzip/brotli) — ~70% smaller JSON payloads
+app.use(compression());
+
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(cookieParser());
@@ -54,15 +68,7 @@ app.use(securityHeaders);
 // Request logging
 app.use(requestLogger);
 
-import userRouter from "./routes/user.routes.js";
-import productRouter from "./routes/product.routes.js";
-import favoriteRouter from "./routes/favorite.routes.js";
-import chatRouter from "./routes/chats.routes.js";
-import messageRouter from "./routes/messages.routes.js";
-import feedbackRouter from "./routes/feedback.routes.js";
-import authRouter from "./routes/auth.routes.js";
-import reportRouter from "./routes/report.routes.js";
-
+// Routes
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/favorites", favoriteRouter);
@@ -77,13 +83,11 @@ app.get("/api/health", (req, res) => {
     res.status(200).json({ status: "ok", uptime: process.uptime() });
 });
 
-
-
 const io = new Server(server, {
     cors: {
         origin: allowedOrigins,
         methods: ["GET", "POST"],
-        credentials: true, // FIX: Add credentials for CORS
+        credentials: true,
         allowedHeaders: ["Content-Type", "Authorization"]
     },
 });
@@ -104,7 +108,6 @@ app.use((err, req, res, next) => {
 });
 
 // Keep-alive self-ping — prevents cold starts on Render free tier
-import { keepAlive } from "./utils/keepAlive.js";
 keepAlive();
 
 export { server };

@@ -4,7 +4,13 @@ let sql;
 
 const connectToDatabase = async () => {
     try {
-        sql = postgres(process.env.DATABASE_URL, { ssl: 'require', max: 5, prepare: true });
+        sql = postgres(process.env.DATABASE_URL, {
+            ssl: 'require',
+            max: 10,
+            prepare: true,
+            idle_timeout: 30,        // close idle connections after 30s
+            connect_timeout: 10,     // fail if connection takes >10s
+        });
 
         // ===============================
         // USERS TABLE
@@ -176,6 +182,21 @@ const connectToDatabase = async () => {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
         `;
+
+        // ===============================
+        // PERFORMANCE INDEXES
+        // ===============================
+        // Products: most queries filter by status + listing_status
+        await sql`CREATE INDEX IF NOT EXISTS idx_products_status_listing ON products(status, listing_status, created_at DESC)`;
+        // Products: user's own products
+        await sql`CREATE INDEX IF NOT EXISTS idx_products_user_id ON products(user_id)`;
+        // Chats: lookup by participants
+        await sql`CREATE INDEX IF NOT EXISTS idx_chats_user1 ON chats(user1_id)`;
+        await sql`CREATE INDEX IF NOT EXISTS idx_chats_user2 ON chats(user2_id)`;
+        // Messages: ordered by chat
+        await sql`CREATE INDEX IF NOT EXISTS idx_messages_chat_created ON messages(chat_id, created_at)`;
+        // Favorites: prevent duplicates + fast lookup
+        await sql`CREATE UNIQUE INDEX IF NOT EXISTS idx_favorites_user_product ON favorites(user_id, product_id)`;
 
         console.log("✅ Successfully connected to the database.");
     } catch (error) {

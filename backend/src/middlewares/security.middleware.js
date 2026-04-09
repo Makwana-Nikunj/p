@@ -20,5 +20,8 @@ export const securityHeaders = (req, res, next) => {
     // Permissions policy
     res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
 
+    // Prevent leaking referrer info to external sites
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+
     next();
 };

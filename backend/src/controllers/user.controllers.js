@@ -123,20 +123,21 @@ const deleteAccount = asyncHandler(async (req, res) => {
     }
     // get all product public_ids of the user to delete from cloudinary
     const products = await sql`
-        SELECT id, image_public_id FROM products WHERE seller_id = ${userId}
+        SELECT id, image_public_id FROM products WHERE user_id = ${userId}
     `;
-    for (const product of products) {
-        if (product.image_public_id) {
-            await deleteFromCloudinary(product.image_public_id);
-        }
-    }
+    // Batch delete images in parallel for speed
+    const deletePromises = products
+        .filter(p => p.image_public_id)
+        .map(p => deleteFromCloudinary(p.image_public_id));
+    await Promise.allSettled(deletePromises);
+
     // Delete all favorites of the user   
     await sql`
         DELETE FROM favorites WHERE user_id = ${userId}
     `;
 
-    // delate all products of the user
-    await sql`DELETE FROM products WHERE seller_id = ${userId}`;
+    // Delete all products of the user
+    await sql`DELETE FROM products WHERE user_id = ${userId}`;
 
     // Delete user from database
     await sql`DELETE FROM users WHERE id = ${userId}`;

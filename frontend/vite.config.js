@@ -4,5 +4,19 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react() ,  tailwindcss()],
+  plugins: [react(), tailwindcss()],
+  build: {
+    // No sourcemaps in production — smaller deploy bundle
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        // Manual chunk splitting for better caching
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'redux-vendor': ['@reduxjs/toolkit', 'react-redux'],
+          'ui-vendor': ['lucide-react', 'framer-motion'],
+        },
+      },
+    },
+  },
 })
