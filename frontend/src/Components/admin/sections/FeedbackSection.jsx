@@ -35,6 +35,7 @@ const FeedbackSection = () => {
 
     useEffect(() => {
         fetchAllFeedback();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [statusFilter, sortBy, search]);
 
     const handleViewFeedback = (feedback) => {

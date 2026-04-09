@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion' // eslint-disable-line no-unused-vars
 import feedbackService from '../services/feedbackService'
 
 const FeedbackPage = () => {
@@ -27,6 +27,7 @@ const FeedbackPage = () => {
   }, [])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchFeedback(currentPage, sortBy)
   }, [currentPage, sortBy, fetchFeedback])
 

@@ -95,8 +95,7 @@ class ChatService {
           const otherUsername = isUser1 ? chat.user2_username : chat.user1_username;
           const otherUserAvatar = isUser1 ? chat.user2_avatar : chat.user1_avatar;
           const myUserId = isUser1 ? chat.user1_id : chat.user2_id;
-          const myUsername = isUser1 ? chat.user1_username : chat.user2_username;
-          const myUserAvatar = isUser1 ? chat.user1_avatar : chat.user2_avatar;
+
 
           return {
             ...chat,

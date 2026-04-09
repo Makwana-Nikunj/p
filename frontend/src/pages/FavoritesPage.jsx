@@ -94,7 +94,7 @@ const Favorites = () => {
 
       <div className="w-full flex justify-center">
         {sortedFavorites.length > 0 ? (
-          <div className='w-[90%] max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-fr'>
+          <div className='w-[92%] sm:w-[90%] max-w-7xl grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 auto-rows-fr'>
             {sortedFavorites.map((product) => (
               <Cart
                 key={product.$id}

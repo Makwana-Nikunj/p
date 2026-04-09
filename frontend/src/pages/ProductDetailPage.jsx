@@ -170,7 +170,7 @@ const ProductDetailPage = () => {
       <AtmosphericBlooms intensity="medium" />
 
       {/* Breadcrumb */}
-      <nav className="animate-fadeIn flex items-center gap-2 text-on-surface-variant text-sm mb-8 font-medium w-[90%] lg:w-[82%] relative z-10">
+      <nav className="animate-fadeIn flex items-center gap-2 text-on-surface-variant text-xs sm:text-sm mb-4 sm:mb-8 font-medium w-[92%] sm:w-[90%] lg:w-[82%] relative z-10 overflow-x-auto">
         <span className="hover:text-primary transition-colors cursor-pointer" onClick={() => navigate("/browse")}>Marketplace</span>
         <span className="material-symbols-outlined text-xs">chevron_right</span>
         <span className="hover:text-primary transition-colors cursor-pointer">{product.category}</span>
@@ -178,7 +178,7 @@ const ProductDetailPage = () => {
         <span className="text-primary">{product.title}</span>
       </nav>
 
-      <div className="w-[90%] lg:w-[82%] relative z-10 animate-fadeIn">
+      <div className="w-[92%] sm:w-[90%] lg:w-[82%] relative z-10 animate-fadeIn">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
 
           {/* LEFT COLUMN: Immersive Hero & Gallery */}
@@ -206,7 +206,7 @@ const ProductDetailPage = () => {
           <div className="md:col-span-5 flex flex-col">
             <div className="space-y-6">
               {/* Product Title with gradient */}
-              <h1 className="text-4xl md:text-5xl font-extrabold font-plus-jakarta tracking-tight leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-plus-jakarta tracking-tight leading-tight">
                 {product.title}
               </h1>
 
@@ -222,28 +222,28 @@ const ProductDetailPage = () => {
               </p>
 
               {/* Specs Grid - Clean glass cards */}
-              <div className="grid grid-cols-2 gap-3 md:gap-4">
-                <div className="p-4 md:p-5 rounded-3xl bg-surface-container-high glass-shine">
-                  <div className="text-on-surface-variant text-xs md:text-sm uppercase font-bold tracking-widest mb-1.5 opacity-60">Condition</div>
-                  <div className="text-on-surface font-plus-jakarta font-bold text-lg">{product.condition || "Not specified"}</div>
+              <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
+                <div className="p-3 sm:p-4 md:p-5 rounded-2xl sm:rounded-3xl bg-surface-container-high glass-shine">
+                  <div className="text-on-surface-variant text-[10px] sm:text-xs md:text-sm uppercase font-bold tracking-widest mb-1 sm:mb-1.5 opacity-60">Condition</div>
+                  <div className="text-on-surface font-plus-jakarta font-bold text-sm sm:text-base md:text-lg truncate">{product.condition || "Not specified"}</div>
                 </div>
-                <div className="p-4 md:p-5 rounded-3xl bg-surface-container-high glass-shine">
-                  <div className="text-on-surface-variant text-xs md:text-sm uppercase font-bold tracking-widest mb-1.5 opacity-60">Location</div>
-                  <div className="text-on-surface font-plus-jakarta font-bold text-lg">{product.location || "Not specified"}</div>
+                <div className="p-3 sm:p-4 md:p-5 rounded-2xl sm:rounded-3xl bg-surface-container-high glass-shine">
+                  <div className="text-on-surface-variant text-[10px] sm:text-xs md:text-sm uppercase font-bold tracking-widest mb-1 sm:mb-1.5 opacity-60">Location</div>
+                  <div className="text-on-surface font-plus-jakarta font-bold text-sm sm:text-base md:text-lg truncate">{product.location || "Not specified"}</div>
                 </div>
-                <div className="p-4 md:p-5 rounded-3xl bg-surface-container-high glass-shine">
-                  <div className="text-on-surface-variant text-xs md:text-sm uppercase font-bold tracking-widest mb-1.5 opacity-60">Posted</div>
-                  <div className="text-on-surface font-plus-jakarta font-bold text-lg">{formatDate(product.$createdAt)}</div>
+                <div className="p-3 sm:p-4 md:p-5 rounded-2xl sm:rounded-3xl bg-surface-container-high glass-shine">
+                  <div className="text-on-surface-variant text-[10px] sm:text-xs md:text-sm uppercase font-bold tracking-widest mb-1 sm:mb-1.5 opacity-60">Posted</div>
+                  <div className="text-on-surface font-plus-jakarta font-bold text-sm sm:text-base md:text-lg truncate">{formatDate(product.$createdAt)}</div>
                 </div>
-                <div className="p-4 md:p-5 rounded-3xl bg-surface-container-high glass-shine">
-                  <div className="text-on-surface-variant text-xs md:text-sm uppercase font-bold tracking-widest mb-1.5 opacity-60">Category</div>
-                  <div className="text-on-surface font-plus-jakarta font-bold text-lg">{product.category}</div>
+                <div className="p-3 sm:p-4 md:p-5 rounded-2xl sm:rounded-3xl bg-surface-container-high glass-shine">
+                  <div className="text-on-surface-variant text-[10px] sm:text-xs md:text-sm uppercase font-bold tracking-widest mb-1 sm:mb-1.5 opacity-60">Category</div>
+                  <div className="text-on-surface font-plus-jakarta font-bold text-sm sm:text-base md:text-lg truncate">{product.category}</div>
                 </div>
               </div>
             </div>
 
             {/* Seller Profile Card - Floating Glass */}
-            <div className="p-8 rounded-[2.5rem] glass-intense border border-white/5 shadow-2xl relative overflow-hidden group tilt-card backdrop-blur-xl mt-10">
+            <div className="p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-[2.5rem] glass-intense border border-white/5 shadow-2xl relative overflow-hidden group tilt-card backdrop-blur-xl mt-6 md:mt-10">
               {/* Subtle gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-transparent to-tertiary/3 pointer-events-none"></div>
 
@@ -307,14 +307,14 @@ const ProductDetailPage = () => {
 
       {/* Related Items Section - Sideways layout with section spacing */}
       {relatedProducts.length > 0 && (
-        <section className="w-[90%] lg:w-[82%] mt-16 md:mt-32 relative z-10">
+        <section className="w-[92%] sm:w-[90%] lg:w-[82%] mt-12 md:mt-32 relative z-10">
           <div className="flex items-center justify-between mb-10">
             <h2 className="text-3xl font-plus-jakarta font-extrabold tracking-tight gradient-text">Similar Products</h2>
             <a className="text-primary font-bold flex items-center gap-1 hover:underline" href="#">
               View Shop <span className="material-symbols-outlined">arrow_right_alt</span>
             </a>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {relatedProducts.map((item) => (
               <Cart
                 key={item.$id}

@@ -2,6 +2,35 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ===========================================
+   GLOBAL RESPONSIVE SAFETY
+   =========================================== */
+html {
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  min-width: 0;
+}
+
+/* Thinner scrollbar on small screens for more content space */
+@media (max-width: 640px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+}
+
+/* Utility: hide scrollbar but keep scroll functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===========================================
    SEMANTIC COLOR TOKENS (Light / Dark)
    =========================================== */
 :root {

@@ -23,11 +23,13 @@ const RegisterForm = () => {
     formState: { errors, isSubmitting }
   } = useForm({ mode: 'onChange' })
 
+  /* eslint-disable react-hooks/incompatible-library */
   const password = watch("password");
   const nameValue = watch("name");
   const emailValue = watch("email");
   const passwordValue = watch("password");
   const confirmPasswordValue = watch("confirmPassword");
+  /* eslint-enable react-hooks/incompatible-library */
 
   const create = async (data) => {
     setError("")
@@ -86,8 +88,8 @@ const RegisterForm = () => {
             {/* 3D Decorative Element */}
             <div className="absolute -top-8 -right-8 w-16 h-16 bg-gradient-to-br from-primary to-tertiary rounded-3xl rotate-12 opacity-20 blur-lg"></div>
 
-            <div className="glass-panel p-8 lg:p-10 rounded-2xl shadow-lg relative z-10">
-              <div className="mb-8">
+            <div className="glass-panel p-5 sm:p-8 lg:p-10 rounded-2xl shadow-lg relative z-10 w-full overflow-hidden">
+              <div className="mb-6 sm:mb-8">
                 <p className="text-on-surface-variant text-sm">Create your account to start exploring.</p>
               </div>
 

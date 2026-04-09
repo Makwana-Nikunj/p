@@ -26,12 +26,12 @@ const ReportPage = () => {
   const {
     register,
     handleSubmit,
-    reset,
     watch,
     setValue,
     formState: { errors, isSubmitting },
   } = useForm();
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const selectedReason = watch('reason');
 
   useEffect(() => {
@@ -75,7 +75,7 @@ const ReportPage = () => {
         {/* Card */}
         <div className="rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(99,102,241,0.1)] glass-card">
           {/* Header */}
-          <div className="px-8 py-6 border-b border-outline-variant/50">
+          <div className="px-4 py-4 sm:px-6 sm:py-5 md:px-8 md:py-6 border-b border-outline-variant/50">
             <div className="flex items-center gap-4 mb-3">
               <div className="w-12 h-12 rounded-xl bg-red-500/15 border border-red-500/20 flex items-center justify-center flex-shrink-0">
                 <span className="material-symbols-outlined dark:text-red-400 text-red-500 text-2xl" data-icon="flag">flag</span>
@@ -93,13 +93,13 @@ const ReportPage = () => {
             )}
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="px-8 py-7 space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="px-4 py-5 sm:px-6 sm:py-6 md:px-8 md:py-7 space-y-6">
             {/* Reason chips */}
             <div>
               <label className="block text-sm font-semibold text-on-surface mb-3">
                 Reason for reporting <span className="text-red-400">*</span>
               </label>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {REPORT_REASONS.map((r) => {
                   const active = selectedReason === r.value;
                   return (

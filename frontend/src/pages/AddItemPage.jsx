@@ -10,8 +10,7 @@ const AddItem = () => {
     handleSubmit,
     formState: { errors },
     reset,
-    setValue,
-    watch,
+    setValue
   } = useForm();
 
   const user = useSelector((state) => state.auth.userData);
@@ -110,11 +109,11 @@ const AddItem = () => {
       </nav>
 
       {/* Main Content */}
-      <main className="pt-24 pb-32 px-6 max-w-5xl mx-auto w-full">
+      <main className="pt-24 pb-32 px-4 sm:px-6 max-w-5xl mx-auto w-full">
         {/* Header */}
         <header className="mb-12 text-center relative">
           <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 bg-indigo-500/10 blur-[120px] rounded-full -z-10"></div>
-          <h1 className="text-4xl md:text-6xl font-extrabold bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent font-headline tracking-tighter mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent font-headline tracking-tighter mb-4">
             List Your Gear
           </h1>
           <p className="text-slate-300 max-w-xl mx-auto text-lg">
@@ -156,7 +155,7 @@ const AddItem = () => {
           {/* Form Content */}
           <form onSubmit={handleSubmit(onSubmit)} className="lg:col-span-9 space-y-8">
             {/* Section 1: Photo Upload */}
-            <div className="bg-surface-container/30 backdrop-blur-xl rounded-3xl p-8 border border-outline-variant/50 shadow-2xl transition-all duration-500 hover:shadow-indigo-500/10">
+            <div className="bg-surface-container/30 backdrop-blur-xl rounded-3xl p-4 sm:p-6 md:p-8 border border-outline-variant/50 shadow-2xl transition-all duration-500 hover:shadow-indigo-500/10">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <span className="material-symbols-outlined text-indigo-400 text-3xl" data-icon="add_a_photo">add_a_photo</span>
@@ -164,7 +163,7 @@ const AddItem = () => {
                 </div>
                 <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">Mandatory</span>
               </div>
-              <div className="relative group h-64 w-full rounded-2xl border-2 border-dashed border-outline-variant hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all overflow-hidden cursor-pointer">
+              <div className="relative group h-48 sm:h-64 w-full rounded-2xl border-2 border-dashed border-outline-variant hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all overflow-hidden cursor-pointer">
                 {imagePreview ? (
                   // Image Preview State
                   <div className="relative inset-0">
@@ -222,7 +221,7 @@ const AddItem = () => {
             </div>
 
             {/* Section 2: Item Details */}
-            <div className="bg-surface-container/30 backdrop-blur-xl rounded-3xl p-8 border border-outline-variant/50">
+            <div className="bg-surface-container/30 backdrop-blur-xl rounded-3xl p-4 sm:p-6 md:p-8 border border-outline-variant/50">
               <div className="flex items-center gap-3 mb-8">
                 <span className="material-symbols-outlined text-pink-400 text-3xl" data-icon="description">description</span>
                 <h2 className="text-2xl font-bold font-headline text-on-surface">Tell the Story</h2>
@@ -307,7 +306,7 @@ const AddItem = () => {
             </div>
 
             {/* Section 3: Pricing & Condition */}
-            <div className="bg-surface-container/30 backdrop-blur-xl rounded-3xl p-8 border border-outline-variant/50">
+            <div className="bg-surface-container/30 backdrop-blur-xl rounded-3xl p-4 sm:p-6 md:p-8 border border-outline-variant/50">
               <div className="flex items-center gap-3 mb-8">
                 <span className="material-symbols-outlined text-cyan-400 text-3xl" data-icon="payments">payments</span>
                 <h2 className="text-2xl font-bold font-headline text-on-surface">Value & Quality</h2>

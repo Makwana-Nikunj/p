@@ -21,6 +21,8 @@ const OwnerProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const products = useSelector((state) => state.auth.userData ? state.products.products : []);
+
   useEffect(() => {
     const loadProduct = async () => {
       try {
@@ -28,7 +30,6 @@ const OwnerProductDetail = () => {
         if (result.payload) {
           setProduct(result.payload);
         } else {
-          const products = useSelector((state) => state.products.products);
           const found = products.find(p => p.$id === id);
           if (found) setProduct(found);
         }
@@ -39,7 +40,7 @@ const OwnerProductDetail = () => {
       }
     };
     loadProduct();
-  }, [id, dispatch]);
+  }, [id, dispatch, products]);
 
   if (loading) {
     return (
@@ -145,11 +146,11 @@ const OwnerProductDetail = () => {
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between gap-3 mb-2 md:mb-4">
-                    <h1 className="font-headline font-extrabold text-2xl md:text-4xl text-on-surface leading-tight flex-1 min-w-0 truncate">
+                  <div className="flex items-center justify-between gap-2 sm:gap-3 mb-2 md:mb-4">
+                    <h1 className="font-headline font-extrabold text-xl sm:text-2xl md:text-4xl text-on-surface leading-tight flex-1 min-w-0 truncate">
                       {product.title}
                     </h1>
-                    <span className="px-4 py-2 md:px-8 md:py-4 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-500 text-on-surface text-xl md:text-3xl md:text-4xl font-bold md:font-black shadow-lg shadow-indigo-500/30 whitespace-nowrap flex-shrink-0">
+                    <span className="px-3 py-1.5 sm:px-4 sm:py-2 md:px-8 md:py-4 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-500 text-on-surface text-lg sm:text-xl md:text-3xl font-bold md:font-black shadow-lg shadow-indigo-500/30 whitespace-nowrap flex-shrink-0">
                       ₹{parseFloat(product.price).toLocaleString('en-IN')}
                     </span>
                   </div>

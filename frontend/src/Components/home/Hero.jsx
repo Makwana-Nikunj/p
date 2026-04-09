@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useMemo, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion' // eslint-disable-line no-unused-vars
 
 const Hero = () => {
   const { userData } = useSelector((state) => state.auth)
@@ -39,10 +39,11 @@ const Hero = () => {
     { id: 12, title: 'Study Lamp', price: '₹900', category: 'Home', condition: 'Very Good', icon: 'lightbulb', color: 'violet' }
   ], [])
 
-  const random = (min, max) => Math.random() * (max - min) + min
-  const randomChoice = (arr) => arr[Math.floor(Math.random() * arr.length)]
-
-  const floatingItems = useMemo(() => {
+  const floatingItemsRef = useRef(null)
+  if (!floatingItemsRef.current) {
+    /* eslint-disable react-hooks/purity */
+    const random = (min, max) => Math.random() * (max - min) + min
+    const randomChoice = (arr) => arr[Math.floor(Math.random() * arr.length)]
     const items = []
     const zones = [
       { xRange: [5, 25], yRange: [15, 40] },
@@ -68,8 +69,10 @@ const Hero = () => {
       const item = randomChoice(marketplaceItems)
       items.push({ key: i, item, x, y, scale: baseScale, blur: blurAmount, opacity, duration, delay, driftX, driftY, rotation })
     }
-    return items
-  }, [marketplaceItems])
+    floatingItemsRef.current = items
+    /* eslint-enable react-hooks/purity */
+  }
+  const floatingItems = floatingItemsRef.current
 
   const createFloatVariant = (driftX, driftY, rotation, duration) => ({
     animate: {
@@ -80,10 +83,10 @@ const Hero = () => {
 
   return (
     <>
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-surface">
+      <section className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden bg-surface pt-24 pb-16">
         {/* Floating Marketplace Items - z-[1] so they sit behind hero content */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-[1]">
-          {floatingItems.map(({ key, item, x, y, scale, blur, opacity, duration, delay, driftX, driftY, rotation }) => (
+          {floatingItems.map(({ key, item, x, y, scale, blur, opacity, duration, driftX, driftY, rotation }) => (
             <motion.div key={key} className="absolute origin-center" style={{ left: `${x}%`, top: `${y}%`, filter: `blur(${blur})`, opacity }} {...createFloatVariant(driftX, driftY, rotation, duration)} initial={{ x: 0, y: 0, rotate: 0 }}>
               <div className="tilt-card glass-card rounded-2xl overflow-hidden border border-white/10 shadow-lg backdrop-blur-xl" style={{ transform: `scale(${scale})` }}>
                 <div className={`aspect-[4/3] relative`}>
@@ -138,13 +141,13 @@ const Hero = () => {
             className="font-headline relative z-10"
           >
             {/* Line 1 — medium weight, large size */}
-            <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-7xl font-medium tracking-tight text-on-surface leading-[1.15] sm:leading-[1.1] leading-tight">
+            <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight text-on-surface leading-[1.15] sm:leading-[1.1] leading-tight">
               Buy, Sell &amp; Connect
             </span>
 
             {/* Line 2 — bold gradient on key phrase, extra large */}
             <span
-              className="block text-5xl sm:text-6xl md:text-7xl lg:text-7xl font-extrabold tracking-tight mt-1 sm:mt-2 text-on-surface"
+              className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mt-1 sm:mt-2 text-on-surface"
             >
               Inside Your Campus
             </span>
@@ -153,21 +156,21 @@ const Hero = () => {
           {/* Subtext — muted, max-width constrained, generous spacing */}
           <motion.p
             variants={fadeInUp(3)}
-            className="relative font-body text-lg sm:text-xl md:text-2xl text-outline mt-8 sm:mt-10 mb-10 sm:mb-14 max-w-3xl mx-auto leading-relaxed"
+            className="relative font-body text-base sm:text-lg md:text-xl text-outline mt-5 sm:mt-8 md:mt-10 mb-8 sm:mb-12 md:mb-14 max-w-3xl mx-auto leading-relaxed px-4 sm:px-0"
           >
             The trusted marketplace built exclusively for students.
-            <span className="font-semibold dark:text-cyan-400 text-tertiary"> Verified users, zero fees, and campus-safe transactions.</span>
+            <span className="block sm:inline font-semibold dark:text-cyan-400 text-tertiary mt-2 sm:mt-0"> Verified users, zero fees, and campus-safe transactions.</span>
           </motion.p>
 
           {/* CTA Buttons */}
           <motion.div
             variants={fadeInUp(5)}
-            className="grid grid-cols-2 gap-3 sm:flex sm:grid-cols-none flex-wrap sm:justify-center sm:gap-5"
+            className="flex flex-col sm:flex-row flex-wrap items-center sm:justify-center gap-3 sm:gap-5 w-full mx-auto"
           >
             {/* Primary — gradient glow */}
             <Link
               to={userData ? "/add-item" : "/register"}
-              className="group relative px-8 py-3.5 sm:px-12 sm:py-4.5 rounded-full text-white font-semibold text-sm sm:text-lg transition-all duration-300 hover:scale-[1.04] active:scale-[0.97] cursor-pointer sm:w-auto text-center"
+              className="group relative px-6 py-3.5 sm:px-10 sm:py-4.5 rounded-full text-white font-semibold text-sm sm:text-lg transition-all duration-300 hover:scale-[1.04] active:scale-[0.97] cursor-pointer w-[80%] max-w-[260px] sm:max-w-none sm:w-auto text-center"
               style={{ background: 'linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)' }}
             >
               <span className="relative z-10 flex items-center justify-center gap-2.5">
@@ -179,7 +182,7 @@ const Hero = () => {
             {/* Secondary — glass outline */}
             <Link
               to="/browse"
-              className="px-8 py-3.5 sm:px-12 sm:py-4.5 rounded-full border border-white/20 text-on-surface font-medium text-sm sm:text-lg hover:bg-black/5 hover:border-indigo-400/40 active:scale-[0.97] cursor-pointer sm:w-auto text-center"
+              className="px-6 py-3.5 sm:px-10 sm:py-4.5 rounded-full border border-white/20 text-on-surface font-medium text-sm sm:text-lg hover:bg-black/5 hover:border-indigo-400/40 active:scale-[0.97] cursor-pointer w-[80%] max-w-[260px] sm:max-w-none sm:w-auto text-center"
             >
               <span className="flex items-center justify-center gap-2.5">
                 <span className="material-symbols-outlined group-hover:scale-110 transition-transform duration-300" style={{ fontVariationSettings: "'FILL' 1" }}>explore</span>

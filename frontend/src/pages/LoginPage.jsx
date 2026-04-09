@@ -119,7 +119,7 @@ const LoginForm = () => {
             {/* 3D Decorative Element */}
             <div className="absolute -top-12 -right-12 w-24 h-24 bg-gradient-to-br from-primary to-tertiary rounded-3xl rotate-12 opacity-20 blur-xl"></div>
 
-            <div className="glass-panel p-8 lg:p-10 rounded-[2.5rem] shadow-2xl relative z-10">
+            <div className="glass-panel p-5 sm:p-8 lg:p-10 rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl relative z-10">
               <div className="mb-8">
                 <h2 className="font-headline text-3xl font-bold text-on-surface mb-2">Welcome Back</h2>
                 <p className="text-on-surface-variant">Sign in to continue to your account</p>

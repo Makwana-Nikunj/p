@@ -96,7 +96,7 @@ const EditProduct = () => {
     <div className="min-h-screen w-full relative py-10" style={{ backgroundColor: LUMINA_COLORS.background }}>
       <AtmosphericBlooms intensity="vibrant" />
 
-      <main className="max-w-6xl mx-auto px-4 pt-8 pb-10">
+      <main className="max-w-6xl mx-auto px-3 sm:px-4 pt-8 pb-10">
         {/* Header */}
         <header className="mb-12 text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight text-on-surface mb-2">
@@ -159,7 +159,7 @@ const EditProduct = () => {
           {/* RIGHT COLUMN: Form */}
           <div className="lg:col-span-7">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="glass-panel rounded-[2rem] p-8 shadow-2xl shadow-indigo-500/5 space-y-6">
+              <div className="glass-panel rounded-[2rem] p-4 sm:p-6 md:p-8 shadow-2xl shadow-indigo-500/5 space-y-6">
                 {/* Listing Title */}
                 <div className="space-y-2">
                   <label className="font-label text-xs uppercase tracking-[0.2em] dark:text-gray-400 text-gray-600 ml-1">

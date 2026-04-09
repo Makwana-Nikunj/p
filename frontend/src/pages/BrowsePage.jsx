@@ -26,15 +26,15 @@ const Browse = () => {
   const [campusHub, setCampusHub] = useState("");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  const curatedCategories = [
-    { id: "tech", title: "Tech & Gadgets", icon: "devices", category: "electronics",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDDM1Fld2FEhvp3SM4JxEk6uImd_AJbdhH8O2UBHs4XnNRAYCWleDti0CwNgRAbURWMNvR-4x7aodEqCP3jy45a151Hc5NEZgNzjK9oDXGtC1RFW5e8_dzakjqMdB5jpwD1sOR2CJWWINogBsUZelVEUnR0Hq_KLQ-BjW8JZuAMEs-EmGkX7T1UkEl_r5eofRw8V0XL9BRUYGXyV68zRNbE_rrDl6JzNPaCPyYZKEMg0gTc451ThOApm2zQM-SI0Cq_kwedcAUnTk-j" },
-    { id: "textbooks", title: "Textbooks", icon: "menu_book", category: "textbooks",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB6aWHB5Ard6HIhsUqVF4ghnRDyT9qIUa7QnWxayo9nDDFSRJP_3GLahrYUNL7Jp-FJGQzyk5Oaz9e7_TdFiZydL5t1546EM6NRptPJWgw1w244Pn9QgIUOnxQMi4NxstkD39ZrkMzbGtsvw9sbLDFhsOiv-VHcaIkcZo0sfxOFe2h_8-r-GcM6RHU-JPQWNb2yaPYDYN4ydWDTNiJFBMuufMPrgmkHr2VNG8NY41nMvLJi4KSK-Q4muPjbPorZ4fKpz6zfQbF8rhw0" },
-    { id: "lifestyle", title: "Lifestyle", icon: "auto_awesome", category: "lifestyle",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCR7N_tUqCbasqNQxu8Ixt_mRJpi1Poum10vMeNVhHXg_oNOQxWOWtPNqKsDIuYFicGQhD28e318BhYJpKA_158Sh7dZ41u8OSasKtBVJ4osikcPvBjRqu7g-Woer40bm1ZiT79_PKrPq7tyQdgTebxnU95R9ePMuGn14Z3E2epoCWlCzBW3TTeb56v-XNsbcgsH0V2aXoK0tpaKNaCAtK_Aekx_WFsCDsXSpEnHuMCdHH8Vi3yvSjQWanwiHTb2eMYYzBPbszxsnOr" },
-    { id: "services", title: "Campus Services", icon: "construction", category: "services",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCP652ki164fZqAOtoPiFYSaIZb7q8jgxBhzLQuQ-f-kc9zrU_F4aDR_FGXIetIdfRxdhEUciLJg29e2hIRZBNsXqN5esEIRuhmkP0nb6_nXVqVY1YncS6qSDIQty_uuL7VqpWuG3tdw2HZj4kXG7SmyOExtriAI54zq3fuM0LAqxxyDp6YT-8ZtGvyZBlXD3gHqVZ2vmQu6W-aPp7FO0o-o6d4qmWnHkZGk-G0sAm26aMVzEhpBWcai2g5093gIw1AvIwNOJi5-ukR" },
+
+
+  const fullCategoriesList = [
+    { value: "electronics", label: "Electronics / Tech" },
+    { value: "textbooks", label: "Textbooks" },
+    { value: "furniture", label: "Furniture" },
+    { value: "appliances", label: "Appliances" },
+    { value: "lifestyle", label: "Lifestyle" },
+    { value: "services", label: "Campus Services" },
   ];
 
   const lastProductRef = useRef();
@@ -112,7 +112,7 @@ const Browse = () => {
           <select value={selectedCategory} onChange={(e) => { setSelectedCategory(e.target.value); onAction?.(); }}
             className="w-full bg-surface-container-highest border-none rounded-lg py-2.5 px-3 text-sm font-medium text-on-surface appearance-none focus-glow-indigo">
             <option value="all">All Categories</option>
-            {curatedCategories.map((c) => <option key={c.id} value={c.category}>{c.title}</option>)}
+            {fullCategoriesList.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
           </select>
           <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm pointer-events-none">arrow_drop_down</span>
         </div>
@@ -181,28 +181,34 @@ const Browse = () => {
       </div>
 
       <div className="max-w-screen-2xl mx-auto px-4 md:px-8">
-        <section className="py-4" aria-label="Categories">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-black uppercase tracking-widest text-on-surface-variant/70 font-plus-jakarta">Curated Categories</h2>
-            <button className="lg:hidden flex items-center gap-2 px-4 py-2 rounded-lg glass-card border border-white/10 text-on-surface-variant hover:border-primary/40 transition-all"
-              onClick={() => setShowMobileFilters(!showMobileFilters)}>
-              <span className="material-symbols-outlined">tune</span>
-              <span className="text-sm font-bold">Filters</span>
-              {(selectedCategory !== "all" || sort !== "newest" || minPrice || maxPrice || campusHub) && <span className="w-2 h-2 rounded-full bg-primary"></span>}
+        <div className="flex items-center justify-between py-4 gap-4">
+          {/* Text Category Row */}
+          <div className="flex-1 flex items-center gap-6 overflow-x-auto scrollbar-hide snap-x">
+            <button
+              onClick={() => setSelectedCategory("all")}
+              className={`shrink-0 snap-start whitespace-nowrap text-sm font-bold pb-2 border-b-2 transition-all ${selectedCategory === "all" ? "text-primary border-primary" : "text-on-surface-variant border-transparent hover:text-on-surface"}`}
+            >
+              All
             </button>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {curatedCategories.map((cat) => (
-              <div key={cat.id}
-                className={`h-20 sm:h-24 rounded-xl glass-card p-3 sm:p-4 flex flex-col justify-end group cursor-pointer transition-all relative overflow-hidden ${selectedCategory === cat.category ? 'border-primary/40 ring-1 ring-primary/20' : 'hover:border-primary/40'}`}
-                onClick={() => setSelectedCategory(selectedCategory === cat.category ? "all" : cat.category)}>
-                <img src={cat.image} alt={cat.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:scale-110 transition-transform duration-700 -z-10" />
-                <span className={`material-symbols-outlined ${selectedCategory === cat.category ? 'text-primary' : 'text-on-surface-variant'} mb-1 text-lg sm:text-xl`}>{cat.icon}</span>
-                <h3 className="font-bold font-plus-jakarta text-on-surface text-sm sm:text-lg leading-tight">{cat.title}</h3>
-              </div>
+            {fullCategoriesList.map((cat) => (
+              <button
+                key={cat.value}
+                onClick={() => setSelectedCategory(cat.value)}
+                className={`shrink-0 snap-start whitespace-nowrap text-sm font-bold pb-2 border-b-2 transition-all ${selectedCategory === cat.value ? "text-primary border-primary" : "text-on-surface-variant border-transparent hover:text-on-surface"}`}
+              >
+                {cat.label}
+              </button>
             ))}
           </div>
-        </section>
+
+          {/* Mobile Filters Toggle (Only visible on small screens) */}
+          <button className="lg:hidden shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg glass-card border border-white/10 text-on-surface-variant hover:border-primary/40 transition-all"
+            onClick={() => setShowMobileFilters(!showMobileFilters)}>
+            <span className="material-symbols-outlined text-sm">tune</span>
+            <span className="text-sm font-bold">Filters</span>
+            {(selectedCategory !== "all" || sort !== "newest" || minPrice || maxPrice || campusHub) && <span className="w-2 h-2 rounded-full bg-primary"></span>}
+          </button>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mt-4 relative pb-12">
           <aside className="hidden lg:block lg:col-span-1" aria-label="Filters">
@@ -236,7 +242,7 @@ const Browse = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
                   {filteredProducts.map((doc, index) => (
                     <div key={doc.$id} ref={index === filteredProducts.length - 1 ? lastProductRef : null} className="animate-fadeIn">
                       <ItemCard id={doc.$id} imgUrl={doc.imageId} category={doc.category} name={doc.title} price={doc.price}

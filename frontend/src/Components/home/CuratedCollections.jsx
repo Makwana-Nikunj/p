@@ -50,7 +50,7 @@ const CuratedCollections = () => {
   ]
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-20">
+    <section className="w-full max-w-7xl mx-auto px-4 md:px-8 pt-4 pb-16 md:pt-8 md:pb-20">
       {/* Section Header */}
       <div className="text-center mb-12 md:mb-16">
         <h2 className="font-headline text-2xl md:text-3xl font-extrabold gradient-text bg-gradient-to-r from-indigo-300 via-violet-300 to-cyan-300 bg-clip-text text-transparent mb-4">
@@ -61,8 +61,8 @@ const CuratedCollections = () => {
         </p>
       </div>
 
-      {/* Collections Grid - Single Row with orbital animations */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+      {/* Collections Grid - Responsive Rows with orbital animations */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
         {collections.map((collection, index) => (
           <Link
             key={index}
@@ -70,7 +70,7 @@ const CuratedCollections = () => {
             className={`group perspective-container floating-orbit-${(index % 3) + 1}`}
           >
             <div className={`
-              tilt-card glass-card rounded-3xl p-6 md:p-8 flex flex-col items-center justify-center text-center cursor-pointer
+              tilt-card glass-card rounded-3xl p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center text-center cursor-pointer
               relative overflow-hidden transition-all duration-500
               bg-gradient-to-br from-surface-container-highest/80 to-surface-container/80
               border ${collection.border}

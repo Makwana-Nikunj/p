@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { TableRowSkeleton } from '../../../Components/SkeletonLoader';
 import apiClient from '../../../lib/apiClient';
 import { useToast } from '../../../Components/Toast/ToastContainer';
 
 const ProductsSection = ({ onApprove, onReject }) => {
-    const { userData, isAdmin } = useSelector(state => state.auth);
     const [allProducts, setAllProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [statusFilter, setStatusFilter] = useState('all');
@@ -30,6 +28,7 @@ const ProductsSection = ({ onApprove, onReject }) => {
 
     useEffect(() => {
         fetchAllProducts();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Filter products based on status
@@ -52,8 +51,6 @@ const ProductsSection = ({ onApprove, onReject }) => {
 
     // Calculate counts
     const pendingCount = allProducts.filter(p => p.status === 'pending').length;
-    const approvedCount = allProducts.filter(p => p.status === 'approved').length;
-    const rejectedCount = allProducts.filter(p => p.status === 'rejected').length;
 
     const getInitials = (name) => {
         if (!name) return "U";
@@ -263,7 +260,7 @@ const ProductsSection = ({ onApprove, onReject }) => {
             <div className="mt-8 mb-12">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
                     <h2 className="text-2xl font-bold font-headline text-on-surface">Product Listings</h2>
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                         <div className="relative">
                             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50 text-sm">filter_list</span>
                             <select

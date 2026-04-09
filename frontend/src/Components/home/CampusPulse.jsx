@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ItemCard from './featuredproduct/ItemCard'
 import productService from '../../services/productService'
 
@@ -16,12 +16,12 @@ const CampusPulse = ({ trendingProducts }) => {
       </div>
 
       {/* Products Grid - Flexbox centered */}
-      <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-6xl mx-auto">
+      <div className="flex flex-wrap justify-center gap-3 sm:gap-6 md:gap-8 max-w-6xl mx-auto">
         {trendingProducts && trendingProducts.length > 0 ? (
           trendingProducts.map((product) => (
             <div
               key={product.id}
-              className="w-full sm:w-[calc(50%-0.75rem)] md:w-[calc(33.333%-1rem)] lg:w-[calc(25%-0.75rem)]"
+              className="w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.75rem)] md:w-[calc(33.333%-1rem)] lg:w-[calc(25%-0.75rem)]"
             >
               <ItemCard
                 id={product.id}
@@ -39,7 +39,7 @@ const CampusPulse = ({ trendingProducts }) => {
           Array.from({ length: 4 }).map((_, index) => (
             <div
               key={index}
-              className="w-full sm:w-[calc(50%-0.75rem)] md:w-[calc(33.333%-1rem)] lg:w-[calc(25%-0.75rem)]"
+              className="w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.75rem)] md:w-[calc(33.333%-1rem)] lg:w-[calc(25%-0.75rem)]"
             >
               <div className="rounded-3xl overflow-hidden relative border border-indigo-500/10 shadow-[0_0_20px_-5px_rgba(99,102,241,0.3),0_8px_32px_-8px_rgba(0,0,0,0.4)] bg-surface-container-highest backdrop-blur-xl">
                 <div className="aspect-[4/3] bg-surface-container-highest animate-pulse flex items-center justify-center rounded-t-3xl">

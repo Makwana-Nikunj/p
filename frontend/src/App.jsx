@@ -38,7 +38,7 @@ const ForgotPassword = lazy(() => import("./pages/ForgotPasswordPage.jsx"));
 // Base layout wrapping routes
 function Layout({ children }) {
   return (
-    <div className="min-h-screen w-full flex flex-col justify-between bg-surface text-on-surface relative">
+    <div className="min-h-screen w-full flex flex-col justify-between bg-surface text-on-surface relative overflow-x-hidden text-base sm:text-lg">
       <AtmosphericBlooms intensity="medium" />
       <Header />
       <main className="grow pt-16 md:pt-16 relative z-10">

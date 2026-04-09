@@ -32,7 +32,7 @@ const ProfileCard = ({ myProducts }) => {
           <img
             src={profilePhoto || user?.avatar || "https://img.freepik.com/free-icon/user_318-159711.jpg"}
             alt={user.name || "Profile"}
-            className="relative w-32 h-32 md:w-40 md:h-40 rounded-[1.5rem] md:rounded-[1.8rem] object-cover border-2 border-white/10 transition-all duration-500 flex-shrink-0"
+            className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-[1.5rem] md:rounded-[1.8rem] object-cover border-2 border-white/10 transition-all duration-500 flex-shrink-0"
             loading="lazy"
           />
         </div>
@@ -41,7 +41,7 @@ const ProfileCard = ({ myProducts }) => {
         <div className="flex-1 space-y-1 min-w-0">
 
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-2xl md:text-5xl font-headline font-extrabold tracking-tight dark:text-white text-gray-900 truncate">{user.name || "User"}</h1>
+            <h1 className="text-xl sm:text-2xl md:text-5xl font-headline font-extrabold tracking-tight dark:text-white text-gray-900 truncate">{user.name || "User"}</h1>
             {user.isPro && (
               <span className="px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-bold tracking-widest uppercase">PRO SELLER</span>
             )}
@@ -74,7 +74,7 @@ const ProfileCard = ({ myProducts }) => {
       </header>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-3 gap-4 mt-4 mb-8 text-center">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4 mt-4 mb-8 text-center">
         <div>
           <span className="text-onSurfaceVariant text-xs font-bold uppercase tracking-wider block">Items Sold</span>
           <span className="font-headline font-black text-secondary text-lg block mt-1">{soldCount}</span>

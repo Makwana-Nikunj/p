@@ -48,6 +48,7 @@ const ReportsSection = () => {
 
   useEffect(() => {
     fetchReports();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleStatusChange = async (reportId, status) => {
@@ -58,7 +59,7 @@ const ReportsSection = () => {
       setReports((prev) =>
         prev.map((r) => (r.id === reportId ? { ...r, status } : r))
       );
-    } catch (error) {
+    } catch {
       showToast('Failed to update report status', 'error', 3000);
     } finally {
       setActionLoading(null);
