@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Skeleton } from "boneyard-js/react";
+import { ProfileFixture } from '../bones/fixtures';
 import usePageTitle from '../hooks/usePageTitle';
 import ProfileCard from '../Components/profile/ProfileCard';
 import OwnerProduct from '../Components/profile/OwnerProduct';
@@ -27,14 +29,9 @@ const Profile = () => {
   // Prevent crash if user not loaded yet
   if (!user) {
     return (
-      <div className="min-h-screen w-full flex justify-center items-center">
-        <div className="text-center space-y-4">
-          <div className="inline-block">
-            <div className="w-16 h-16 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
-          </div>
-          <p className="text-lg font-semibold text-on-surface/80">Loading profile...</p>
-        </div>
-      </div>
+      <Skeleton name="profile" loading={true} fixture={<ProfileFixture />}>
+        <div />
+      </Skeleton>
     );
   }
 
@@ -52,22 +49,20 @@ const Profile = () => {
             <nav className="flex items-center gap-8 overflow-x-auto scrollbar-hide">
               <button
                 onClick={() => setActiveTab("my-listings")}
-                className={`pb-4 text-lg font-headline font-bold transition-all duration-300 px-2 tab-indicator ${
-                  activeTab === "my-listings"
+                className={`pb-4 text-lg font-headline font-bold transition-all duration-300 px-2 tab-indicator ${activeTab === "my-listings"
                     ? "text-indigo-300 border-b-2 border-indigo-500"
                     : "text-on-surface-variant hover:text-on-surface"
-                }`}
+                  }`}
               >
                 My Listings
               </button>
 
               <button
                 onClick={() => setActiveTab("sold")}
-                className={`pb-4 text-lg font-headline font-medium transition-all duration-300 px-2 tab-indicator ${
-                  activeTab === "sold"
+                className={`pb-4 text-lg font-headline font-medium transition-all duration-300 px-2 tab-indicator ${activeTab === "sold"
                     ? "text-indigo-300 border-b-2 border-indigo-500"
                     : "text-on-surface-variant hover:text-on-surface"
-                }`}
+                  }`}
               >
                 Sold Items
               </button>

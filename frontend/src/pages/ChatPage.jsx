@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import chatService from '../services/chatService';
 import MessageBubble from '../Components/chat/MessageBubble';
 import AtmosphericBlooms from '../Components/Theme/AtmosphericBlooms';
-import { ConversationItemSkeleton, ChatMessageSkeleton } from '../Components/SkeletonLoader';
+import { Skeleton } from "boneyard-js/react";
+import { ConversationListFixture, ChatMessagesFixture } from '../bones/fixtures';
 
 const Chat = () => {
   const user = useSelector((state) => state.auth.userData);
@@ -266,84 +267,80 @@ const Chat = () => {
             </div>
 
             {/* Conversation List */}
-            <div className="flex-1 overflow-y-auto custom-scrollbar px-3 py-3 space-y-2">
-              {loading ? (
-                <div className="space-y-3 p-3">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <ConversationItemSkeleton key={i} />
-                  ))}
-                </div>
-              ) : filteredConversations.length > 0 ? (
-                filteredConversations.map((conv) => {
-                  const isActive = activeConversation?.$id === conv.$id;
-                  const otherName = getOtherParticipantName(conv);
-                  const role = getParticipantRole(conv);
-                  const unread = getUnreadCount(conv);
-                  const avatarUrl = getOtherParticipantAvatar(conv);
+            <Skeleton name="conversation-list" loading={loading} fixture={<ConversationListFixture />}>
+              <div className="flex-1 overflow-y-auto custom-scrollbar px-3 py-3 space-y-2">
+                {loading ? null : filteredConversations.length > 0 ? (
+                  filteredConversations.map((conv) => {
+                    const isActive = activeConversation?.$id === conv.$id;
+                    const otherName = getOtherParticipantName(conv);
+                    const role = getParticipantRole(conv);
+                    const unread = getUnreadCount(conv);
+                    const avatarUrl = getOtherParticipantAvatar(conv);
 
-                  return (
-                    <div
-                      key={conv.$id}
-                      onClick={() => openChat(conv)}
-                      className={`
+                    return (
+                      <div
+                        key={conv.$id}
+                        onClick={() => openChat(conv)}
+                        className={`
                       rounded-2xl p-4 flex gap-4 cursor-pointer transition-all duration-200 border
                       ${isActive
-                          ? 'glass-panel border-primary/20 active-glow'
-                          : 'hover:bg-white/5 border-transparent'
-                        }
+                            ? 'glass-panel border-primary/20 active-glow'
+                            : 'hover:bg-white/5 border-transparent'
+                          }
                     `}
-                    >
-                      {/* Avatar with image or fallback */}
-                      <div className="relative shrink-0">
-                        {avatarUrl ? (
-                          <img className="w-12 h-12 rounded-xl object-cover border border-white/10 bg-surface-container-highest" src={avatarUrl} alt={otherName} />
-                        ) : (
-                          <div className="w-12 h-12 rounded-xl flex items-center justify-center text-sm font-semibold text-on-surface shrink-0 border border-white/10 overflow-hidden glass">
-                            {getInitials(otherName)}
-                          </div>
-                        )}
-                        {unread > 0 && (
-                          <div className="absolute -top-1 -right-1 min-w-[20px] h-5 bg-secondary text-on-secondary rounded-full flex items-center justify-center text-[10px] font-bold border-2 border-surface-container px-1">
-                            {unread}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Info */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex justify-between items-start mb-1">
-                          <div>
-                            <h3 className="font-headline font-bold text-on-surface text-sm truncate">
-                              {otherName}
-                            </h3>
-                            <p className="text-[9px] text-on-surface-variant/50 font-bold uppercase tracking-widest mt-0.5">
-                              {role}
-                            </p>
-                          </div>
-                          <span className={`text-[10px] font-bold ${isActive ? 'text-primary uppercase' : 'text-on-surface-variant'}`}>
-                            {formatTime(conv.$updatedAt)}
-                          </span>
+                      >
+                        {/* Avatar with image or fallback */}
+                        <div className="relative shrink-0">
+                          {avatarUrl ? (
+                            <img className="w-12 h-12 rounded-xl object-cover border border-white/10 bg-surface-container-highest" src={avatarUrl} alt={otherName} />
+                          ) : (
+                            <div className="w-12 h-12 rounded-xl flex items-center justify-center text-sm font-semibold text-on-surface shrink-0 border border-white/10 overflow-hidden glass">
+                              {getInitials(otherName)}
+                            </div>
+                          )}
+                          {unread > 0 && (
+                            <div className="absolute -top-1 -right-1 min-w-[20px] h-5 bg-secondary text-on-secondary rounded-full flex items-center justify-center text-[10px] font-bold border-2 border-surface-container px-1">
+                              {unread}
+                            </div>
+                          )}
                         </div>
-                        <p className={`text-xs truncate ${unread > 0 ? 'text-on-surface font-bold' : 'text-on-surface-variant'}`}>
-                          {conv.lastMessage || 'No messages yet'}
-                        </p>
+
+                        {/* Info */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex justify-between items-start mb-1">
+                            <div>
+                              <h3 className="font-headline font-bold text-on-surface text-sm truncate">
+                                {otherName}
+                              </h3>
+                              <p className="text-[9px] text-on-surface-variant/50 font-bold uppercase tracking-widest mt-0.5">
+                                {role}
+                              </p>
+                            </div>
+                            <span className={`text-[10px] font-bold ${isActive ? 'text-primary uppercase' : 'text-on-surface-variant'}`}>
+                              {formatTime(conv.$updatedAt)}
+                            </span>
+                          </div>
+                          <p className={`text-xs truncate ${unread > 0 ? 'text-on-surface font-bold' : 'text-on-surface-variant'}`}>
+                            {conv.lastMessage || 'No messages yet'}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })
-              ) : conversations.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-                  <span className="material-symbols-outlined text-5xl text-on-surface-variant/30 mb-3">forum</span>
-                  <p className="text-on-surface-variant font-medium mb-1">No conversations yet</p>
-                  <p className="text-xs text-on-surface-variant/60">Start chatting from any product listing</p>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-                  <span className="material-symbols-outlined text-5xl text-on-surface-variant/30 mb-3">search_off</span>
-                  <p className="text-on-surface-variant">No conversations found</p>
-                </div>
-              )}
-            </div>
+                    );
+                  })
+                ) : conversations.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+                    <span className="material-symbols-outlined text-5xl text-on-surface-variant/30 mb-3">forum</span>
+                    <p className="text-on-surface-variant font-medium mb-1">No conversations yet</p>
+                    <p className="text-xs text-on-surface-variant/60">Start chatting from any product listing</p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+                    <span className="material-symbols-outlined text-5xl text-on-surface-variant/30 mb-3">search_off</span>
+                    <p className="text-on-surface-variant">No conversations found</p>
+                  </div>
+                )}
+              </div>
+            </Skeleton>
           </aside>
 
           {/* ========== RIGHT PANE: Chat Window ========== */}
@@ -425,50 +422,50 @@ const Chat = () => {
                   <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
                   <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-tertiary/5 rounded-full blur-[120px] pointer-events-none" />
 
-                  {loadingMessages ? (
-                    <ChatMessageSkeleton />
-                  ) : messages.length > 0 ? (
-                    <>
-                      {/* Date separator */}
-                      <div className="flex justify-center relative z-10">
-                        <span className="px-4 py-1 rounded-full bg-surface-container text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
-                          Today
-                        </span>
-                      </div>
-
-                      {messages.map((msg, i) => {
-                        if (!msg) return null;
-                        const isOwn = isCurrentUser(msg.senderId);
-
-                        return (
-                          <MessageBubble
-                            key={msg.$id || i}
-                            isOwn={isOwn}
-                            text={msg.text || ""}
-                            timestamp={msg.$createdAt}
-                          />
-                        );
-                      })}
-
-                      {/* Typing indicator (demo) */}
-                      {typingUser && (
-                        <div className="flex items-center gap-3 ml-11">
-                          <div className="flex gap-1">
-                            <div className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                            <div className="w-1.5 h-1.5 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                            <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                          </div>
-                          <span className="text-[10px] text-on-surface-variant font-bold italic">{typingUser} is typing...</span>
+                  <Skeleton name="chat-messages" loading={loadingMessages} fixture={<ChatMessagesFixture />}>
+                    {loadingMessages ? null : messages.length > 0 ? (
+                      <>
+                        {/* Date separator */}
+                        <div className="flex justify-center relative z-10">
+                          <span className="px-4 py-1 rounded-full bg-surface-container text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                            Today
+                          </span>
                         </div>
-                      )}
-                      <div ref={messagesEndRef} />
-                    </>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center h-full text-center text-on-surface-variant/60">
-                      <span className="material-symbols-outlined text-5xl text-on-surface-variant/30 mb-3">chat_bubble_outline</span>
-                      <p className="text-sm">No messages yet. Start the conversation!</p>
-                    </div>
-                  )}
+
+                        {messages.map((msg, i) => {
+                          if (!msg) return null;
+                          const isOwn = isCurrentUser(msg.senderId);
+
+                          return (
+                            <MessageBubble
+                              key={msg.$id || i}
+                              isOwn={isOwn}
+                              text={msg.text || ""}
+                              timestamp={msg.$createdAt}
+                            />
+                          );
+                        })}
+
+                        {/* Typing indicator (demo) */}
+                        {typingUser && (
+                          <div className="flex items-center gap-3 ml-11">
+                            <div className="flex gap-1">
+                              <div className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                              <div className="w-1.5 h-1.5 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                              <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                            </div>
+                            <span className="text-[10px] text-on-surface-variant font-bold italic">{typingUser} is typing...</span>
+                          </div>
+                        )}
+                        <div ref={messagesEndRef} />
+                      </>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-full text-center text-on-surface-variant/60">
+                        <span className="material-symbols-outlined text-5xl text-on-surface-variant/30 mb-3">chat_bubble_outline</span>
+                        <p className="text-sm">No messages yet. Start the conversation!</p>
+                      </div>
+                    )}
+                  </Skeleton>
                 </div>
 
                 {/* Input Area */}

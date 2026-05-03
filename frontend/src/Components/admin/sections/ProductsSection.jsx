@@ -1,7 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { TableRowSkeleton } from '../../../Components/SkeletonLoader';
 import apiClient from '../../../lib/apiClient';
 import { useToast } from '../../../Components/Toast/ToastContainer';
+
+export const TableRowSkeleton = () => {
+    const base = 'animate-pulse';
+    return (
+        <tr className={`flex items-center gap-4 p-4 rounded-xl dark:border-white/5 border-gray-200 ${base} bg-surface-container-high/50`}>
+            <td className={`w-10 h-10 rounded-lg bg-surface-container-highest`}></td>
+            <td className="flex-1 space-y-2">
+                <div className={`h-4 rounded w-3/4 bg-[rgba(255,255,255,0.06)]`}></div>
+                <div className={`h-3 rounded w-1/2 bg-[rgba(255,255,255,0.06)]`}></div>
+            </td>
+            <td className={`h-8 rounded-full px-4 bg-[rgba(255,255,255,0.06)]`}></td>
+            <td className="flex gap-2">
+                <div className={`h-8 w-8 rounded-lg bg-[rgba(255,255,255,0.06)]`}></div>
+                <div className={`h-8 w-8 rounded-lg bg-[rgba(255,255,255,0.06)]`}></div>
+            </td>
+        </tr>
+    );
+};
 
 const ProductsSection = ({ onApprove, onReject }) => {
     const [allProducts, setAllProducts] = useState([]);
@@ -154,12 +171,11 @@ const ProductsSection = ({ onApprove, onReject }) => {
                     </div>
                 </td>
                 <td className="px-6 py-5">
-                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                        product.status === 'pending' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                        product.status === 'approved' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                        product.status === 'rejected' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
-                        'bg-gray-500/10 text-gray-400 border border-gray-500/20'
-                    }`}>
+                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${product.status === 'pending' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                            product.status === 'approved' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                                product.status === 'rejected' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
+                                    'bg-gray-500/10 text-gray-400 border border-gray-500/20'
+                        }`}>
                         {product.status || 'pending'}
                     </span>
                 </td>

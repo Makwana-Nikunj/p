@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import favoriteService from '../services/favoriteService';
 import productService from '../services/productService';
-import { ProductGridSkeleton } from '../Components/SkeletonLoader';
+import { Skeleton } from "boneyard-js/react";
+import { ProductGridFixture } from '../bones/fixtures';
 import Cart from '../Components/home/featuredproduct/ItemCard';
 import { FaHeart } from 'react-icons/fa';
 import AtmosphericBlooms from '../Components/AtmosphericBlooms';
@@ -70,7 +71,9 @@ const Favorites = () => {
             <div className="h-10 glass rounded w-32 animate-pulse-skeleton"></div>
           </div>
           <div className="h-5 glass rounded w-64 mb-6 animate-pulse-skeleton"></div>
-          <ProductGridSkeleton count={8} />
+          <Skeleton name="product-grid" loading={true} fixture={<ProductGridFixture />}>
+            <div />
+          </Skeleton>
         </div>
       ) : (
         <div className="w-[90%] max-w-7xl section-spacing">

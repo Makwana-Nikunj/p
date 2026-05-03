@@ -4,7 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts, fetchMoreProducts } from "../store/productSlice";
 import SearchBar from "../Components/browse/SearchBar";
 import ItemCard from "../Components/home/featuredproduct/ItemCard";
-import { ProductGridSkeleton } from "../Components/SkeletonLoader";
+import { Skeleton } from "boneyard-js/react";
+import { ProductGridFixture } from "../bones/fixtures";
 import { useToast } from "../Components/Toast/ToastContainer";
 import { Package, SearchX } from "lucide-react";
 
@@ -176,7 +177,7 @@ const Browse = () => {
     <main className="min-h-screen bg-surface">
       <div className="sticky top-16 z-40 bg-surface/95 backdrop-blur-sm border-b border-white/5 pb-4">
         <div className="max-w-screen-2xl mx-auto px-4 md:px-8 pt-4">
-          <SearchBar search={search} setSearch={setSearch} onSearch={() => {}} compact />
+          <SearchBar search={search} setSearch={setSearch} onSearch={() => { }} compact />
         </div>
       </div>
 
@@ -221,42 +222,48 @@ const Browse = () => {
           </aside>
 
           <section className="lg:col-span-3" aria-label="Product listings">
-            {loading ? (
-              <ProductGridSkeleton count={12} />
-            ) : (filteredProducts || []).length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-20 px-4 animate-fadeIn">
-                <div className="p-4 glass-card rounded-full mb-6">
-                  {search || selectedCategory !== "all" || minPrice || maxPrice || campusHub
-                    ? <SearchX className="w-12 h-12 text-primary" />
-                    : <Package className="w-12 h-12 text-on-surface-variant" />}
+            <Skeleton name="product-grid" loading={loading} fixture={<ProductGridFixture />}>
+              {loading ? null : (filteredProducts || []).length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-20 px-4 animate-fadeIn">
+                  <div className="p-4 glass-card rounded-full mb-6">
+                    {search || selectedCategory !== "all" || minPrice || maxPrice || campusHub
+                      ? <SearchX className="w-12 h-12 text-primary" />
+                      : <Package className="w-12 h-12 text-on-surface-variant" />}
+                  </div>
+                  <h3 className="text-2xl font-bold font-plus-jakarta text-on-surface mb-2">No products found</h3>
+                  <p className="text-on-surface-variant text-center max-w-md mb-6">
+                    {search || selectedCategory !== "all" || minPrice || maxPrice || campusHub
+                      ? "Try adjusting your filters or search terms"
+                      : "No products available at the moment. Be the first to list one!"}
+                  </p>
+                  {(search || selectedCategory !== "all" || minPrice || maxPrice || campusHub) && (
+                    <button onClick={handleResetFilters} className="px-6 py-2 bg-primary/10 border border-primary/30 text-primary font-bold rounded-xl hover:bg-primary hover:text-on-primary transition-all">Clear Filters</button>
+                  )}
                 </div>
-                <h3 className="text-2xl font-bold font-plus-jakarta text-on-surface mb-2">No products found</h3>
-                <p className="text-on-surface-variant text-center max-w-md mb-6">
-                  {search || selectedCategory !== "all" || minPrice || maxPrice || campusHub
-                    ? "Try adjusting your filters or search terms"
-                    : "No products available at the moment. Be the first to list one!"}
-                </p>
-                {(search || selectedCategory !== "all" || minPrice || maxPrice || campusHub) && (
-                  <button onClick={handleResetFilters} className="px-6 py-2 bg-primary/10 border border-primary/30 text-primary font-bold rounded-xl hover:bg-primary hover:text-on-primary transition-all">Clear Filters</button>
-                )}
-              </div>
-            ) : (
-              <>
-                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
-                  {filteredProducts.map((doc, index) => (
-                    <div key={doc.$id} ref={index === filteredProducts.length - 1 ? lastProductRef : null} className="animate-fadeIn">
-                      <ItemCard id={doc.$id} imgUrl={doc.imageId} category={doc.category} name={doc.title} price={doc.price}
-                        views={doc.views} favoriteCount={doc.favoriteCount} condition={doc.condition}
-                        sellerName={doc.sellerName} sellerAvatar={doc.sellerAvatar} rating={doc.rating} />
+              ) : (
+                <>
+                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
+                    {filteredProducts.map((doc, index) => (
+                      <div key={doc.$id} ref={index === filteredProducts.length - 1 ? lastProductRef : null} className="animate-fadeIn">
+                        <ItemCard id={doc.$id} imgUrl={doc.imageId} category={doc.category} name={doc.title} price={doc.price}
+                          views={doc.views} favoriteCount={doc.favoriteCount} condition={doc.condition}
+                          sellerName={doc.sellerName} sellerAvatar={doc.sellerAvatar} rating={doc.rating} />
+                      </div>
+                    ))}
+                  </div>
+                  {isLoadingMore && (
+                    <div className="w-full py-8">
+                      <Skeleton name="product-grid" loading={true} fixture={<ProductGridFixture />}>
+                        <div />
+                      </Skeleton>
                     </div>
-                  ))}
-                </div>
-                {isLoadingMore && <div className="w-full py-8"><ProductGridSkeleton count={6} /></div>}
-                <div className="text-center text-on-surface-variant text-sm py-4">
-                  Showing {filteredProducts.length} of {products.length} loaded{pagination?.hasMore && " • Scroll for more"}
-                </div>
-              </>
-            )}
+                  )}
+                  <div className="text-center text-on-surface-variant text-sm py-4">
+                    Showing {filteredProducts.length} of {products.length} loaded{pagination?.hasMore && " • Scroll for more"}
+                  </div>
+                </>
+              )}
+            </Skeleton>
           </section>
         </div>
       </div>

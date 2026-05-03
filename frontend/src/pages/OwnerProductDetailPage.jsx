@@ -11,7 +11,8 @@ import productService from '../services/productService';
 import { fetchProducts, fetchProductById, fetchMyProducts } from '../store/productSlice';
 import { useEffect, useState } from "react";
 import AtmosphericBlooms from '../Components/AtmosphericBlooms';
-import { ProductDetailSkeleton } from '../Components/SkeletonLoader';
+import { Skeleton } from "boneyard-js/react";
+import { ProductDetailFixture } from '../bones/fixtures';
 
 const OwnerProductDetail = () => {
   const { id } = useParams();
@@ -44,12 +45,9 @@ const OwnerProductDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen w-full bg-surface px-4 md:px-8 py-12">
-        <AtmosphericBlooms intensity="subtle" />
-        <div className="max-w-7xl mx-auto animate-fadeIn">
-          <ProductDetailSkeleton />
-        </div>
-      </div>
+      <Skeleton name="product-detail" loading={true} fixture={<ProductDetailFixture />}>
+        <div />
+      </Skeleton>
     );
   }
 
@@ -120,13 +118,12 @@ const OwnerProductDetail = () => {
                 )}
 
                 {/* Status Badge */}
-                <div className={`absolute top-2 right-2 md:top-4 md:right-4 md:px-4 md:py-2 px-2 py-1 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider ${
-                  product.listing_status === 'active'
+                <div className={`absolute top-2 right-2 md:top-4 md:right-4 md:px-4 md:py-2 px-2 py-1 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider ${product.listing_status === 'active'
                     ? 'bg-green-500/20 text-green-400 border border-green-500/30'
                     : product.listing_status === 'sold'
-                    ? 'bg-red-500/20 text-red-400 border border-red-500/30'
-                    : 'bg-gray-500/20 dark:text-gray-400 text-gray-500 border border-gray-500/30'
-                }`}>
+                      ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                      : 'bg-gray-500/20 dark:text-gray-400 text-gray-500 border border-gray-500/30'
+                  }`}>
                   {product.listing_status}
                 </div>
               </div>
@@ -222,11 +219,10 @@ const OwnerProductDetail = () => {
 
                 <button
                   onClick={handleMoveStatus}
-                  className={`w-full py-4 rounded-xl font-bold transition-all duration-300 transform-gpu hover:-translate-y-0.5 ${
-                    product.listing_status === 'active'
+                  className={`w-full py-4 rounded-xl font-bold transition-all duration-300 transform-gpu hover:-translate-y-0.5 ${product.listing_status === 'active'
                       ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-on-surface shadow-lg hover:shadow-green-500/40'
                       : 'bg-gradient-to-r from-blue-500 to-indigo-600 text-on-surface shadow-lg hover:shadow-blue-500/40'
-                  }`}
+                    }`}
                 >
                   {product.listing_status === "active"
                     ? "✓ Mark as Sold"
